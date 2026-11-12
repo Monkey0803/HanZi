@@ -30,3 +30,9 @@ oh_modules/
 *.cer
 *.jks
 *.keystore
+
+# DevEco Code workspace (IDE-local)
+.deveco/
+
+# Local signing configuration (contains key paths / passwords)
+build-profile.json5

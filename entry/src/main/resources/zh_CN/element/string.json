@@ -1,0 +1,696 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "HDS 应用入口模块"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "HDS 应用"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "label"
+    },
+    {
+      "name": "tab_home",
+      "value": "首页"
+    },
+    {
+      "name": "tab_settings",
+      "value": "设置"
+    },
+    {
+      "name": "tab_images",
+      "value": "图片"
+    },
+    {
+      "name": "home_title",
+      "value": "首页"
+    },
+    {
+      "name": "settings_title",
+      "value": "设置"
+    },
+    {
+      "name": "section_appearance",
+      "value": "外观"
+    },
+    {
+      "name": "section_language",
+      "value": "语言"
+    },
+    {
+      "name": "section_system",
+      "value": "系统特性"
+    },
+    {
+      "name": "row_theme",
+      "value": "主题"
+    },
+    {
+      "name": "row_language",
+      "value": "语言"
+    },
+    {
+      "name": "row_immersive",
+      "value": "沉浸光感"
+    },
+    {
+      "name": "row_material_type",
+      "value": "材质类型"
+    },
+    {
+      "name": "row_material_level",
+      "value": "沉浸光感材质"
+    },
+    {
+      "name": "row_grip",
+      "value": "智感握姿"
+    },
+    {
+      "name": "row_antipeep",
+      "value": "防窥保护"
+    },
+    {
+      "name": "opt_follow_system",
+      "value": "跟随系统"
+    },
+    {
+      "name": "opt_light",
+      "value": "浅色"
+    },
+    {
+      "name": "opt_dark",
+      "value": "深色"
+    },
+    {
+      "name": "opt_chinese",
+      "value": "简体中文"
+    },
+    {
+      "name": "opt_english",
+      "value": "English"
+    },
+    {
+      "name": "opt_material_adaptive",
+      "value": "自适应"
+    },
+    {
+      "name": "opt_material_immersive",
+      "value": "沉浸式"
+    },
+    {
+      "name": "opt_material_none",
+      "value": "无材质效果"
+    },
+    {
+      "name": "opt_level_exquisite",
+      "value": "精美"
+    },
+    {
+      "name": "opt_level_gentle",
+      "value": "轻柔"
+    },
+    {
+      "name": "opt_level_smooth",
+      "value": "流畅"
+    },
+    {
+      "name": "opt_level_adaptive",
+      "value": "自适应"
+    },
+    {
+      "name": "aux_material_unsupported",
+      "value": "本机不支持沉浸式材质"
+    },
+    {
+      "name": "aux_grip_unsupported",
+      "value": "未生效：设备不支持智感握姿"
+    },
+    {
+      "name": "aux_antipeep_unsupported",
+      "value": "未生效：设备不支持防窥保护"
+    },
+    {
+      "name": "veil_message",
+      "value": "已为你隐藏屏幕内容"
+    },
+    {
+      "name": "veil_dismiss",
+      "value": "轻点任意位置继续"
+    },
+    {
+      "name": "home_placeholder",
+      "value": "HDS Navigation + HdsTabs 模板"
+    },
+    {
+      "name": "home_sample_row",
+      "value": "示例文章 %d"
+    },
+    {
+      "name": "home_open_detail",
+      "value": "打开详情"
+    },
+    {
+      "name": "image_hdr",
+      "value": "HDR"
+    },
+    {
+      "name": "image_animated",
+      "value": "检测到动图格式（GIF / WebP）"
+    },
+    {
+      "name": "image_static",
+      "value": "静态图片"
+    },
+    {
+      "name": "image_hint",
+      "value": "GIF / WebP 动图由系统 Image 组件自动播放。"
+    },
+    {
+      "name": "image_preview_title",
+      "value": "图片预览"
+    },
+    {
+      "name": "image_open_preview",
+      "value": "点按图片查看大图"
+    },
+    {
+      "name": "row_light_effect",
+      "value": "光感反馈"
+    },
+    {
+      "name": "detail_title",
+      "value": "详情"
+    },
+    {
+      "name": "detail_hint",
+      "value": "HDS 列表项 / 操作栏 / 即时通知"
+    },
+    {
+      "name": "detail_snack_message",
+      "value": "操作已完成"
+    },
+    {
+      "name": "detail_snack_action",
+      "value": "撤销"
+    },
+    {
+      "name": "mini_bar_now_playing",
+      "value": "正在播放"
+    },
+    {
+      "name": "section_list",
+      "value": "分区"
+    },
+    {
+      "name": "section_effects",
+      "value": "视效"
+    },
+    {
+      "name": "reason_detect_gesture",
+      "value": "用于识别握持手，实现智感握姿"
+    },
+    {
+      "name": "reason_dlp_hide",
+      "value": "用于在他人窥视时隐藏屏幕内容"
+    },
+    {
+      "name": "aux_material_state_enable",
+      "value": "应用级材质：enable（所有系统组件默认开启）"
+    },
+    {
+      "name": "aux_material_state_default",
+      "value": "应用级材质：default（仅弹窗与文本菜单默认开启）"
+    },
+    {
+      "name": "aux_material_state_disable",
+      "value": "应用级材质：disable（全部关闭）"
+    },
+    {
+      "name": "aux_material_level_high",
+      "value": "材质等级：EXQUISITE（高算力）"
+    },
+    {
+      "name": "aux_material_level_mid",
+      "value": "材质等级：GENTLE（中算力）"
+    },
+    {
+      "name": "aux_material_level_low",
+      "value": "材质等级：SMOOTH（低算力）"
+    },
+    {
+      "name": "row_theme_color",
+      "value": "主题色"
+    },
+    {
+      "name": "theme_color_custom",
+      "value": "自定义"
+    },
+    {
+      "name": "theme_color_done",
+      "value": "完成"
+    },
+    {
+      "name": "theme_color_picker_title",
+      "value": "选择主题色"
+    },
+    {
+      "name": "theme_color_picker_unavailable",
+      "value": "当前系统版本不支持自定义取色"
+    },
+    {
+      "name": "theme_color_presets",
+      "value": "预设"
+    },
+    {
+      "name": "theme_color_preview",
+      "value": "预览"
+    },
+    {
+      "name": "theme_color_blue",
+      "value": "蓝色"
+    },
+    {
+      "name": "theme_color_cyan",
+      "value": "青色"
+    },
+    {
+      "name": "theme_color_green",
+      "value": "绿色"
+    },
+    {
+      "name": "theme_color_orange",
+      "value": "橙色"
+    },
+    {
+      "name": "theme_color_purple",
+      "value": "紫色"
+    },
+    {
+      "name": "theme_color_pink",
+      "value": "粉色"
+    },
+    {
+      "name": "settings_look_title",
+      "value": "外观与语言"
+    },
+    {
+      "name": "settings_material_title",
+      "value": "材质与动效"
+    },
+    {
+      "name": "settings_system_title",
+      "value": "系统与隐私"
+    },
+    {
+      "name": "bootstrap_error_title",
+      "value": "学习数据加载失败"
+    },
+    {
+      "name": "bootstrap_retry",
+      "value": "重试"
+    },
+    {
+      "name": "tab_books",
+      "value": "课本"
+    },
+    {
+      "name": "tab_review",
+      "value": "复习"
+    },
+    {
+      "name": "books_title",
+      "value": "语文课本"
+    },
+    {
+      "name": "books_today_title",
+      "value": "今日学习"
+    },
+    {
+      "name": "books_progress",
+      "value": "%d / %d 字"
+    },
+    {
+      "name": "books_continue",
+      "value": "继续学习"
+    },
+    {
+      "name": "books_mode_seed",
+      "value": "演示数据"
+    },
+    {
+      "name": "books_mode_full",
+      "value": "完整数据（本地）"
+    },
+    {
+      "name": "books_search",
+      "value": "查字"
+    },
+    {
+      "name": "books_lesson_count",
+      "value": "%d 课 · %d 字"
+    },
+    {
+      "name": "unit_title",
+      "value": "第 %d 单元"
+    },
+    {
+      "name": "lesson_chars",
+      "value": "本课生字"
+    },
+    {
+      "name": "lesson_write_chars",
+      "value": "会写的字"
+    },
+    {
+      "name": "lesson_words",
+      "value": "本课词语"
+    },
+    {
+      "name": "lesson_prev",
+      "value": "上一课"
+    },
+    {
+      "name": "lesson_next",
+      "value": "下一课"
+    },
+    {
+      "name": "lesson_hide_pinyin",
+      "value": "隐藏拼音"
+    },
+    {
+      "name": "char_play",
+      "value": "播放笔顺"
+    },
+    {
+      "name": "char_quiz",
+      "value": "描红练习"
+    },
+    {
+      "name": "char_strokes",
+      "value": "第 %d / %d 笔"
+    },
+    {
+      "name": "char_mistakes",
+      "value": "错误 %d 次"
+    },
+    {
+      "name": "char_readings",
+      "value": "读音"
+    },
+    {
+      "name": "char_shape",
+      "value": "字形"
+    },
+    {
+      "name": "char_radical",
+      "value": "部首"
+    },
+    {
+      "name": "char_decomposition",
+      "value": "部件"
+    },
+    {
+      "name": "char_same_pinyin",
+      "value": "同音字"
+    },
+    {
+      "name": "char_same_radical",
+      "value": "同部首字"
+    },
+    {
+      "name": "char_words",
+      "value": "组词"
+    },
+    {
+      "name": "char_mark_learned",
+      "value": "标记已学会"
+    },
+    {
+      "name": "char_learned",
+      "value": "已学会"
+    },
+    {
+      "name": "char_no_strokes",
+      "value": "暂无笔顺数据"
+    },
+    {
+      "name": "char_speak",
+      "value": "朗读"
+    },
+    {
+      "name": "review_title",
+      "value": "复习"
+    },
+    {
+      "name": "review_intro",
+      "value": "把学过的字再练一遍。"
+    },
+    {
+      "name": "review_start",
+      "value": "开始复习"
+    },
+    {
+      "name": "review_coming_soon",
+      "value": "复习会话将在下一步接入。"
+    },
+    {
+      "name": "common_loading",
+      "value": "加载中…"
+    },
+    {
+      "name": "char_more",
+      "value": "更多"
+    },
+    {
+      "name": "char_less",
+      "value": "收起"
+    },
+    {
+      "name": "char_loading",
+      "value": "笔顺加载中…"
+    },
+    {
+      "name": "section_custom_immersive",
+      "value": "自定义沉浸光感"
+    },
+    {
+      "name": "custom_immersive_reason_auto",
+      "value": "跟随系统自适应档位。"
+    },
+    {
+      "name": "custom_immersive_reason_ok",
+      "value": "使用设备支持的所选档位。"
+    },
+    {
+      "name": "custom_immersive_reason_unsupported",
+      "value": "设备不支持沉浸材质，已降级为流畅档。"
+    },
+    {
+      "name": "custom_immersive_reason_l1",
+      "value": "设备算力中等，精美档已收敛为柔和档。"
+    },
+    {
+      "name": "custom_immersive_reason_l2",
+      "value": "设备算力或版本受限，已降级为流畅档。"
+    },
+    {
+      "name": "custom_immersive_reason_user_smooth",
+      "value": "按选择使用流畅档。"
+    },
+    {
+      "name": "custom_immersive_reason_off",
+      "value": "沉浸光感已关闭，不下发材质效果。"
+    },
+    {
+      "name": "bootstrap_loading",
+      "value": "正在加载课本数据…"
+    },
+    {
+      "name": "char_numbers",
+      "value": "笔顺序号"
+    },
+    {
+      "name": "char_skeleton",
+      "value": "透视"
+    },
+    {
+      "name": "char_grid",
+      "value": "字格"
+    },
+    {
+      "name": "char_steps",
+      "value": "笔顺步骤"
+    },
+    {
+      "name": "char_fullscreen",
+      "value": "全屏练字"
+    },
+    {
+      "name": "char_stroke_count",
+      "value": "共 %d 画"
+    },
+    {
+      "name": "char_structure",
+      "value": "结构"
+    },
+    {
+      "name": "char_components",
+      "value": "部件"
+    },
+    {
+      "name": "char_structure_lr",
+      "value": "左右结构"
+    },
+    {
+      "name": "char_structure_tb",
+      "value": "上下结构"
+    },
+    {
+      "name": "char_structure_lcr",
+      "value": "左中右结构"
+    },
+    {
+      "name": "char_structure_tcb",
+      "value": "上中下结构"
+    },
+    {
+      "name": "char_structure_surround",
+      "value": "全包围结构"
+    },
+    {
+      "name": "char_structure_semi",
+      "value": "半包围结构"
+    },
+    {
+      "name": "char_structure_overlay",
+      "value": "镶嵌结构"
+    },
+    {
+      "name": "char_no_pinyin",
+      "value": "暂无拼音"
+    },
+    {
+      "name": "settings_study_title",
+      "value": "笔顺与练习"
+    },
+    {
+      "name": "settings_show_numbers",
+      "value": "显示笔顺序号"
+    },
+    {
+      "name": "settings_show_skeleton",
+      "value": "显示运笔骨架"
+    },
+    {
+      "name": "settings_show_steps",
+      "value": "显示笔顺步骤"
+    },
+    {
+      "name": "settings_grid_style",
+      "value": "字格样式"
+    },
+    {
+      "name": "opt_grid_tian",
+      "value": "田字格"
+    },
+    {
+      "name": "opt_grid_mi",
+      "value": "米字格"
+    },
+    {
+      "name": "opt_grid_nine",
+      "value": "九宫格"
+    },
+    {
+      "name": "opt_grid_none",
+      "value": "无格"
+    },
+    {
+      "name": "catalog_title",
+      "value": "字表"
+    },
+    {
+      "name": "catalog_search_hint",
+      "value": "输入汉字或拼音"
+    },
+    {
+      "name": "catalog_scope",
+      "value": "范围"
+    },
+    {
+      "name": "catalog_scope_all",
+      "value": "全部"
+    },
+    {
+      "name": "catalog_scope_curriculum",
+      "value": "教材字"
+    },
+    {
+      "name": "catalog_scope_common",
+      "value": "通用字"
+    },
+    {
+      "name": "catalog_stroke_band",
+      "value": "笔画数"
+    },
+    {
+      "name": "catalog_band_all",
+      "value": "不限"
+    },
+    {
+      "name": "catalog_band_1_4",
+      "value": "1-4"
+    },
+    {
+      "name": "catalog_band_5_8",
+      "value": "5-8"
+    },
+    {
+      "name": "catalog_band_9_12",
+      "value": "9-12"
+    },
+    {
+      "name": "catalog_band_13_plus",
+      "value": "13+"
+    },
+    {
+      "name": "catalog_radical",
+      "value": "部首"
+    },
+    {
+      "name": "catalog_radical_all",
+      "value": "不限"
+    },
+    {
+      "name": "catalog_result_count",
+      "value": "%d 个字"
+    },
+    {
+      "name": "catalog_empty",
+      "value": "没有匹配的字"
+    },
+    {
+      "name": "catalog_seed_hint",
+      "value": "演示数据只包含本课生字。"
+    },
+    {
+      "name": "practice_title",
+      "value": "练字"
+    },
+    {
+      "name": "practice_play",
+      "value": "播放"
+    },
+    {
+      "name": "practice_quiz",
+      "value": "描红"
+    },
+    {
+      "name": "practice_reset",
+      "value": "重置"
+    }
+  ]
+}

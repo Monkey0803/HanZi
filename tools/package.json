@@ -1,0 +1,17 @@
+{
+  "name": "hanzi-data-tools",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Build seed/full curriculum and stroke data for the HanZi HarmonyOS app",
+  "scripts": {
+    "data:fetch": "node fetch-textbook.mjs",
+    "data:curriculum": "node build-curriculum.mjs",
+    "data:strokes": "node build-hanzi-data.mjs",
+    "data:build": "node build-curriculum.mjs && node build-hanzi-data.mjs",
+    "data:validate": "node validate-data.mjs",
+    "data:all": "node fetch-textbook.mjs && node build-curriculum.mjs && node build-hanzi-data.mjs && node validate-data.mjs",
+    "data:seed": "node make-seed.mjs"
+  },
+  "dependencies": {}
+}

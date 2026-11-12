@@ -1,0 +1,64 @@
+/*
+ * Template build profile.
+ *
+ * Two placeholders, filled by the scaffold script from the installed DevEco SDK:
+ * - `compatibleSdkVersion: "6.1.0(23)"` — the compatibility floor (the immersive-light
+ *   `hdsMaterial` capability used by this template needs API 23). Stays at 23.
+ * - `targetSdkVersion: "26.0.0"` — the *target* API, set to the installed SDK
+ *   version. Component-level 沉浸光感 (`uiMaterial.systemMaterial` / `lightEffect`) only takes
+ *   effect when targetAPIVersion >= 26.0.0, so the target is kept at the highest installed SDK
+ *   (degrading gracefully to the installed version on older SDKs).
+ *
+ * Signing is intentionally empty: let DevEco Studio (or `devecocli signature
+ * generate`) create a debug signature for the generated app. The anti-peep
+ * permission `ohos.permission.DLP_GET_HIDE_STATUS` is `system_basic`, so the
+ * certificate's `allowed-acls` must include it before the app can be installed.
+ */
+{
+  "app": {
+    "products": [
+      {
+        "name": "default",
+        "targetSdkVersion": "26.0.0",
+        "compatibleSdkVersion": "6.1.0(23)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug"
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "toast_kit",
+      "srcPath": "./toast-kit"
+    },
+    {
+      "name": "keyboard_kit",
+      "srcPath": "./keyboard-kit"
+    }
+  ]
+}

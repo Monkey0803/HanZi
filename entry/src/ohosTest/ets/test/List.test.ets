@@ -1,0 +1,19 @@
+import settingsOptionsTest from './SettingsOptions.test';
+import materialMapTest from './MaterialMap.test';
+import imageSupportTest from './ImageSupport.test';
+import constantsTest from './Constants.test';
+import strokeEngineTest from './StrokeEngine.test';
+import customImmersivePolicyTest from './CustomImmersivePolicy.test';
+import adoptionPolicyTest from './AdoptionPolicy.test';
+import strokeNumberLayoutTest from './StrokeNumberLayout.test';
+
+export default function testsuite() {
+  settingsOptionsTest();
+  materialMapTest();
+  imageSupportTest();
+  constantsTest();
+  strokeEngineTest();
+  customImmersivePolicyTest();
+  adoptionPolicyTest();
+  strokeNumberLayoutTest();
+}

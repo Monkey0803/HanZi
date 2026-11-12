@@ -1,0 +1,9 @@
+dataMode	seed
+dataSource	PEP primary school Chinese word lists (MIT dataset)
+dataSourceUrl	https://github.com/athenayan123-web/dictation-robot
+dataLicense	MIT
+books	1
+lessons	2
+uniqueChars	13
+strokeChars	13
+generatedAt	2026-11-12

@@ -1,0 +1,112 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "hm_title_backdrop",
+      "value": "#CCFFFFFF"
+    },
+    {
+      "name": "hm_page_background",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "hm_brand",
+      "value": "#FF0A59F7"
+    },
+    {
+      "name": "hm_text_primary",
+      "value": "#E6000000"
+    },
+    {
+      "name": "hm_text_secondary",
+      "value": "#99000000"
+    },
+    {
+      "name": "hm_card_background",
+      "value": "#FFF7F8FA"
+    },
+    {
+      "name": "hm_divider",
+      "value": "#0D000000"
+    },
+    {
+      "name": "hm_page_transparent",
+      "value": "#00000000"
+    },
+    {
+      "name": "hm_veil_background",
+      "value": "#F2FFFFFF"
+    },
+    {
+      "name": "hm_effect_surface",
+      "value": "#FF121318"
+    },
+    {
+      "name": "hm_on_brand",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "hm_danger",
+      "value": "#FFE84026"
+    },
+    {
+      "name": "hanzi_ink",
+      "value": "#1F1F1F"
+    },
+    {
+      "name": "hanzi_grid",
+      "value": "#D8D8D8"
+    },
+    {
+      "name": "hanzi_outline",
+      "value": "#DDE3EA"
+    },
+    {
+      "name": "hanzi_active",
+      "value": "#0A59F7"
+    },
+    {
+      "name": "hanzi_error",
+      "value": "#E84026"
+    },
+    {
+      "name": "hanzi_success",
+      "value": "#64BB5C"
+    },
+    {
+      "name": "hanzi_card",
+      "value": "#FFF7F8FA"
+    },
+    {
+      "name": "hanzi_number_bg",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "hanzi_number_border",
+      "value": "#FFBFBFBF"
+    },
+    {
+      "name": "hanzi_number_text",
+      "value": "#FF1F1F1F"
+    },
+    {
+      "name": "hanzi_number_active_bg",
+      "value": "#FF0A59F7"
+    },
+    {
+      "name": "hanzi_number_active_text",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "hanzi_skeleton",
+      "value": "#FFC04A1E"
+    },
+    {
+      "name": "hanzi_skeleton_active",
+      "value": "#FF0A59F7"
+    }
+  ]
+}

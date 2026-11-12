@@ -1,0 +1,696 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "HDS app entry module"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "HDS app"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "HanZi"
+    },
+    {
+      "name": "tab_home",
+      "value": "Home"
+    },
+    {
+      "name": "tab_settings",
+      "value": "Settings"
+    },
+    {
+      "name": "tab_images",
+      "value": "Images"
+    },
+    {
+      "name": "home_title",
+      "value": "Home"
+    },
+    {
+      "name": "settings_title",
+      "value": "Settings"
+    },
+    {
+      "name": "section_appearance",
+      "value": "Appearance"
+    },
+    {
+      "name": "section_language",
+      "value": "Language"
+    },
+    {
+      "name": "section_system",
+      "value": "System features"
+    },
+    {
+      "name": "row_theme",
+      "value": "Theme"
+    },
+    {
+      "name": "row_language",
+      "value": "Language"
+    },
+    {
+      "name": "row_immersive",
+      "value": "Immersive light"
+    },
+    {
+      "name": "row_material_type",
+      "value": "Material type"
+    },
+    {
+      "name": "row_material_level",
+      "value": "Immersive material"
+    },
+    {
+      "name": "row_grip",
+      "value": "Smart grip"
+    },
+    {
+      "name": "row_antipeep",
+      "value": "Anti-peep"
+    },
+    {
+      "name": "opt_follow_system",
+      "value": "Follow system"
+    },
+    {
+      "name": "opt_light",
+      "value": "Light"
+    },
+    {
+      "name": "opt_dark",
+      "value": "Dark"
+    },
+    {
+      "name": "opt_chinese",
+      "value": "简体中文"
+    },
+    {
+      "name": "opt_english",
+      "value": "English"
+    },
+    {
+      "name": "opt_material_adaptive",
+      "value": "Adaptive"
+    },
+    {
+      "name": "opt_material_immersive",
+      "value": "Immersive"
+    },
+    {
+      "name": "opt_material_none",
+      "value": "None"
+    },
+    {
+      "name": "opt_level_exquisite",
+      "value": "Exquisite"
+    },
+    {
+      "name": "opt_level_gentle",
+      "value": "Gentle"
+    },
+    {
+      "name": "opt_level_smooth",
+      "value": "Smooth"
+    },
+    {
+      "name": "opt_level_adaptive",
+      "value": "Adaptive"
+    },
+    {
+      "name": "aux_material_unsupported",
+      "value": "Not supported on this device"
+    },
+    {
+      "name": "aux_grip_unsupported",
+      "value": "Not supported on this device"
+    },
+    {
+      "name": "aux_antipeep_unsupported",
+      "value": "Not supported on this device"
+    },
+    {
+      "name": "veil_message",
+      "value": "Content hidden for privacy"
+    },
+    {
+      "name": "veil_dismiss",
+      "value": "Tap anywhere to continue"
+    },
+    {
+      "name": "home_placeholder",
+      "value": "HDS Navigation + HdsTabs template"
+    },
+    {
+      "name": "home_sample_row",
+      "value": "Sample article %d"
+    },
+    {
+      "name": "home_open_detail",
+      "value": "Open detail"
+    },
+    {
+      "name": "image_hdr",
+      "value": "HDR"
+    },
+    {
+      "name": "image_animated",
+      "value": "Animated format (GIF / WebP) detected"
+    },
+    {
+      "name": "image_static",
+      "value": "Static image"
+    },
+    {
+      "name": "image_hint",
+      "value": "Animated GIF / WebP are auto-played by the system Image component."
+    },
+    {
+      "name": "image_preview_title",
+      "value": "Preview"
+    },
+    {
+      "name": "image_open_preview",
+      "value": "Tap the image to preview"
+    },
+    {
+      "name": "row_light_effect",
+      "value": "Light effect"
+    },
+    {
+      "name": "detail_title",
+      "value": "Detail"
+    },
+    {
+      "name": "detail_hint",
+      "value": "HDS list item, action bar and snack bar"
+    },
+    {
+      "name": "detail_snack_message",
+      "value": "Action completed"
+    },
+    {
+      "name": "detail_snack_action",
+      "value": "Undo"
+    },
+    {
+      "name": "mini_bar_now_playing",
+      "value": "Now playing"
+    },
+    {
+      "name": "section_list",
+      "value": "Sections"
+    },
+    {
+      "name": "section_effects",
+      "value": "Effects"
+    },
+    {
+      "name": "reason_detect_gesture",
+      "value": "Used to detect the holding hand for smart grip"
+    },
+    {
+      "name": "reason_dlp_hide",
+      "value": "Used to hide screen content when someone is peeking"
+    },
+    {
+      "name": "aux_material_state_enable",
+      "value": "App material: enable (all system components default on)"
+    },
+    {
+      "name": "aux_material_state_default",
+      "value": "App material: default (dialogs & text menu only)"
+    },
+    {
+      "name": "aux_material_state_disable",
+      "value": "App material: disable (all off)"
+    },
+    {
+      "name": "aux_material_level_high",
+      "value": "Material level: EXQUISITE (high compute)"
+    },
+    {
+      "name": "aux_material_level_mid",
+      "value": "Material level: GENTLE (mid compute)"
+    },
+    {
+      "name": "aux_material_level_low",
+      "value": "Material level: SMOOTH (low compute)"
+    },
+    {
+      "name": "row_theme_color",
+      "value": "Theme color"
+    },
+    {
+      "name": "theme_color_custom",
+      "value": "Custom"
+    },
+    {
+      "name": "theme_color_done",
+      "value": "Done"
+    },
+    {
+      "name": "theme_color_picker_title",
+      "value": "Choose theme color"
+    },
+    {
+      "name": "theme_color_picker_unavailable",
+      "value": "Custom colors are not supported on this system version."
+    },
+    {
+      "name": "theme_color_presets",
+      "value": "Presets"
+    },
+    {
+      "name": "theme_color_preview",
+      "value": "Preview"
+    },
+    {
+      "name": "theme_color_blue",
+      "value": "Blue"
+    },
+    {
+      "name": "theme_color_cyan",
+      "value": "Cyan"
+    },
+    {
+      "name": "theme_color_green",
+      "value": "Green"
+    },
+    {
+      "name": "theme_color_orange",
+      "value": "Orange"
+    },
+    {
+      "name": "theme_color_purple",
+      "value": "Purple"
+    },
+    {
+      "name": "theme_color_pink",
+      "value": "Pink"
+    },
+    {
+      "name": "settings_look_title",
+      "value": "Appearance & language"
+    },
+    {
+      "name": "settings_material_title",
+      "value": "Material & motion"
+    },
+    {
+      "name": "settings_system_title",
+      "value": "System & privacy"
+    },
+    {
+      "name": "bootstrap_error_title",
+      "value": "Study data failed to load"
+    },
+    {
+      "name": "bootstrap_retry",
+      "value": "Retry"
+    },
+    {
+      "name": "tab_books",
+      "value": "Books"
+    },
+    {
+      "name": "tab_review",
+      "value": "Review"
+    },
+    {
+      "name": "books_title",
+      "value": "Textbooks"
+    },
+    {
+      "name": "books_today_title",
+      "value": "Today"
+    },
+    {
+      "name": "books_progress",
+      "value": "%d / %d characters"
+    },
+    {
+      "name": "books_continue",
+      "value": "Continue learning"
+    },
+    {
+      "name": "books_mode_seed",
+      "value": "Demo data"
+    },
+    {
+      "name": "books_mode_full",
+      "value": "Full data (local)"
+    },
+    {
+      "name": "books_search",
+      "value": "Look up a character"
+    },
+    {
+      "name": "books_lesson_count",
+      "value": "%d lessons · %d characters"
+    },
+    {
+      "name": "unit_title",
+      "value": "Unit %d"
+    },
+    {
+      "name": "lesson_chars",
+      "value": "Characters in this lesson"
+    },
+    {
+      "name": "lesson_write_chars",
+      "value": "Characters to write"
+    },
+    {
+      "name": "lesson_words",
+      "value": "Words"
+    },
+    {
+      "name": "lesson_prev",
+      "value": "Previous lesson"
+    },
+    {
+      "name": "lesson_next",
+      "value": "Next lesson"
+    },
+    {
+      "name": "lesson_hide_pinyin",
+      "value": "Hide pinyin"
+    },
+    {
+      "name": "char_play",
+      "value": "Play stroke order"
+    },
+    {
+      "name": "char_quiz",
+      "value": "Trace practice"
+    },
+    {
+      "name": "char_strokes",
+      "value": "Stroke %d / %d"
+    },
+    {
+      "name": "char_mistakes",
+      "value": "Mistakes %d"
+    },
+    {
+      "name": "char_readings",
+      "value": "Readings"
+    },
+    {
+      "name": "char_shape",
+      "value": "Shape"
+    },
+    {
+      "name": "char_radical",
+      "value": "Radical"
+    },
+    {
+      "name": "char_decomposition",
+      "value": "Parts"
+    },
+    {
+      "name": "char_same_pinyin",
+      "value": "Same sound"
+    },
+    {
+      "name": "char_same_radical",
+      "value": "Same radical"
+    },
+    {
+      "name": "char_words",
+      "value": "Words"
+    },
+    {
+      "name": "char_mark_learned",
+      "value": "Mark as learned"
+    },
+    {
+      "name": "char_learned",
+      "value": "Learned"
+    },
+    {
+      "name": "char_no_strokes",
+      "value": "No stroke data"
+    },
+    {
+      "name": "char_speak",
+      "value": "Speak"
+    },
+    {
+      "name": "review_title",
+      "value": "Review"
+    },
+    {
+      "name": "review_intro",
+      "value": "Practice what you have learned."
+    },
+    {
+      "name": "review_start",
+      "value": "Start review"
+    },
+    {
+      "name": "review_coming_soon",
+      "value": "Review sessions arrive in the next step."
+    },
+    {
+      "name": "common_loading",
+      "value": "Loading…"
+    },
+    {
+      "name": "char_more",
+      "value": "More"
+    },
+    {
+      "name": "char_less",
+      "value": "Less"
+    },
+    {
+      "name": "char_loading",
+      "value": "Loading stroke data…"
+    },
+    {
+      "name": "section_custom_immersive",
+      "value": "Custom immersive material"
+    },
+    {
+      "name": "custom_immersive_reason_auto",
+      "value": "Following the system adaptive level."
+    },
+    {
+      "name": "custom_immersive_reason_ok",
+      "value": "Using the selected level supported by this device."
+    },
+    {
+      "name": "custom_immersive_reason_unsupported",
+      "value": "This device does not support immersive material; using the smooth level."
+    },
+    {
+      "name": "custom_immersive_reason_l1",
+      "value": "Medium compute power: exquisite is capped to gentle."
+    },
+    {
+      "name": "custom_immersive_reason_l2",
+      "value": "Compute or SDK limit reached; using the smooth level."
+    },
+    {
+      "name": "custom_immersive_reason_user_smooth",
+      "value": "Using the smooth level as selected."
+    },
+    {
+      "name": "custom_immersive_reason_off",
+      "value": "Immersive material is off; no material effect is applied."
+    },
+    {
+      "name": "bootstrap_loading",
+      "value": "Loading textbooks..."
+    },
+    {
+      "name": "char_numbers",
+      "value": "Stroke numbers"
+    },
+    {
+      "name": "char_skeleton",
+      "value": "X-ray"
+    },
+    {
+      "name": "char_grid",
+      "value": "Grid"
+    },
+    {
+      "name": "char_steps",
+      "value": "Stroke steps"
+    },
+    {
+      "name": "char_fullscreen",
+      "value": "Full screen"
+    },
+    {
+      "name": "char_stroke_count",
+      "value": "%d strokes"
+    },
+    {
+      "name": "char_structure",
+      "value": "Structure"
+    },
+    {
+      "name": "char_components",
+      "value": "Components"
+    },
+    {
+      "name": "char_structure_lr",
+      "value": "Left-right"
+    },
+    {
+      "name": "char_structure_tb",
+      "value": "Top-bottom"
+    },
+    {
+      "name": "char_structure_lcr",
+      "value": "Left-middle-right"
+    },
+    {
+      "name": "char_structure_tcb",
+      "value": "Top-middle-bottom"
+    },
+    {
+      "name": "char_structure_surround",
+      "value": "Enclosed"
+    },
+    {
+      "name": "char_structure_semi",
+      "value": "Semi-enclosed"
+    },
+    {
+      "name": "char_structure_overlay",
+      "value": "Overlaid"
+    },
+    {
+      "name": "char_no_pinyin",
+      "value": "No pinyin"
+    },
+    {
+      "name": "settings_study_title",
+      "value": "Strokes & practice"
+    },
+    {
+      "name": "settings_show_numbers",
+      "value": "Show stroke numbers"
+    },
+    {
+      "name": "settings_show_skeleton",
+      "value": "Show writing path"
+    },
+    {
+      "name": "settings_show_steps",
+      "value": "Show stroke steps"
+    },
+    {
+      "name": "settings_grid_style",
+      "value": "Grid style"
+    },
+    {
+      "name": "opt_grid_tian",
+      "value": "Tian grid"
+    },
+    {
+      "name": "opt_grid_mi",
+      "value": "Mi grid"
+    },
+    {
+      "name": "opt_grid_nine",
+      "value": "Nine-grid"
+    },
+    {
+      "name": "opt_grid_none",
+      "value": "No grid"
+    },
+    {
+      "name": "catalog_title",
+      "value": "Character catalog"
+    },
+    {
+      "name": "catalog_search_hint",
+      "value": "Character or pinyin"
+    },
+    {
+      "name": "catalog_scope",
+      "value": "Scope"
+    },
+    {
+      "name": "catalog_scope_all",
+      "value": "All"
+    },
+    {
+      "name": "catalog_scope_curriculum",
+      "value": "Textbook"
+    },
+    {
+      "name": "catalog_scope_common",
+      "value": "Common"
+    },
+    {
+      "name": "catalog_stroke_band",
+      "value": "Strokes"
+    },
+    {
+      "name": "catalog_band_all",
+      "value": "Any"
+    },
+    {
+      "name": "catalog_band_1_4",
+      "value": "1-4"
+    },
+    {
+      "name": "catalog_band_5_8",
+      "value": "5-8"
+    },
+    {
+      "name": "catalog_band_9_12",
+      "value": "9-12"
+    },
+    {
+      "name": "catalog_band_13_plus",
+      "value": "13+"
+    },
+    {
+      "name": "catalog_radical",
+      "value": "Radical"
+    },
+    {
+      "name": "catalog_radical_all",
+      "value": "Any"
+    },
+    {
+      "name": "catalog_result_count",
+      "value": "%d characters"
+    },
+    {
+      "name": "catalog_empty",
+      "value": "No matching characters"
+    },
+    {
+      "name": "catalog_seed_hint",
+      "value": "Demo data only contains this lesson's characters."
+    },
+    {
+      "name": "practice_title",
+      "value": "Practice"
+    },
+    {
+      "name": "practice_play",
+      "value": "Play"
+    },
+    {
+      "name": "practice_quiz",
+      "value": "Trace"
+    },
+    {
+      "name": "practice_reset",
+      "value": "Reset"
+    }
+  ]
+}

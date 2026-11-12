@@ -3,12 +3,17 @@
  */
 
 import { Lesson, LessonChar, WordEntry } from '../../model/CurriculumModels';
+import { Passage } from '../../model/ReadingModels';
 import { curriculumRepository } from '../../service/CurriculumRepository';
+import { ttsService } from '../../service/TtsService';
+import { ReadingViewModel } from '../../viewmodel/ReadingViewModel';
 import { safeArea } from '../../service/SafeAreaController';
 import { RouterConstants } from '../../common/constants/RouterConstants';
 import { themePalette } from '../../model/ThemePalette';
 import { CharRouteParam, LessonRouteParam } from '../../model/RouteParams';
+import { ReadingQuiz } from '../../common/utils/ReadingQuiz';
 import { ResponsiveContent } from '../ResponsiveContent';
+import { PassageCard } from './PassageCard';
 
 const CELL_SIZE: number = 64;
 const CELL_GAP: number = 8;
@@ -32,6 +37,23 @@ export struct LessonDetailView {
   @Param underTitleBar: boolean = true;
 
   @Local hidePinyin: boolean = false;
+  @Local showReadingPinyin: boolean = true;
+  @Local quizTarget: string = '';
+  @Local quizResult: number = 0;
+
+  private reading: ReadingViewModel = new ReadingViewModel();
+  private quizCursor: number = 0;
+
+  aboutToAppear(): void {
+    this.reading.load(this.lessonId);
+    if (this.reading.hasReading()) {
+      ttsService.init();
+    }
+  }
+
+  aboutToDisappear(): void {
+    ttsService.stop();
+  }
 
   private lesson(): Lesson | undefined {
     return curriculumRepository.lesson(this.lessonId);
@@ -112,6 +134,35 @@ export struct LessonDetailView {
     }
   }
 
+  /** 阅读区点击汉字：小测进行中先判分，否则进字详情。 */
+  private handleReadingChar(char: string): void {
+    const result: number = ReadingQuiz.judge(this.quizTarget, char);
+    if (result === 0) {
+      this.openChar(char);
+      return;
+    }
+    this.quizResult = result;
+    if (result === 1) {
+      this.quizTarget = '';
+    }
+  }
+
+  /** 「找一找」：按本课生字顺序轮取下一个目标字。 */
+  private nextQuiz(): void {
+    const chars: string[] = this.reading.focusChars();
+    const target: string = ReadingQuiz.nextTarget(chars, this.quizCursor);
+    if (target.length === 0) {
+      return;
+    }
+    this.quizTarget = target;
+    this.quizCursor += 1;
+    this.quizResult = 0;
+  }
+
+  private speakPassage(passageId: string, text: string): void {
+    ttsService.speak(passageId, text);
+  }
+
   @Builder
   charCell(item: LessonChar) {
     Column({ space: $r('app.float.space_xxs') }) {
@@ -157,6 +208,77 @@ export struct LessonDetailView {
         .rowsGap(CELL_GAP)
         .width('100%')
         .height(this.gridHeight(chars.length))
+      }
+      .width('100%')
+      .alignItems(HorizontalAlign.Start)
+      .padding($r('app.float.space_l'))
+      .backgroundColor($r('app.color.hanzi_card'))
+      .borderRadius($r('app.float.radius_card'))
+    }
+  }
+
+  /** 读一读：识字短文点读 + 找一找小测（无短文数据时整段不渲染）。 */
+  @Builder
+  readingSection() {
+    if (this.reading.hasReading()) {
+      Column({ space: $r('app.float.space_m') }) {
+        Row({ space: $r('app.float.space_s') }) {
+          Text($r('app.string.reading_section_title'))
+            .fontSize($r('app.float.font_size_section'))
+            .fontWeight(FontWeight.Medium)
+            .fontColor($r('app.color.hm_text_primary'))
+            .layoutWeight(1)
+          Text($r('app.string.reading_pinyin'))
+            .fontSize($r('app.float.font_size_caption'))
+            .fontColor($r('app.color.hm_text_secondary'))
+          Toggle({ type: ToggleType.Switch, isOn: this.showReadingPinyin })
+            .onChange((value: boolean) => {
+              this.showReadingPinyin = value;
+            })
+          Button($r('app.string.reading_quiz_start'))
+            .buttonStyle(ButtonStyleMode.TEXTUAL)
+            .fontSize($r('app.float.font_size_caption'))
+            .fontColor(themePalette.accent())
+            .onClick(() => {
+              this.nextQuiz();
+            })
+        }
+        .width('100%')
+        .alignItems(VerticalAlign.Center)
+
+        if (this.quizTarget.length > 0) {
+          Text($r('app.string.reading_quiz_prompt', this.reading.pinyinOf(this.quizTarget)))
+            .fontSize($r('app.float.font_size_caption'))
+            .fontColor(themePalette.accent())
+            .width('100%')
+        }
+        if (this.quizResult === 1) {
+          Text($r('app.string.reading_quiz_correct'))
+            .fontSize($r('app.float.font_size_caption'))
+            .fontColor($r('app.color.hanzi_success'))
+            .width('100%')
+        } else if (this.quizResult === 2) {
+          Text($r('app.string.reading_quiz_retry'))
+            .fontSize($r('app.float.font_size_caption'))
+            .fontColor($r('app.color.hanzi_error'))
+            .width('100%')
+        }
+
+        ForEach(this.reading.passages, (passage: Passage) => {
+          PassageCard({
+            passage: passage,
+            glyphs: this.reading.glyphsOf(passage.id),
+            showPinyin: this.showReadingPinyin,
+            playing: ttsService.speakingId === passage.id,
+            canSpeak: ttsService.available,
+            onCharClick: (char: string): void => {
+              this.handleReadingChar(char);
+            },
+            onSpeak: (passageId: string, text: string): void => {
+              this.speakPassage(passageId, text);
+            }
+          })
+        }, (passage: Passage) => passage.id)
       }
       .width('100%')
       .alignItems(HorizontalAlign.Start)
@@ -231,6 +353,8 @@ export struct LessonDetailView {
               .backgroundColor($r('app.color.hanzi_card'))
               .borderRadius($r('app.float.radius_card'))
             }
+
+            this.readingSection()
 
             Row({ space: $r('app.float.space_m') }) {
               Button($r('app.string.lesson_prev'))

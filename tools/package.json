@@ -8,9 +8,10 @@
     "data:fetch": "node fetch-textbook.mjs",
     "data:curriculum": "node build-curriculum.mjs",
     "data:strokes": "node build-hanzi-data.mjs",
-    "data:build": "node build-curriculum.mjs && node build-hanzi-data.mjs",
+    "data:passages": "node build-passages.mjs",
+    "data:build": "node build-curriculum.mjs && node build-hanzi-data.mjs && node build-passages.mjs",
     "data:validate": "node validate-data.mjs",
-    "data:all": "node fetch-textbook.mjs && node build-curriculum.mjs && node build-hanzi-data.mjs && node validate-data.mjs",
+    "data:all": "node fetch-textbook.mjs && node build-curriculum.mjs && node build-hanzi-data.mjs && node build-passages.mjs && node validate-data.mjs",
     "data:seed": "node make-seed.mjs"
   },
   "dependencies": {}

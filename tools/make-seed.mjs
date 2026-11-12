@@ -122,6 +122,18 @@ async function main() {
     path.join(curriculum, 'readings.tsv'),
     [tsvRow(['char', 'pinyin', 'lessonId', 'words']), ...readings.map(tsvRow)].join('\n') + '\n'
   );
+
+  const passagesFile = path.join(fullCurriculum, 'passages.tsv');
+  const passageRows = (await exists(passagesFile))
+    ? (await readTsv(passagesFile)).filter((row) => row[0] !== 'passageId' && lessonIds.has(row[1]))
+    : [];
+  await writeText(
+    path.join(curriculum, 'passages.tsv'),
+    [
+      tsvRow(['passageId', 'lessonId', 'order', 'title', 'text', 'pinyinOverrides']),
+      ...passageRows.map(tsvRow)
+    ].join('\n') + '\n'
+  );
   await writeText(
     path.join(curriculum, 'meta.tsv'),
     [
@@ -133,6 +145,7 @@ async function main() {
       tsvRow(['lessons', String(seedLessons.length)]),
       tsvRow(['uniqueChars', String(keep.size)]),
       tsvRow(['strokeChars', String(graphics.size)]),
+      tsvRow(['passages', String(passageRows.length)]),
       tsvRow(['generatedAt', nowIso()])
     ].join('\n') + '\n'
   );

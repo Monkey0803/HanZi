@@ -187,6 +187,62 @@
     {
       "name": "ink_radius_card",
       "value": "20"
+    },
+    {
+      "name": "unit_bar_width",
+      "value": "3"
+    },
+    {
+      "name": "unit_bar_height",
+      "value": "16"
+    },
+    {
+      "name": "unit_bar_radius",
+      "value": "1.5"
+    },
+    {
+      "name": "lesson_row_min_height",
+      "value": "56"
+    },
+    {
+      "name": "review_number_size",
+      "value": "44"
+    },
+    {
+      "name": "review_char_size",
+      "value": "96"
+    },
+    {
+      "name": "review_card_height",
+      "value": "300"
+    },
+    {
+      "name": "review_stat_min_height",
+      "value": "84"
+    },
+    {
+      "name": "reading_font_size",
+      "value": "20"
+    },
+    {
+      "name": "reading_pinyin_size",
+      "value": "10"
+    },
+    {
+      "name": "reading_glyph_gap",
+      "value": "2"
+    },
+    {
+      "name": "reading_line_gap",
+      "value": "10"
+    },
+    {
+      "name": "reading_pinyin_height",
+      "value": "14"
+    },
+    {
+      "name": "reading_glyph_height",
+      "value": "34"
     }
   ]
 }

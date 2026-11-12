@@ -10,6 +10,7 @@ import { CharacterEntry, WordEntry } from '../../model/CurriculumModels';
 import { StrokeData, StrokeTheme } from '../../model/StrokeModels';
 import { curriculumRepository } from '../../service/CurriculumRepository';
 import { hanziDataRepository } from '../../service/HanziDataRepository';
+import { progressStore } from '../../service/ProgressStore';
 import { StrokeThemeFactory } from '../../service/StrokeThemeFactory';
 import { deviceService } from '../../service/DeviceService';
 import { safeArea } from '../../service/SafeAreaController';
@@ -44,6 +45,8 @@ export struct PracticeView {
   @Local strokeIndex: number = 0;
   @Local mistakes: number = 0;
   @Local selectedStroke: number = -1;
+  /** 本次描红开始时间；0 表示未开始。 */
+  @Local quizStartAt: number = 0;
 
   aboutToAppear(): void {
     this.buildTheme();
@@ -141,6 +144,10 @@ export struct PracticeView {
           },
           onQuizComplete: (value: number) => {
             this.mistakes = value;
+            const startAt: number = this.quizStartAt;
+            this.quizStartAt = 0;
+            const durationMs: number = startAt > 0 ? Date.now() - startAt : 0;
+            progressStore.recordPractice(this.char, this.lessonId, value, durationMs);
           }
         })
       }
@@ -210,6 +217,7 @@ export struct PracticeView {
         .enabled(this.strokeData !== undefined)
         .onClick(() => {
           this.mistakes = 0;
+          this.quizStartAt = Date.now();
           this.selectedStroke = -1;
           this.quizTrigger += 1;
         })
@@ -222,6 +230,7 @@ export struct PracticeView {
           this.selectedStroke = -1;
           this.strokeIndex = 0;
           this.mistakes = 0;
+          this.quizStartAt = Date.now();
           this.quizTrigger += 1;
           this.playTrigger += 1;
         })

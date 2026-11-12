@@ -457,6 +457,126 @@
       "value": "复习会话将在下一步接入。"
     },
     {
+      "name": "review_due_unit",
+      "value": "%d 个待复习"
+    },
+    {
+      "name": "review_due_label",
+      "value": "待复习"
+    },
+    {
+      "name": "review_today_title",
+      "value": "今日复习"
+    },
+    {
+      "name": "review_due_zero",
+      "value": "今天没有到期的字"
+    },
+    {
+      "name": "review_learned",
+      "value": "已学会"
+    },
+    {
+      "name": "review_accuracy",
+      "value": "正确率"
+    },
+    {
+      "name": "review_accuracy_empty",
+      "value": "--"
+    },
+    {
+      "name": "review_streak",
+      "value": "连续天数"
+    },
+    {
+      "name": "review_streak_value",
+      "value": "%d 天"
+    },
+    {
+      "name": "review_today_progress",
+      "value": "今日 %d / %d"
+    },
+    {
+      "name": "review_empty_title",
+      "value": "还没有学过的字"
+    },
+    {
+      "name": "review_empty_desc",
+      "value": "先去课本里学几个字，回来就能复习了。"
+    },
+    {
+      "name": "review_go_books",
+      "value": "去课本学习"
+    },
+    {
+      "name": "review_consolidate",
+      "value": "巩固练习"
+    },
+    {
+      "name": "review_none_due",
+      "value": "可以继续巩固已学会的字。"
+    },
+    {
+      "name": "review_mistakes_title",
+      "value": "错题本"
+    },
+    {
+      "name": "review_mistakes_empty",
+      "value": "暂无错题"
+    },
+    {
+      "name": "review_mode_char",
+      "value": "看字读音"
+    },
+    {
+      "name": "review_mode_pinyin",
+      "value": "看拼音写字"
+    },
+    {
+      "name": "review_card_flip_hint",
+      "value": "点击卡片翻面"
+    },
+    {
+      "name": "review_again",
+      "value": "再来"
+    },
+    {
+      "name": "review_good",
+      "value": "会了"
+    },
+    {
+      "name": "review_progress",
+      "value": "%d / %d"
+    },
+    {
+      "name": "review_summary_title",
+      "value": "本轮完成"
+    },
+    {
+      "name": "review_summary_reviewed",
+      "value": "复习 %d 字"
+    },
+    {
+      "name": "review_summary_again",
+      "value": "再来 %d 字"
+    },
+    {
+      "name": "review_done",
+      "value": "完成"
+    },
+    {
+      "name": "review_loading",
+      "value": "进度加载中…"
+    },
+    {
+      "name": "review_unavailable",
+      "value": "学习进度暂不可用"
+    },
+    {
+      "name": "review_retry",
+      "value": "重试"
+    },
+    {
       "name": "common_loading",
       "value": "加载中…"
     },
@@ -715,6 +835,74 @@
     {
       "name": "books_term_down",
       "value": "下册"
+    },
+    {
+      "name": "unit_header",
+      "value": "第 %d 单元 · %d 课"
+    },
+    {
+      "name": "lesson_meta",
+      "value": "%d 字 · %d 会写"
+    },
+    {
+      "name": "lesson_char_count",
+      "value": "%d 字"
+    },
+    {
+      "name": "book_meta_extra",
+      "value": "%d 个单元 · 会写 %d 字"
+    },
+    {
+      "name": "book_unit_count",
+      "value": "%d 个单元"
+    },
+    {
+      "name": "book_not_found",
+      "value": "没有找到这本课本"
+    },
+    {
+      "name": "book_back",
+      "value": "返回课本列表"
+    },
+    {
+      "name": "lesson_a11y",
+      "value": "%s，%d 个生字"
+    },
+    {
+      "name": "reading_section_title",
+      "value": "读一读"
+    },
+    {
+      "name": "reading_pinyin",
+      "value": "拼音"
+    },
+    {
+      "name": "reading_speak",
+      "value": "朗读"
+    },
+    {
+      "name": "reading_stop",
+      "value": "停止"
+    },
+    {
+      "name": "reading_quiz_start",
+      "value": "找一找"
+    },
+    {
+      "name": "reading_quiz_prompt",
+      "value": "点一点：%s"
+    },
+    {
+      "name": "reading_quiz_correct",
+      "value": "找到了"
+    },
+    {
+      "name": "reading_quiz_retry",
+      "value": "不是这个，再试试"
+    },
+    {
+      "name": "reading_a11y",
+      "value": "阅读短文《%s》，点字查看详情。"
     }
   ]
 }

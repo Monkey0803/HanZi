@@ -9,6 +9,7 @@ import { CharacterEntry, Reading, WordEntry } from '../../model/CurriculumModels
 import { Point, StrokeData, StrokeTheme } from '../../model/StrokeModels';
 import { curriculumRepository } from '../../service/CurriculumRepository';
 import { hanziDataRepository } from '../../service/HanziDataRepository';
+import { progressStore } from '../../service/ProgressStore';
 import { safeArea } from '../../service/SafeAreaController';
 import { RouterConstants } from '../../common/constants/RouterConstants';
 import { themePalette } from '../../model/ThemePalette';
@@ -46,6 +47,8 @@ export struct CharDetailView {
   @Local quizTrigger: number = 0;
   @Local wordsExpanded: boolean = false;
   @Local theme: StrokeTheme = new StrokeTheme();
+  /** 本次描红开始时间；0 表示未开始。 */
+  @Local quizStartAt: number = 0;
   /** 步骤条选中笔；-1 表示跟随播放/描红。 */
   @Local selectedStroke: number = -1;
 
@@ -90,6 +93,10 @@ export struct CharDetailView {
 
   private words(): WordEntry[] {
     return curriculumRepository.wordsFor(this.char);
+  }
+
+  private isLearned(): boolean {
+    return progressStore.isLearned(this.char);
   }
 
   private visibleWords(): WordEntry[] {
@@ -281,10 +288,14 @@ export struct CharDetailView {
         onStrokeError: (total: number) => {
           this.mistakes = total;
         },
-        onQuizComplete: (mistakes: number) => {
-          this.mistakes = mistakes;
-          this.quizStarted = false;
-        }
+          onQuizComplete: (mistakes: number) => {
+            this.mistakes = mistakes;
+            this.quizStarted = false;
+            const startAt: number = this.quizStartAt;
+            this.quizStartAt = 0;
+            const durationMs: number = startAt > 0 ? Date.now() - startAt : 0;
+            progressStore.recordPractice(this.char, this.lessonId, mistakes, durationMs);
+          }
       })
 
       this.strokeTools()
@@ -345,6 +356,7 @@ export struct CharDetailView {
           .onClick(() => {
             this.mistakes = 0;
             this.quizStarted = true;
+            this.quizStartAt = Date.now();
             this.strokeIndex = 0;
             this.selectedStroke = -1;
             this.quizTrigger += 1;
@@ -360,6 +372,15 @@ export struct CharDetailView {
           })
       }
       .width('100%')
+
+      Button(this.isLearned() ? $r('app.string.char_learned') : $r('app.string.char_mark_learned'))
+        .buttonStyle(ButtonStyleMode.NORMAL)
+        .fontColor(themePalette.accent())
+        .width('100%')
+        .id('char_mark_learned')
+        .onClick(() => {
+          progressStore.toggleLearned(this.char, this.lessonId);
+        })
     }
     .width('100%')
     .padding($r('app.float.space_l'))

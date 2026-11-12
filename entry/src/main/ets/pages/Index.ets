@@ -44,13 +44,17 @@ import { CharDetailView } from '../views/char/CharDetailView';
 import { PracticeView } from '../views/practice/PracticeView';
 import { CatalogView } from '../views/catalog/CatalogView';
 import { ReviewTabView } from '../views/review/ReviewTabView';
+import { ReviewSessionView } from '../views/review/ReviewSessionView';
 import { DetailPageView } from '../views/DetailPageView';
 import { SettingsTabView } from '../views/SettingsTabView';
 import { ImageTabView } from '../views/ImageTabView';
 import { ImagePreviewView } from '../views/ImagePreviewView';
 import { PrivacyVeil } from '../views/PrivacyVeil';
 import { appBootstrap, BootstrapState } from '../service/AppBootstrap';
-import { BookRouteParam, LessonRouteParam, CharRouteParam, PracticeRouteParam, CatalogRouteParam } from '../model/RouteParams';
+import { progressStore } from '../service/ProgressStore';
+import { curriculumRepository } from '../service/CurriculumRepository';
+import { Book, Lesson } from '../model/CurriculumModels';
+import { BookRouteParam, LessonRouteParam, CharRouteParam, PracticeRouteParam, CatalogRouteParam, ReviewRouteParam } from '../model/RouteParams';
 
 @Entry
 @ComponentV2
@@ -79,6 +83,11 @@ struct Index {
     deviceService.stop();
   }
 
+  /** 跨天回到前台时刷新今日复习统计。 */
+  onPageShow(): void {
+    progressStore.refreshToday();
+  }
+
   /** 当前分区标题（底部页签与宽屏侧栏共用）。 */
   private currentTitle(): ResourceStr {
     if (this.currentTab === TabIndex.BOOKS) {
@@ -93,10 +102,22 @@ struct Index {
     return $r('app.string.tab_images');
   }
 
-  /** 首页标题栏右侧：查字（HM Symbol 搜索图标）。 */
-  private titleMenu(): HdsNavigationMenuContentOptions | undefined {
+  /** 二级页标题：册名（查不到时回退分区标题）。 */
+  private bookTitle(bookId: string): ResourceStr {
+    const book: Book | undefined = curriculumRepository.book(bookId);
+    return book !== undefined ? book.title : $r('app.string.books_title');
+  }
+
+  /** 二级页标题：课名（查不到时回退分区标题）。 */
+  private lessonTitle(lessonId: string): ResourceStr {
+    const lesson: Lesson | undefined = curriculumRepository.lesson(lessonId);
+    return lesson !== undefined ? lesson.title : $r('app.string.books_title');
+  }
+
+  /** 首页标题栏右侧：查字（HM Symbol 搜索图标）；其它页签下发空菜单以清空图标。 */
+  private titleMenu(): HdsNavigationMenuContentOptions {
     if (this.currentTab !== TabIndex.BOOKS) {
-      return undefined;
+      return { value: [] };
     }
     const searchItem: HdsNavigationMenuItemOptions = {
       content: {
@@ -185,8 +206,13 @@ struct Index {
 
   @Builder
   reviewContent() {
-    ReviewTabView({ navPathStack: this.navPathStack,
-      underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR })
+    ReviewTabView({
+      navPathStack: this.navPathStack,
+      underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR,
+      onGoBooks: () => {
+        this.currentTab = TabIndex.BOOKS;
+      }
+    })
   }
 
   @Builder
@@ -337,7 +363,7 @@ struct Index {
           underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR
         })
       }
-      .titleBar(indexTitleOptions($r('app.string.books_title')))
+      .titleBar(indexTitleOptions(this.bookTitle((pageInfos as BookRouteParam).bookId)))
       .dynamicHideTitleBar(indexDynamicHideParams())
       .backgroundColor($r('app.color.hm_page_background'))
     } else if (name === RouterConstants.PAGE_LESSON) {
@@ -348,7 +374,7 @@ struct Index {
           underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR
         })
       }
-      .titleBar(indexTitleOptions($r('app.string.books_title')))
+      .titleBar(indexTitleOptions(this.lessonTitle((pageInfos as LessonRouteParam).lessonId)))
       .dynamicHideTitleBar(indexDynamicHideParams())
       .backgroundColor($r('app.color.hm_page_background'))
     } else if (name === RouterConstants.PAGE_CHAR) {
@@ -372,6 +398,20 @@ struct Index {
         })
       }
       .titleBar(indexTitleOptions($r('app.string.practice_title')))
+      .dynamicHideTitleBar(indexDynamicHideParams())
+      .backgroundColor($r('app.color.hm_page_background'))
+    } else if (name === RouterConstants.PAGE_REVIEW_SESSION) {
+      HdsNavDestination() {
+        ReviewSessionView({
+          mode: (pageInfos as ReviewRouteParam).mode,
+          bookId: (pageInfos as ReviewRouteParam).bookId,
+          unit: (pageInfos as ReviewRouteParam).unit,
+          limit: (pageInfos as ReviewRouteParam).limit,
+          cardMode: (pageInfos as ReviewRouteParam).cardMode,
+          navPathStack: this.navPathStack
+        })
+      }
+      .titleBar(indexTitleOptions($r('app.string.review_title')))
       .dynamicHideTitleBar(indexDynamicHideParams())
       .backgroundColor($r('app.color.hm_page_background'))
     } else if (name === RouterConstants.PAGE_CATALOG) {

@@ -16,8 +16,10 @@ import { dailyCharService, DailyChar } from '../../service/DailyCharService';
 import { scrollers } from '../../service/ScrollerRegistry';
 import { safeArea } from '../../service/SafeAreaController';
 import { RouterConstants } from '../../common/constants/RouterConstants';
-import { BookRouteParam, CatalogRouteParam, CharRouteParam, LessonRouteParam } from '../../model/RouteParams';
+import { gradeGlyphOf } from '../../common/constants/CurriculumConstants';
+import { BookRouteParam, CharRouteParam, LessonRouteParam } from '../../model/RouteParams';
 import { ResponsiveContent } from '../ResponsiveContent';
+import { PaperBackground } from '../PaperBackground';
 import { HanziGridCell } from './HanziGridCell';
 import { InkCard } from './InkCard';
 
@@ -25,7 +27,6 @@ const CARD_HEIGHT: number = 108;
 const CARD_GAP: number = 12;
 const HERO_TILE: number = 96;
 const CARD_TILE: number = 44;
-const GRADE_GLYPHS: string[] = ['一', '二', '三', '四', '五', '六'];
 
 @ComponentV2
 export struct BooksTabView {
@@ -67,14 +68,6 @@ export struct BooksTabView {
     return rows * CARD_HEIGHT + (rows - 1) * CARD_GAP;
   }
 
-  private gradeGlyph(book: Book): string {
-    const index: number = book.grade - 1;
-    if (index >= 0 && index < GRADE_GLYPHS.length) {
-      return GRADE_GLYPHS[index];
-    }
-    return book.title.length > 0 ? book.title.substring(0, 1) : '';
-  }
-
   private termLabel(book: Book): ResourceStr {
     return book.term === 1 ? $r('app.string.books_term_up') : $r('app.string.books_term_down');
   }
@@ -90,10 +83,6 @@ export struct BooksTabView {
 
   private openBook(book: Book): void {
     this.navPathStack.pushPathByName(RouterConstants.PAGE_BOOK, new BookRouteParam(book.id));
-  }
-
-  private openCatalog(): void {
-    this.navPathStack.pushPathByName(RouterConstants.PAGE_CATALOG, new CatalogRouteParam(''));
   }
 
   private openDailyChar(daily: DailyChar): void {
@@ -230,13 +219,6 @@ export struct BooksTabView {
       Divider()
         .color($r('app.color.ink_line'))
         .layoutWeight(1)
-      Button($r('app.string.books_search'))
-        .buttonStyle(ButtonStyleMode.TEXTUAL)
-        .fontSize($r('app.float.font_size_caption'))
-        .fontColor(themePalette.accent())
-        .onClick(() => {
-          this.openCatalog();
-        })
     }
     .width('100%')
     .alignItems(VerticalAlign.Center)
@@ -248,7 +230,7 @@ export struct BooksTabView {
       InkCard() {
         Column({ space: $r('app.float.space_s') }) {
           Row({ space: $r('app.float.space_s') }) {
-            HanziGridCell({ char: this.gradeGlyph(book), cellSize: CARD_TILE })
+            HanziGridCell({ char: gradeGlyphOf(book), cellSize: CARD_TILE })
             Column({ space: $r('app.float.space_xxs') }) {
               Text(book.title)
                 .fontSize($r('app.float.font_size_body'))
@@ -290,40 +272,9 @@ export struct BooksTabView {
   }
 
   /** 纸色底 + 两团墨晕，营造宣纸质感（不使用位图素材）。 */
-  @Builder
-  paperLayer() {
-    Stack() {
-      Column()
-        .width('100%')
-        .height('100%')
-        .linearGradient({
-          angle: 180,
-          colors: [[$r('app.color.ink_paper'), 0.0], [$r('app.color.ink_paper_deep'), 1.0]]
-        })
-      Column()
-        .width(260)
-        .height(260)
-        .borderRadius(130)
-        .backgroundColor($r('app.color.ink_paper_deep'))
-        .opacity(0.9)
-        .blur(80)
-        .offset({ x: -90, y: -60 })
-      Column()
-        .width(220)
-        .height(220)
-        .borderRadius(110)
-        .backgroundColor($r('app.color.ink_paper_deep'))
-        .opacity(0.9)
-        .blur(80)
-        .offset({ x: 110, y: 320 })
-    }
-    .width('100%')
-    .height('100%')
-  }
-
   build() {
     Stack({ alignContent: Alignment.TopStart }) {
-      this.paperLayer()
+      PaperBackground()
 
       ResponsiveContent() {
         List({ scroller: scrollers.home }) {

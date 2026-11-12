@@ -16,6 +16,8 @@ export class RouterConstants {
   static readonly PAGE_PRACTICE: string = 'practice';
   /** 字表 / 查字。 */
   static readonly PAGE_CATALOG: string = 'catalog';
+  /** 复习会话。 */
+  static readonly PAGE_REVIEW_SESSION: string = 'reviewSession';
   /** 全屏图片预览（图片领域使用；基模板只保留桩件与路由分支）。 */
   static readonly PAGE_PREVIEW: string = 'imagePreview';
 }

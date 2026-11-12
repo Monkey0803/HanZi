@@ -19,6 +19,11 @@ function check(condition, message, errors) {
   if (!condition) errors.push(message);
 }
 
+function isHan(char) {
+  const code = char.codePointAt(0) ?? 0;
+  return code >= 0x4e00 && code <= 0x9fff;
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const curriculum = path.join(args.data, 'curriculum');
@@ -144,6 +149,90 @@ async function main() {
   if (dataMode === 'full' && commonChars > 0) {
     check(charPinyin.size > commonChars,
       `catalog (${charPinyin.size}) should exceed common charset (${commonChars})`, errors);
+  }
+
+  // 识字短文（阅读）：文件可选，旧数据缺文件只提示。
+  const passagesFile = path.join(curriculum, 'passages.tsv');
+  const manualFile = path.join(__dirname, 'passages/manual.json');
+  if (!(await exists(passagesFile))) {
+    warnings.push('passages.tsv not found; reading section will be hidden');
+  } else {
+    let extraChars = new Set();
+    if (await exists(manualFile)) {
+      const manual = JSON.parse(await readText(manualFile));
+      extraChars = new Set();
+      for (const char of Array.from(String(manual.extraChars ?? ''))) {
+        if (isHan(char)) extraChars.add(char);
+      }
+    }
+
+    const rank = new Map();
+    [...books]
+      .sort((a, b) => Number(a[1]) - Number(b[1]) || String(a[2] ?? '').localeCompare(String(b[2] ?? '')))
+      .forEach((row, index) => rank.set(row[0], index));
+    const orderedLessons = [...lessons].sort((a, b) => {
+      const left = rank.get(a[1]) ?? 0;
+      const right = rank.get(b[1]) ?? 0;
+      if (left !== right) return left - right;
+      return Number(a[3]) - Number(b[3]);
+    });
+
+    const lessonCharMap = new Map();
+    for (const row of lessonChars) {
+      const list = lessonCharMap.get(row[0]) ?? [];
+      if (!list.includes(row[1])) list.push(row[1]);
+      lessonCharMap.set(row[0], list);
+    }
+    const allowedByLesson = new Map();
+    const learned = new Set();
+    for (const lesson of orderedLessons) {
+      const focus = lessonCharMap.get(lesson[0]) ?? [];
+      allowedByLesson.set(lesson[0], new Set([...learned, ...focus, ...extraChars]));
+      for (const char of focus) learned.add(char);
+    }
+
+    const passages = await readTsv(path.join(curriculum, 'passages.tsv'));
+    const passageIds = new Set();
+    const passageLessons = new Set();
+    for (const row of passages) {
+      if (row[0] === 'passageId') continue;
+      const id = row[0];
+      const lessonId = row[1];
+      const text = row[4] ?? '';
+      check(row.length >= 5, `bad passage row: ${row.join('\t')}`, errors);
+      if (id) {
+        check(!passageIds.has(id), `duplicate passage id: ${id}`, errors);
+        passageIds.add(id);
+      }
+      check(lessonIds.has(lessonId), `passage ${id} references unknown lesson ${lessonId}`, errors);
+      check(text.length > 0, `passage ${id} has empty text`, errors);
+      if (text.length > 160) {
+        check(false, `passage ${id} text is too long (${text.length})`, errors);
+      } else if (text.length > 120) {
+        warnings.push(`passage ${id} text is ${text.length} chars`);
+      }
+      if (text.includes('\t')) {
+        check(false, `passage ${id} text contains a tab`, errors);
+      }
+      passageLessons.add(lessonId);
+
+      const allowed = allowedByLesson.get(lessonId) ?? new Set();
+      const focus = lessonCharMap.get(lessonId) ?? [];
+      const outside = [];
+      let hasFocus = false;
+      for (const char of Array.from(text)) {
+        if (!isHan(char)) continue;
+        if (focus.includes(char)) hasFocus = true;
+        if (!allowed.has(char)) outside.push(char);
+      }
+      if (outside.length > 0) {
+        check(false, `passage ${id} uses chars outside learned set: ${[...new Set(outside)].join('')}`, errors);
+      }
+      if (!hasFocus) {
+        warnings.push(`passage ${id} contains no chars from lesson ${lessonId}`);
+      }
+    }
+    console.log(`[validate] passages=${passageIds.size} lessonsCovered=${passageLessons.size}`);
   }
 
   for (const name of ['ARPHICPL.txt', 'COPYING.txt', 'LGPL.txt', 'LICENSE-hanzi-writer.txt']) {

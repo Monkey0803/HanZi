@@ -9,6 +9,8 @@ import { common } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { dataRootResolver } from './DataRootResolver';
 import { curriculumRepository } from './CurriculumRepository';
+import { progressStore } from './ProgressStore';
+import { readingRepository } from './ReadingRepository';
 
 /** 启动状态。 */
 export enum BootstrapState {
@@ -36,6 +38,20 @@ export class AppBootstrap {
       await dataRootResolver.resolve(context);
       this.dataMode = dataRootResolver.currentMode();
       await curriculumRepository.load(context);
+      // 阅读短文是可选增强数据：缺失或解析失败时只隐藏阅读区，不影响课本浏览。
+      try {
+        await readingRepository.load(context);
+      } catch (readingErr) {
+        const readingError: BusinessError = readingErr as BusinessError;
+        console.error(`AppBootstrap reading load failed: ${readingError.code} ${readingError.message}`);
+      }
+      // 学习进度是增强能力：数据库打不开时仍允许浏览课本，复习页自行降级。
+      try {
+        await progressStore.load(context);
+      } catch (progressErr) {
+        const progressError: BusinessError = progressErr as BusinessError;
+        console.error(`AppBootstrap progress load failed: ${progressError.code} ${progressError.message}`);
+      }
       this.state = BootstrapState.READY;
     } catch (err) {
       const error: BusinessError = err as BusinessError;

@@ -457,6 +457,126 @@
       "value": "Review sessions arrive in the next step."
     },
     {
+      "name": "review_due_unit",
+      "value": "%d to review"
+    },
+    {
+      "name": "review_due_label",
+      "value": "Due"
+    },
+    {
+      "name": "review_today_title",
+      "value": "Today's review"
+    },
+    {
+      "name": "review_due_zero",
+      "value": "Nothing due today"
+    },
+    {
+      "name": "review_learned",
+      "value": "Learned"
+    },
+    {
+      "name": "review_accuracy",
+      "value": "Accuracy"
+    },
+    {
+      "name": "review_accuracy_empty",
+      "value": "--"
+    },
+    {
+      "name": "review_streak",
+      "value": "Streak"
+    },
+    {
+      "name": "review_streak_value",
+      "value": "%d days"
+    },
+    {
+      "name": "review_today_progress",
+      "value": "Today %d / %d"
+    },
+    {
+      "name": "review_empty_title",
+      "value": "No characters yet"
+    },
+    {
+      "name": "review_empty_desc",
+      "value": "Learn a few characters in the textbook first."
+    },
+    {
+      "name": "review_go_books",
+      "value": "Go to textbooks"
+    },
+    {
+      "name": "review_consolidate",
+      "value": "Practice learned"
+    },
+    {
+      "name": "review_none_due",
+      "value": "Keep practicing learned characters."
+    },
+    {
+      "name": "review_mistakes_title",
+      "value": "Mistake book"
+    },
+    {
+      "name": "review_mistakes_empty",
+      "value": "No mistakes"
+    },
+    {
+      "name": "review_mode_char",
+      "value": "By character"
+    },
+    {
+      "name": "review_mode_pinyin",
+      "value": "By pinyin"
+    },
+    {
+      "name": "review_card_flip_hint",
+      "value": "Tap the card to flip"
+    },
+    {
+      "name": "review_again",
+      "value": "Again"
+    },
+    {
+      "name": "review_good",
+      "value": "Got it"
+    },
+    {
+      "name": "review_progress",
+      "value": "%d / %d"
+    },
+    {
+      "name": "review_summary_title",
+      "value": "Session complete"
+    },
+    {
+      "name": "review_summary_reviewed",
+      "value": "Reviewed %d"
+    },
+    {
+      "name": "review_summary_again",
+      "value": "Again %d"
+    },
+    {
+      "name": "review_done",
+      "value": "Done"
+    },
+    {
+      "name": "review_loading",
+      "value": "Loading progress…"
+    },
+    {
+      "name": "review_unavailable",
+      "value": "Learning progress is unavailable"
+    },
+    {
+      "name": "review_retry",
+      "value": "Retry"
+    },
+    {
       "name": "common_loading",
       "value": "Loading…"
     },
@@ -715,6 +835,74 @@
     {
       "name": "books_term_down",
       "value": "Second term"
+    },
+    {
+      "name": "unit_header",
+      "value": "Unit %d · %d lessons"
+    },
+    {
+      "name": "lesson_meta",
+      "value": "%d chars · %d to write"
+    },
+    {
+      "name": "lesson_char_count",
+      "value": "%d characters"
+    },
+    {
+      "name": "book_meta_extra",
+      "value": "%d units · %d to write"
+    },
+    {
+      "name": "book_unit_count",
+      "value": "%d units"
+    },
+    {
+      "name": "book_not_found",
+      "value": "This textbook is unavailable."
+    },
+    {
+      "name": "book_back",
+      "value": "Back to textbooks"
+    },
+    {
+      "name": "lesson_a11y",
+      "value": "%s, %d characters"
+    },
+    {
+      "name": "reading_section_title",
+      "value": "Read"
+    },
+    {
+      "name": "reading_pinyin",
+      "value": "Pinyin"
+    },
+    {
+      "name": "reading_speak",
+      "value": "Read aloud"
+    },
+    {
+      "name": "reading_stop",
+      "value": "Stop"
+    },
+    {
+      "name": "reading_quiz_start",
+      "value": "Find"
+    },
+    {
+      "name": "reading_quiz_prompt",
+      "value": "Tap \"%s\""
+    },
+    {
+      "name": "reading_quiz_correct",
+      "value": "Found it"
+    },
+    {
+      "name": "reading_quiz_retry",
+      "value": "Not this one, try again"
+    },
+    {
+      "name": "reading_a11y",
+      "value": "Reading passage %s. Tap a character for details."
     }
   ]
 }

@@ -5,6 +5,8 @@
  * 后续业务方法一律用这里的类，不再扩散 as 断言。
  */
 
+import { ReviewCardMode } from '../common/constants/ReviewConstants';
+
 /** 进入某册。 */
 export class BookRouteParam {
   bookId: string = '';
@@ -73,11 +75,15 @@ export class ReviewRouteParam {
   bookId: string = '';
   unit: number = 0;
   limit: number = 20;
+  /** 卡片正面内容：看字 / 看拼音。 */
+  cardMode: string = ReviewCardMode.CHAR;
 
-  constructor(mode: string = ReviewMode.ALL, bookId: string = '', unit: number = 0, limit: number = 20) {
+  constructor(mode: string = ReviewMode.ALL, bookId: string = '', unit: number = 0, limit: number = 20,
+    cardMode: string = ReviewCardMode.CHAR) {
     this.mode = mode;
     this.bookId = bookId;
     this.unit = unit;
     this.limit = limit;
+    this.cardMode = cardMode;
   }
 }

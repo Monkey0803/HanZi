@@ -32,6 +32,15 @@ This project uses the following third-party code, data and references.
 - The public repository ships only the minimal `data/seed/` dataset; the full
   dataset is generated locally by the scripts in `tools/`. See `DATA_LICENSE.md`.
 
+## Common character catalog
+
+- The optional `full` dataset adds the 3755 level-1 Hanzi of the GB2312
+  character set to the browsable catalog.
+- The list is derived from the GB2312 code ranges (facts of the standard); no
+  third-party project text or image assets are copied.
+- Stroke data for these characters is still sourced from makemeahanzi, under
+  the Arphic Public License notice above.
+
 ## HarmonyOS / HDS
 
 - HarmonyOS UI Design Kit and ScaffoldApp template are used under their

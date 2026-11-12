@@ -39,6 +39,8 @@ import { BooksTabView } from '../views/books/BooksTabView';
 import { BookDetailView } from '../views/books/BookDetailView';
 import { LessonDetailView } from '../views/books/LessonDetailView';
 import { CharDetailView } from '../views/char/CharDetailView';
+import { PracticeView } from '../views/practice/PracticeView';
+import { CatalogView } from '../views/catalog/CatalogView';
 import { ReviewTabView } from '../views/review/ReviewTabView';
 import { DetailPageView } from '../views/DetailPageView';
 import { SettingsTabView } from '../views/SettingsTabView';
@@ -50,7 +52,7 @@ import { ImageTabView } from '../views/ImageTabView';
 import { ImagePreviewView } from '../views/ImagePreviewView';
 import { PrivacyVeil } from '../views/PrivacyVeil';
 import { appBootstrap, BootstrapState } from '../service/AppBootstrap';
-import { BookRouteParam, LessonRouteParam, CharRouteParam } from '../model/RouteParams';
+import { BookRouteParam, LessonRouteParam, CharRouteParam, PracticeRouteParam, CatalogRouteParam } from '../model/RouteParams';
 
 @Entry
 @ComponentV2
@@ -337,6 +339,28 @@ struct Index {
         })
       }
       .titleBar(indexTitleOptions((pageInfos as CharRouteParam).char))
+      .dynamicHideTitleBar(indexDynamicHideParams())
+      .backgroundColor($r('app.color.hm_page_background'))
+    } else if (name === RouterConstants.PAGE_PRACTICE) {
+      HdsNavDestination() {
+        PracticeView({
+          char: (pageInfos as PracticeRouteParam).char,
+          lessonId: (pageInfos as PracticeRouteParam).lessonId,
+          underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR
+        })
+      }
+      .titleBar(indexTitleOptions($r('app.string.practice_title')))
+      .dynamicHideTitleBar(indexDynamicHideParams())
+      .backgroundColor($r('app.color.hm_page_background'))
+    } else if (name === RouterConstants.PAGE_CATALOG) {
+      HdsNavDestination() {
+        CatalogView({
+          navPathStack: this.navPathStack,
+          underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR,
+          initialQuery: (pageInfos as CatalogRouteParam).query
+        })
+      }
+      .titleBar(indexTitleOptions($r('app.string.catalog_title')))
       .dynamicHideTitleBar(indexDynamicHideParams())
       .backgroundColor($r('app.color.hm_page_background'))
     } else if (name === RouterConstants.PAGE_DETAIL) {

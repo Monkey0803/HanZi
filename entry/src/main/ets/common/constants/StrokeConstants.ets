@@ -48,3 +48,11 @@ export const ARROW_LENGTH_VP: number = 9;
 export const ARROW_POSITION_RATIO: number = 0.8;
 /** 骨架模式下轮廓透明度。 */
 export const SKELETON_OUTLINE_ALPHA: number = 0.2;
+/** 步骤条单元格宽度（vp，Canvas 几何）。 */
+export const STEPS_CELL_WIDTH: number = 56;
+/** 步骤条高度（vp，Canvas 几何）。 */
+export const STEPS_HEIGHT: number = 96;
+/** 步骤条单元格内边距（vp）。 */
+export const STEPS_CELL_PADDING: number = 4;
+/** 步骤条序号字号（px）。 */
+export const STEPS_NUMBER_FONT_SIZE: number = 10;

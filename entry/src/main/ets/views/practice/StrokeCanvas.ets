@@ -10,6 +10,7 @@ import { StrokeData, StrokeMatcherOptions, StrokeMatchResult, StrokeTheme, Point
 import { StrokeRenderer } from '../../service/StrokeRenderer';
 import { StrokeGeometry } from '../../service/StrokeGeometry';
 import { StrokeMatcher } from '../../service/StrokeMatcher';
+import { GridStyleId, SKELETON_OUTLINE_ALPHA } from '../../common/constants/StrokeConstants';
 
 const MASK_HALF_WIDTH: number = 140;
 const STROKE_PAUSE_MS: number = 180;
@@ -27,6 +28,14 @@ export struct StrokeCanvas {
   @Param playTrigger: number = 0;
   @Param quizTrigger: number = 0;
   @Param resetTrigger: number = 0;
+  /** 字格样式：田 / 米 / 九宫 / 无。 */
+  @Param gridStyle: string = GridStyleId.TIAN;
+  /** 是否显示笔顺序号。 */
+  @Param showNumbers: boolean = true;
+  /** 是否显示 median 透视骨架。 */
+  @Param showSkeleton: boolean = false;
+  /** >= 0 时按步骤条选中笔数静态显示（-1 表示跟随播放/描红状态）。 */
+  @Param staticReveal: number = -1;
   @Event onStrokeIndexChange: (index: number) => void = () => {};
   @Event onQuizComplete: (mistakes: number) => void = () => {};
 
@@ -78,6 +87,28 @@ export struct StrokeCanvas {
     this.resetState();
     this.drawBase();
     this.clearOverlay();
+  }
+
+  @Monitor('gridStyle')
+  onGridStyleChanged(): void {
+    this.drawBase();
+  }
+
+  @Monitor('showNumbers')
+  onShowNumbersChanged(): void {
+    this.drawBase();
+  }
+
+  @Monitor('showSkeleton')
+  onShowSkeletonChanged(): void {
+    this.drawBase();
+  }
+
+  @Monitor('staticReveal')
+  onStaticRevealChanged(): void {
+    this.stop();
+    this.clearOverlay();
+    this.drawBase();
   }
 
   /** 播放完整笔顺动画。 */
@@ -180,7 +211,7 @@ export struct StrokeCanvas {
     const ctx: CanvasRenderingContext2D = this.baseCtx;
     StrokeRenderer.resetTransform(ctx);
     ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
-    StrokeRenderer.drawGrid(ctx, this.canvasSize, this.canvasPadding, this.theme);
+    StrokeRenderer.drawGrid(ctx, this.canvasSize, this.canvasPadding, this.theme, this.gridStyle);
     const data: StrokeData | undefined = this.data;
     if (data === undefined) {
       return;
@@ -188,10 +219,39 @@ export struct StrokeCanvas {
     ctx.save();
     StrokeRenderer.applyTransform(ctx, this.canvasSize, this.canvasPadding);
     if (this.showOutline) {
+      ctx.globalAlpha = this.showSkeleton ? SKELETON_OUTLINE_ALPHA : 1;
       StrokeRenderer.fillStrokes(ctx, data, data.commands.length, this.theme.outline);
+      ctx.globalAlpha = 1;
     }
-    StrokeRenderer.fillStrokes(ctx, data, this.revealed, this.theme.ink);
+    StrokeRenderer.fillStrokes(ctx, data, this.revealedCount(data), this.theme.ink);
     ctx.restore();
+    if (this.showSkeleton) {
+      StrokeRenderer.drawSkeleton(ctx, data, this.canvasSize, this.canvasPadding, this.theme,
+        this.currentStrokeIndex(data));
+    }
+    if (this.showNumbers) {
+      StrokeRenderer.drawNumbers(ctx, data, this.canvasSize, this.canvasPadding, this.theme,
+        this.currentStrokeIndex(data));
+    }
+  }
+
+  /** 步骤条选中时按选中笔数静态显示。 */
+  private revealedCount(data: StrokeData): number {
+    if (this.staticReveal >= 0) {
+      return Math.min(this.staticReveal + 1, data.strokeCount);
+    }
+    return this.revealed;
+  }
+
+  /** 序号/骨架高亮笔：步骤条优先，其次描红/播放当前笔。 */
+  private currentStrokeIndex(data: StrokeData): number {
+    if (data.strokeCount <= 0) {
+      return 0;
+    }
+    if (this.staticReveal >= 0) {
+      return Math.min(this.staticReveal, data.strokeCount - 1);
+    }
+    return Math.min(this.current, data.strokeCount - 1);
   }
 
   private clearOverlay(): void {
@@ -232,10 +292,7 @@ export struct StrokeCanvas {
       return;
     }
     if (this.mistakes >= 2 && this.current < data.strokeCount) {
-      ctx.save();
-      StrokeRenderer.applyTransform(ctx, this.canvasSize, this.canvasPadding);
-      StrokeRenderer.fillStroke(ctx, data, this.current, this.theme.outline);
-      ctx.restore();
+      StrokeRenderer.drawSkeletonStroke(ctx, data, this.current, this.canvasSize, this.canvasPadding, this.theme);
     }
     const screenPoints: Point[] = this.toScreenPoints(this.userPoints);
     StrokeRenderer.drawUserTrail(ctx, screenPoints, this.theme.active, QUIZ_TRAIL_WIDTH);

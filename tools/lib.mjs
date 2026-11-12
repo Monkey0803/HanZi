@@ -139,3 +139,44 @@ export async function readTsv(file) {
 export function nowIso() {
   return new Date().toISOString().slice(0, 10);
 }
+
+/**
+ * GB2312 一级汉字（3755 字）：区位 0xB0–0xD7 / 0xA1–0xFE。
+ *
+ * 只是字符集标准里的事实性字表，不含任何项目的文本或图片数据；
+ * Node 需要带 full-icu 才能解码 gbk，失败时返回空数组由调用方降级。
+ */
+export function gb2312Level1() {
+  let decoder;
+  try {
+    decoder = new TextDecoder('gbk');
+  } catch {
+    return [];
+  }
+  const chars = [];
+  for (let lead = 0xb0; lead <= 0xd7; lead += 1) {
+    for (let trail = 0xa1; trail <= 0xfe; trail += 1) {
+      let text;
+      try {
+        text = decoder.decode(new Uint8Array([lead, trail]));
+      } catch {
+        continue;
+      }
+      if (!text || text.length !== 1) continue;
+      const code = text.codePointAt(0);
+      if (code >= 0x3400 && code <= 0x9fff) chars.push(text);
+    }
+  }
+  return chars;
+}
+
+/** 读取手工提供的常用字表（任意空白分隔），返回去重后的汉字数组。 */
+export async function readCharsetFile(file) {
+  const text = await readText(file);
+  const unique = new Set();
+  for (const ch of text.replace(/\s+/g, '')) {
+    const code = ch.codePointAt(0) ?? 0;
+    if (code >= 0x3400 && code <= 0x9fff) unique.add(ch);
+  }
+  return [...unique];
+}

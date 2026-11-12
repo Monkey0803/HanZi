@@ -6,7 +6,7 @@
  */
 
 import { ThemeMode, AppLanguage, MaterialKind, MaterialGrade } from '../common/constants/SettingsConstants';
-import { GridStyleId } from '../common/constants/StrokeConstants';
+import { CatalogScope, GridStyleId, StrokeBand } from '../common/constants/StrokeConstants';
 
 /** 一个可选项：语义 id + 展示文案。 */
 export class ChoiceOption {
@@ -97,3 +97,19 @@ export const GRID_OPTIONS: ChoiceSet = new ChoiceSet([
   new ChoiceOption(GridStyleId.NINE, $r('app.string.opt_grid_nine')),
   new ChoiceOption(GridStyleId.NONE, $r('app.string.opt_grid_none'))
 ], GridStyleId.TIAN);
+
+/** 字表口径：全部 / 教材字 / 通用字。 */
+export const CATALOG_SCOPE_OPTIONS: ChoiceSet = new ChoiceSet([
+  new ChoiceOption(CatalogScope.ALL, $r('app.string.catalog_scope_all')),
+  new ChoiceOption(CatalogScope.CURRICULUM, $r('app.string.catalog_scope_curriculum')),
+  new ChoiceOption(CatalogScope.COMMON, $r('app.string.catalog_scope_common'))
+], CatalogScope.ALL);
+
+/** 字表笔画分段。 */
+export const CATALOG_BAND_OPTIONS: ChoiceSet = new ChoiceSet([
+  new ChoiceOption(StrokeBand.ALL, $r('app.string.catalog_band_all')),
+  new ChoiceOption(StrokeBand.B1, $r('app.string.catalog_band_1_4')),
+  new ChoiceOption(StrokeBand.B2, $r('app.string.catalog_band_5_8')),
+  new ChoiceOption(StrokeBand.B3, $r('app.string.catalog_band_9_12')),
+  new ChoiceOption(StrokeBand.B4, $r('app.string.catalog_band_13_plus'))
+], StrokeBand.ALL);

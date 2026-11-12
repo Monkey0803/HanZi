@@ -8,6 +8,7 @@
 import { common } from '@kit.AbilityKit';
 import { CharacterEntry, Book, Lesson, LessonChar, Reading, Unit, WordEntry } from '../model/CurriculumModels';
 import { dataRootResolver } from './DataRootResolver';
+import { PinyinUtils } from './PinyinUtils';
 import { TsvUtil } from './TsvUtil';
 
 export class CurriculumRepository {
@@ -51,6 +52,7 @@ export class CurriculumRepository {
     this.parseReadings(readingsText);
     this.parseMeta(metaText);
     this.buildUnits();
+    this.markCurriculumFlags();
     this.loaded = true;
   }
 
@@ -165,6 +167,109 @@ export class CurriculumRepository {
     return this.metaMap.get(key) ?? fallback;
   }
 
+  /** 全量字表（教材字 + 通用字），未做过滤。 */
+  catalogCharacters(): CharacterEntry[] {
+    return this.charList;
+  }
+
+  /** 指定口径的字表数量；带笔画分段时按分段统计。 */
+  catalogCount(scope: string, band: string): number {
+    let count: number = 0;
+    for (let i = 0; i < this.charList.length; i += 1) {
+      if (this.inScope(this.charList[i], scope) && this.inBand(this.charList[i], band)) {
+        count += 1;
+      }
+    }
+    return count;
+  }
+
+  /** 字表中出现过的部首，按字符序排列。 */
+  catalogRadicals(): string[] {
+    this.ensureIndexes();
+    const radicals: string[] = [];
+    this.radicalIndex.forEach((_chars: string[], radical: string) => {
+      if (radical.length > 0) {
+        radicals.push(radical);
+      }
+    });
+    radicals.sort((a: string, b: string) => a.localeCompare(b));
+    return radicals;
+  }
+
+  /**
+   * 查字：汉字子串优先，其次拼音前缀，再次部首完全匹配。
+   * 结果按「教材字优先 → 笔画数 → 字符码」排序。
+   */
+  searchCatalog(query: string, scope: string, band: string, radical: string, limit: number): CharacterEntry[] {
+    const trimmed: string = query.trim();
+    const normalizedQuery: string = PinyinUtils.normalize(trimmed);
+    const matched: CharacterEntry[] = [];
+    for (let i = 0; i < this.charList.length; i += 1) {
+      const entry: CharacterEntry = this.charList[i];
+      if (!this.inScope(entry, scope) || !this.inBand(entry, band)) {
+        continue;
+      }
+      if (radical.length > 0 && entry.radical !== radical) {
+        continue;
+      }
+      if (trimmed.length === 0) {
+        matched.push(entry);
+        continue;
+      }
+      if (entry.char.indexOf(trimmed) >= 0 || PinyinUtils.matches(entry.pinyins, normalizedQuery)) {
+        matched.push(entry);
+      }
+    }
+    matched.sort((a: CharacterEntry, b: CharacterEntry) => {
+      if (a.inCurriculum !== b.inCurriculum) {
+        return a.inCurriculum ? -1 : 1;
+      }
+      if (a.strokeCount !== b.strokeCount) {
+        return a.strokeCount - b.strokeCount;
+      }
+      return a.char.localeCompare(b.char);
+    });
+    return limit > 0 && matched.length > limit ? matched.slice(0, limit) : matched;
+  }
+
+  private inScope(entry: CharacterEntry, scope: string): boolean {
+    if (scope === 'curriculum') {
+      return entry.inCurriculum;
+    }
+    if (scope === 'common') {
+      return !entry.inCurriculum;
+    }
+    return true;
+  }
+
+  private inBand(entry: CharacterEntry, band: string): boolean {
+    const count: number = entry.strokeCount;
+    if (band === '1-4') {
+      return count >= 1 && count <= 4;
+    }
+    if (band === '5-8') {
+      return count >= 5 && count <= 8;
+    }
+    if (band === '9-12') {
+      return count >= 9 && count <= 12;
+    }
+    if (band === '13+') {
+      return count >= 13;
+    }
+    return true;
+  }
+
+  private markCurriculumFlags(): void {
+    this.lessonCharsMap.forEach((items: LessonChar[]) => {
+      for (let i = 0; i < items.length; i += 1) {
+        const entry: CharacterEntry | undefined = this.charMap.get(items[i].char);
+        if (entry !== undefined) {
+          entry.inCurriculum = true;
+        }
+      }
+    });
+  }
+
   private parseBooks(text: string): void {
     const rows: string[][] = TsvUtil.rows(text);
     for (let i = 0; i < rows.length; i += 1) {
@@ -234,6 +339,7 @@ export class CurriculumRepository {
       entry.pinyins = TsvUtil.splitList(TsvUtil.at(row, 1), ';');
       entry.radical = TsvUtil.at(row, 2);
       entry.decomposition = TsvUtil.at(row, 3);
+      entry.strokeCount = TsvUtil.numberAt(row, 4);
       if (entry.char.length === 0) {
         continue;
       }

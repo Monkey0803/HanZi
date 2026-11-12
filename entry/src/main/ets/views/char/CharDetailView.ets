@@ -12,8 +12,17 @@ import { hanziDataRepository } from '../../service/HanziDataRepository';
 import { safeArea } from '../../service/SafeAreaController';
 import { RouterConstants } from '../../common/constants/RouterConstants';
 import { themePalette } from '../../model/ThemePalette';
-import { CharRouteParam } from '../../model/RouteParams';
+import { appSettings } from '../../model/AppSettings';
+import { settingsViewModel } from '../../viewmodel/SettingsViewModel';
+import { GRID_OPTIONS } from '../../model/SettingsOptions';
+import { MaterialController } from '../../service/MaterialController';
+import { StrokeThemeFactory } from '../../service/StrokeThemeFactory';
+import { AppMenu } from '../../common/components/AppMenu';
+import { choiceMenu } from '../../common/components/ChoiceMenu';
+import { CharRouteParam, PracticeRouteParam } from '../../model/RouteParams';
 import { StrokeCanvas } from '../practice/StrokeCanvas';
+import { StrokeStepsView } from '../practice/StrokeStepsView';
+import { StrokeToggleChip } from '../practice/StrokeToggleChip';
 import { ResponsiveContent } from '../ResponsiveContent';
 
 const CANVAS_SIZE: number = 280;
@@ -35,11 +44,20 @@ export struct CharDetailView {
   @Local playTrigger: number = 0;
   @Local quizTrigger: number = 0;
   @Local wordsExpanded: boolean = false;
-
-  private theme: StrokeTheme = new StrokeTheme();
+  @Local theme: StrokeTheme = new StrokeTheme();
+  /** 步骤条选中笔；-1 表示跟随播放/描红。 */
+  @Local selectedStroke: number = -1;
 
   aboutToAppear(): void {
+    this.buildTheme();
     this.loadStrokeData();
+  }
+
+  private buildTheme(): void {
+    const context: common.Context | undefined = this.getUIContext().getHostContext();
+    if (context !== undefined) {
+      this.theme = StrokeThemeFactory.fromContext(context);
+    }
   }
 
   private async loadStrokeData(): Promise<void> {
@@ -122,6 +140,62 @@ export struct CharDetailView {
   }
 
   @Builder
+  GridMenu() {
+    AppMenu(choiceMenu(GRID_OPTIONS, appSettings.gridStyle, (id: string) => {
+      settingsViewModel.setGridStyle(id);
+    }))
+  }
+
+  /** 字格当前值 chip：点开 4 种格子样式。 */
+  @Builder
+  gridChip() {
+    Text(GRID_OPTIONS.labelOf(appSettings.gridStyle))
+      .fontSize($r('app.float.font_size_caption'))
+      .fontColor($r('app.color.hm_text_secondary'))
+      .padding({
+        left: $r('app.float.space_m'),
+        right: $r('app.float.space_m'),
+        top: $r('app.float.space_xs'),
+        bottom: $r('app.float.space_xs')
+      })
+      .backgroundColor($r('app.color.hm_divider'))
+      .borderRadius($r('app.float.radius_chip'))
+      .bindMenu(this.GridMenu(),
+        MaterialController.menuOptionsFor({ placement: Placement.BottomLeft }, appSettings.immersiveOn,
+          appSettings.lightEffectEnabled))
+  }
+
+  /** 笔顺显示开关：序号 / 透视 / 步骤条 / 字格。 */
+  @Builder
+  strokeTools() {
+    Row({ space: $r('app.float.space_s') }) {
+      StrokeToggleChip({
+        label: $r('app.string.char_numbers'),
+        active: appSettings.showStrokeNumbers,
+        onTap: () => {
+          settingsViewModel.setShowStrokeNumbers(!appSettings.showStrokeNumbers);
+        }
+      })
+      StrokeToggleChip({
+        label: $r('app.string.char_skeleton'),
+        active: appSettings.showSkeleton,
+        onTap: () => {
+          settingsViewModel.setShowSkeleton(!appSettings.showSkeleton);
+        }
+      })
+      StrokeToggleChip({
+        label: $r('app.string.char_steps'),
+        active: appSettings.showStrokeSteps,
+        onTap: () => {
+          settingsViewModel.setShowStrokeSteps(!appSettings.showStrokeSteps);
+        }
+      })
+      this.gridChip()
+    }
+    .width('100%')
+  }
+
+  @Builder
   header() {
     Column({ space: $r('app.float.space_s') }) {
       Row({ space: $r('app.float.space_m') }) {
@@ -144,6 +218,10 @@ export struct CharDetailView {
         showOutline: true,
         playTrigger: this.playTrigger,
         quizTrigger: this.quizTrigger,
+        gridStyle: appSettings.gridStyle,
+        showNumbers: appSettings.showStrokeNumbers,
+        showSkeleton: appSettings.showSkeleton,
+        staticReveal: this.selectedStroke,
         onStrokeIndexChange: (index: number) => {
           this.strokeIndex = index;
         },
@@ -152,6 +230,25 @@ export struct CharDetailView {
           this.quizStarted = false;
         }
       })
+
+      this.strokeTools()
+
+      if (appSettings.showStrokeSteps && this.strokeData !== undefined) {
+        Scroll() {
+          StrokeStepsView({
+            data: this.strokeData,
+            selected: this.selectedStroke,
+            theme: this.theme,
+            showNumbers: appSettings.showStrokeNumbers,
+            onSelect: (index: number) => {
+              this.selectedStroke = index;
+            }
+          })
+        }
+        .scrollable(ScrollDirection.Horizontal)
+        .scrollBar(BarState.Off)
+        .width('100%')
+      }
 
       if (this.loading) {
         Text($r('app.string.char_loading'))
@@ -180,6 +277,7 @@ export struct CharDetailView {
           .layoutWeight(1)
           .enabled(this.strokeData !== undefined)
           .onClick(() => {
+            this.selectedStroke = -1;
             this.playTrigger += 1;
           })
         Button($r('app.string.char_quiz'))
@@ -191,7 +289,17 @@ export struct CharDetailView {
           .onClick(() => {
             this.mistakes = 0;
             this.quizStarted = true;
+            this.selectedStroke = -1;
             this.quizTrigger += 1;
+          })
+        Button($r('app.string.char_fullscreen'))
+          .buttonStyle(ButtonStyleMode.NORMAL)
+          .fontColor(themePalette.accent())
+          .layoutWeight(1)
+          .enabled(this.strokeData !== undefined)
+          .onClick(() => {
+            this.navPathStack.pushPathByName(RouterConstants.PAGE_PRACTICE,
+              new PracticeRouteParam(this.char, this.lessonId));
           })
       }
       .width('100%')

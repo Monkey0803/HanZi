@@ -510,7 +510,7 @@
     },
     {
       "name": "char_numbers",
-      "value": "Stroke numbers"
+      "value": "Numbers"
     },
     {
       "name": "char_skeleton",
@@ -522,7 +522,7 @@
     },
     {
       "name": "char_steps",
-      "value": "Stroke steps"
+      "value": "Steps"
     },
     {
       "name": "char_fullscreen",

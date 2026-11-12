@@ -53,6 +53,10 @@ export class CharacterEntry {
   pinyins: string[] = [];
   radical: string = '';
   decomposition: string = '';
+  /** 笔画数（来自 characters.tsv 第 5 列）。 */
+  strokeCount: number = 0;
+  /** 是否属于教材课文生字（由 lesson_chars.tsv 回填）。 */
+  inCurriculum: boolean = false;
 }
 
 /** 词语（组词）。 */

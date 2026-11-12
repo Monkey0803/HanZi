@@ -40,6 +40,26 @@ export class CharRouteParam {
   }
 }
 
+/** 进入全屏练字。 */
+export class PracticeRouteParam {
+  char: string = '';
+  lessonId: string = '';
+
+  constructor(char: string = '', lessonId: string = '') {
+    this.char = char;
+    this.lessonId = lessonId;
+  }
+}
+
+/** 进入字表 / 查字。 */
+export class CatalogRouteParam {
+  query: string = '';
+
+  constructor(query: string = '') {
+    this.query = query;
+  }
+}
+
 /** 复习模式。 */
 export enum ReviewMode {
   ALL = 'all',

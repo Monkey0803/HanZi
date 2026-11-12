@@ -13,7 +13,7 @@ import { deviceService } from '../../service/DeviceService';
 import { scrollers } from '../../service/ScrollerRegistry';
 import { safeArea } from '../../service/SafeAreaController';
 import { RouterConstants } from '../../common/constants/RouterConstants';
-import { BookRouteParam, LessonRouteParam } from '../../model/RouteParams';
+import { BookRouteParam, CatalogRouteParam, LessonRouteParam } from '../../model/RouteParams';
 import { ResponsiveContent } from '../ResponsiveContent';
 
 const CARD_HEIGHT: number = 120;
@@ -60,6 +60,10 @@ export struct BooksTabView {
 
   private openBook(book: Book): void {
     this.navPathStack.pushPathByName(RouterConstants.PAGE_BOOK, new BookRouteParam(book.id));
+  }
+
+  private openCatalog(): void {
+    this.navPathStack.pushPathByName(RouterConstants.PAGE_CATALOG, new CatalogRouteParam(''));
   }
 
   private openFirstLesson(book: Book): void {
@@ -163,6 +167,9 @@ export struct BooksTabView {
                 .buttonStyle(ButtonStyleMode.TEXTUAL)
                 .fontSize($r('app.float.font_size_caption'))
                 .fontColor(themePalette.accent())
+                .onClick(() => {
+                  this.openCatalog();
+                })
             }
             .width('100%')
           }

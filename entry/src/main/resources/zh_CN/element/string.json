@@ -510,7 +510,7 @@
     },
     {
       "name": "char_numbers",
-      "value": "笔顺序号"
+      "value": "序号"
     },
     {
       "name": "char_skeleton",
@@ -522,7 +522,7 @@
     },
     {
       "name": "char_steps",
-      "value": "笔顺步骤"
+      "value": "步骤"
     },
     {
       "name": "char_fullscreen",

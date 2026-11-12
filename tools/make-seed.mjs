@@ -110,7 +110,7 @@ async function main() {
   await writeText(
     path.join(curriculum, 'characters.tsv'),
     [
-      tsvRow(['char', 'pinyins', 'radical', 'decomposition']),
+      tsvRow(['char', 'pinyins', 'radical', 'decomposition', 'strokeCount']),
       ...characters.map(tsvRow)
     ].join('\n') + '\n'
   );

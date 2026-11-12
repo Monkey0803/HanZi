@@ -4,9 +4,11 @@ import { copyFile, mkdir } from 'node:fs/promises';
 import {
   ensureDir,
   exists,
+  gb2312Level1,
   loadDictionary,
   loadGraphics,
   nowIso,
+  readCharsetFile,
   readTsv,
   tsvRow,
   writeStrokeShards,
@@ -21,7 +23,10 @@ function parseArgs(argv) {
     curriculum: path.join(__dirname, '../entry/src/main/resources/rawfile/data/full/curriculum'),
     out: path.join(__dirname, '../entry/src/main/resources/rawfile/data/full'),
     graphics: '',
-    dictionary: ''
+    dictionary: '',
+    common: '',
+    noCommon: false,
+    commonLimit: 0
   };
   for (let i = 0; i < argv.length; i += 1) {
     const value = argv[i];
@@ -30,6 +35,9 @@ function parseArgs(argv) {
     else if (value === '--out') args.out = path.resolve(process.cwd(), argv[++i]);
     else if (value === '--graphics') args.graphics = path.resolve(process.cwd(), argv[++i]);
     else if (value === '--dictionary') args.dictionary = path.resolve(process.cwd(), argv[++i]);
+    else if (value === '--common') args.common = path.resolve(process.cwd(), argv[++i]);
+    else if (value === '--no-common') args.noCommon = true;
+    else if (value === '--common-limit') args.commonLimit = Number(argv[++i]) || 0;
   }
   args.graphics = args.graphics || path.join(args.cache, 'graphics.txt');
   args.dictionary = args.dictionary || path.join(args.cache, 'dictionary.txt');
@@ -69,12 +77,30 @@ async function main() {
     if (row.length < 2) continue;
     pinyinByChar.set(row[0], row[1] ?? '');
   }
-  const keep = new Set(pinyinByChar.keys());
-  console.log(`[build] curriculum chars=${keep.size}`);
+  const curriculumChars = new Set(pinyinByChar.keys());
+  console.log(`[build] curriculum chars=${curriculumChars.size}`);
+
+  let commonChars = [];
+  if (!args.noCommon) {
+    if (args.common) {
+      commonChars = await readCharsetFile(args.common);
+    } else {
+      commonChars = gb2312Level1();
+    }
+    if (args.commonLimit > 0) {
+      commonChars = commonChars.slice(0, args.commonLimit);
+    }
+    if (commonChars.length === 0) {
+      console.warn('[build] common charset unavailable; catalog stays curriculum-only');
+    }
+  }
+  const keep = new Set(curriculumChars);
+  for (const char of commonChars) keep.add(char);
+  console.log(`[build] common chars=${commonChars.length} keep=${keep.size}`);
 
   const graphics = await loadGraphics(args.graphics, keep);
   const dictionary = await loadDictionary(args.dictionary, keep);
-  const missing = [...keep].filter((char) => !graphics.has(char));
+  const missing = [...curriculumChars].filter((char) => !graphics.has(char));
   console.log(`[build] graphics=${graphics.size} dictionary=${dictionary.size} missing=${missing.length}`);
   if (missing.length > 0) {
     console.warn(`[build] missing stroke data: ${missing.slice(0, 40).join(' ')}`);
@@ -84,7 +110,8 @@ async function main() {
   await ensureDir(outStrokes);
   await writeStrokeShards(outStrokes, graphics);
 
-  const dictionaryRows = [...keep]
+  const catalogChars = [...keep].filter((char) => graphics.has(char) || curriculumChars.has(char));
+  const dictionaryRows = catalogChars
     .sort((a, b) => (a.codePointAt(0) ?? 0) - (b.codePointAt(0) ?? 0))
     .map((char) => {
       const info = dictionary.get(char);
@@ -94,13 +121,16 @@ async function main() {
         char,
         own || fallback,
         info?.radical ?? '',
-        info?.decomposition ?? ''
+        info?.decomposition ?? '',
+        String(graphics.get(char)?.strokes.length ?? 0)
       ];
     });
   await writeText(
     path.join(args.curriculum, 'characters.tsv'),
-    ['# char\tpinyins\tradical\tdecomposition', ...dictionaryRows.map(tsvRow)].join('\n') + '\n'
+    ['# char\tpinyins\tradical\tdecomposition\tstrokeCount',
+      ...dictionaryRows.map(tsvRow)].join('\n') + '\n'
   );
+  console.log(`[build] catalog chars=${dictionaryRows.length}`);
 
   const primaryPinyin = new Map();
   for (const row of dictionaryRows) {
@@ -127,6 +157,10 @@ async function main() {
   const meta = new Map(metaRows.filter((row) => row.length >= 2).map((row) => [row[0], row[1]]));
   meta.set('strokeChars', String(graphics.size));
   meta.set('missingStrokes', String(missing.length));
+  meta.set('catalogChars', String(dictionaryRows.length));
+  meta.set('commonChars', String(commonChars.length));
+  meta.set('catalogSource', args.noCommon ? 'curriculum-only'
+    : (args.common ? 'custom-file' : 'GB2312 level-1'));
   meta.set('generatedAt', nowIso());
   await writeText(
     metaFile,

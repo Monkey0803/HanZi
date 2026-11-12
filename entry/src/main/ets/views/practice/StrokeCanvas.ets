@@ -37,6 +37,8 @@ export struct StrokeCanvas {
   /** >= 0 时按步骤条选中笔数静态显示（-1 表示跟随播放/描红状态）。 */
   @Param staticReveal: number = -1;
   @Event onStrokeIndexChange: (index: number) => void = () => {};
+  /** 每写错一笔回调当前累计错误数，便于父组件实时显示。 */
+  @Event onStrokeError: (mistakes: number) => void = () => {};
   @Event onQuizComplete: (mistakes: number) => void = () => {};
 
   private baseSettings: RenderingContextSettings = new RenderingContextSettings(true);
@@ -337,6 +339,7 @@ export struct StrokeCanvas {
       }
     } else {
       this.mistakes += 1;
+      this.onStrokeError(this.mistakes);
       this.flashError();
     }
   }

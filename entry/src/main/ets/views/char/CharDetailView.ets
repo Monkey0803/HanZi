@@ -17,6 +17,7 @@ import { settingsViewModel } from '../../viewmodel/SettingsViewModel';
 import { GRID_OPTIONS } from '../../model/SettingsOptions';
 import { MaterialController } from '../../service/MaterialController';
 import { StrokeThemeFactory } from '../../service/StrokeThemeFactory';
+import { DecompositionInfo, IdeographDecomposition, StructureKind } from '../../service/IdeographDecomposition';
 import { AppMenu } from '../../common/components/AppMenu';
 import { choiceMenu } from '../../common/components/ChoiceMenu';
 import { CharRouteParam, PracticeRouteParam } from '../../model/RouteParams';
@@ -109,6 +110,40 @@ export struct CharDetailView {
       new CharRouteParam(char, this.lessonId, false));
   }
 
+  private decomposition(): DecompositionInfo {
+    return IdeographDecomposition.parse(this.entry()?.decomposition ?? '');
+  }
+
+  private hasStructure(): boolean {
+    return this.decomposition().kind !== StructureKind.UNKNOWN;
+  }
+
+  private structureLabel(): ResourceStr {
+    const kind: StructureKind = this.decomposition().kind;
+    if (kind === StructureKind.LEFT_RIGHT) {
+      return $r('app.string.char_structure_lr');
+    }
+    if (kind === StructureKind.TOP_BOTTOM) {
+      return $r('app.string.char_structure_tb');
+    }
+    if (kind === StructureKind.LEFT_MIDDLE_RIGHT) {
+      return $r('app.string.char_structure_lcr');
+    }
+    if (kind === StructureKind.TOP_MIDDLE_BOTTOM) {
+      return $r('app.string.char_structure_tcb');
+    }
+    if (kind === StructureKind.SURROUND) {
+      return $r('app.string.char_structure_surround');
+    }
+    if (kind === StructureKind.SEMI_SURROUND) {
+      return $r('app.string.char_structure_semi');
+    }
+    if (kind === StructureKind.OVERLAY) {
+      return $r('app.string.char_structure_overlay');
+    }
+    return '';
+  }
+
   @Builder
   sectionTitle(title: ResourceStr) {
     Text(title)
@@ -135,6 +170,24 @@ export struct CharDetailView {
             this.openChar(entry.char);
           })
       }, (entry: CharacterEntry) => entry.char)
+    }
+    .width('100%')
+  }
+
+  @Builder
+  partChips(parts: string[]) {
+    Flex({ wrap: FlexWrap.Wrap }) {
+      ForEach(parts, (part: string) => {
+        Text(part)
+          .fontSize($r('app.float.font_size_body'))
+          .fontColor($r('app.color.hanzi_ink'))
+          .width($r('app.float.hanzi_cell_size'))
+          .height($r('app.float.hanzi_cell_size'))
+          .textAlign(TextAlign.Center)
+          .backgroundColor($r('app.color.hm_divider'))
+          .borderRadius($r('app.float.space_s'))
+          .margin({ right: $r('app.float.hanzi_cell_gap'), bottom: $r('app.float.hanzi_cell_gap') })
+      }, (part: string) => part)
     }
     .width('100%')
   }
@@ -225,6 +278,9 @@ export struct CharDetailView {
         onStrokeIndexChange: (index: number) => {
           this.strokeIndex = index;
         },
+        onStrokeError: (total: number) => {
+          this.mistakes = total;
+        },
         onQuizComplete: (mistakes: number) => {
           this.mistakes = mistakes;
           this.quizStarted = false;
@@ -289,6 +345,7 @@ export struct CharDetailView {
           .onClick(() => {
             this.mistakes = 0;
             this.quizStarted = true;
+            this.strokeIndex = 0;
             this.selectedStroke = -1;
             this.quizTrigger += 1;
           })
@@ -362,6 +419,29 @@ export struct CharDetailView {
                     .fontColor($r('app.color.hanzi_ink'))
                 }
                 .width('100%')
+
+                Row({ space: $r('app.float.space_s') }) {
+                  Text($r('app.string.char_stroke_count', this.entry()?.strokeCount ?? 0))
+                    .fontSize($r('app.float.font_size_caption'))
+                    .fontColor($r('app.color.hm_text_secondary'))
+                  if (this.hasStructure()) {
+                    Text($r('app.string.char_structure'))
+                      .fontSize($r('app.float.font_size_caption'))
+                      .fontColor($r('app.color.hm_text_secondary'))
+                    Text(this.structureLabel())
+                      .fontSize($r('app.float.font_size_body'))
+                      .fontColor($r('app.color.hanzi_ink'))
+                  }
+                }
+                .width('100%')
+
+                if (this.decomposition().components.length > 0) {
+                  Text($r('app.string.char_components'))
+                    .fontSize($r('app.float.font_size_caption'))
+                    .fontColor($r('app.color.hm_text_secondary'))
+                    .width('100%')
+                  this.partChips(this.decomposition().components)
+                }
 
                 if (this.sameRadical().length > 0) {
                   Text($r('app.string.char_same_radical'))

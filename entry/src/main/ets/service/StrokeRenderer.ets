@@ -192,6 +192,7 @@ export class StrokeRenderer {
     }
     const lineWidth: number = SKELETON_LINE_VP / scale;
     ctx.save();
+    StrokeRenderer.applyTransform(ctx, size, padding);
     for (let i = 0; i < data.medians.length; i += 1) {
       const color: string = i === highlightIndex ? theme.skeletonActive : theme.skeleton;
       StrokeRenderer.strokeMedian(ctx, data.medians[i], color, lineWidth);
@@ -215,6 +216,7 @@ export class StrokeRenderer {
       return;
     }
     ctx.save();
+    StrokeRenderer.applyTransform(ctx, size, padding);
     StrokeRenderer.strokeMedian(ctx, data.medians[index], theme.skeletonActive, SKELETON_LINE_VP / scale);
     ctx.restore();
     StrokeRenderer.resetTransform(ctx);

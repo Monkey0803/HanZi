@@ -2,7 +2,7 @@
   "color": [
     {
       "name": "start_window_background",
-      "value": "#0D0F14"
+      "value": "#FF17181C"
     },
     {
       "name": "hm_title_backdrop",
@@ -10,7 +10,7 @@
     },
     {
       "name": "hm_page_background",
-      "value": "#0D0F14"
+      "value": "#FF17181C"
     },
     {
       "name": "hm_brand",
@@ -38,7 +38,7 @@
     },
     {
       "name": "hm_veil_background",
-      "value": "#F20D0F14"
+      "value": "#F217181C"
     },
     {
       "name": "hm_effect_surface",
@@ -102,11 +102,31 @@
     },
     {
       "name": "hanzi_skeleton",
-      "value": "#FFE07B39"
+      "value": "#FFB0B4BA"
     },
     {
       "name": "hanzi_skeleton_active",
       "value": "#FF7EA8FF"
+    },
+    {
+      "name": "ink_paper",
+      "value": "#FF17181C"
+    },
+    {
+      "name": "ink_paper_deep",
+      "value": "#FF101114"
+    },
+    {
+      "name": "ink_card",
+      "value": "#F21E2128"
+    },
+    {
+      "name": "ink_line",
+      "value": "#1AFFFFFF"
+    },
+    {
+      "name": "ink_seal",
+      "value": "#FFE0685A"
     }
   ]
 }

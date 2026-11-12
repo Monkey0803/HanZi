@@ -691,6 +691,30 @@
     {
       "name": "practice_reset",
       "value": "重置"
+    },
+    {
+      "name": "books_daily_title",
+      "value": "每日一字"
+    },
+    {
+      "name": "books_daily_open",
+      "value": "看这个字"
+    },
+    {
+      "name": "books_daily_from",
+      "value": "出自《%s》"
+    },
+    {
+      "name": "books_daily_stroke",
+      "value": "%d 画"
+    },
+    {
+      "name": "books_term_up",
+      "value": "上册"
+    },
+    {
+      "name": "books_term_down",
+      "value": "下册"
     }
   ]
 }

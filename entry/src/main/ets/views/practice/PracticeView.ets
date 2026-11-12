@@ -136,6 +136,9 @@ export struct PracticeView {
           onStrokeIndexChange: (index: number) => {
             this.strokeIndex = index;
           },
+          onStrokeError: (total: number) => {
+            this.mistakes = total;
+          },
           onQuizComplete: (value: number) => {
             this.mistakes = value;
           }

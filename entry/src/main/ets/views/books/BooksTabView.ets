@@ -1,7 +1,9 @@
 /*
- * BooksTabView.ets — 课本页签（首页）。
+ * BooksTabView.ets — 课本页签（首页，水墨卷轴风）。
  *
- * 今日学习卡片 + 12 册卡片；点击进入 BookDetailView。
+ * 结构：纸色底层（渐变 + 两团低透明度墨晕）→
+ *   今日学习卡（每日一字 + 进度 + 继续学习）、分区头（课本 · 查字）、12 册卷轴册签。
+ * 每日一字来自 DailyCharService（同一天稳定、跨天轮换），点「看这个字」进字详情。
  * 进度数据在 Phase 5 接入 ProgressStore，这里先显示册的字数统计。
  */
 
@@ -10,19 +12,35 @@ import { themePalette } from '../../model/ThemePalette';
 import { curriculumRepository } from '../../service/CurriculumRepository';
 import { appBootstrap } from '../../service/AppBootstrap';
 import { deviceService } from '../../service/DeviceService';
+import { dailyCharService, DailyChar } from '../../service/DailyCharService';
 import { scrollers } from '../../service/ScrollerRegistry';
 import { safeArea } from '../../service/SafeAreaController';
 import { RouterConstants } from '../../common/constants/RouterConstants';
-import { BookRouteParam, CatalogRouteParam, LessonRouteParam } from '../../model/RouteParams';
+import { BookRouteParam, CatalogRouteParam, CharRouteParam, LessonRouteParam } from '../../model/RouteParams';
 import { ResponsiveContent } from '../ResponsiveContent';
+import { HanziGridCell } from './HanziGridCell';
+import { InkCard } from './InkCard';
 
-const CARD_HEIGHT: number = 120;
+const CARD_HEIGHT: number = 108;
 const CARD_GAP: number = 12;
+const HERO_TILE: number = 96;
+const CARD_TILE: number = 44;
+const GRADE_GLYPHS: string[] = ['一', '二', '三', '四', '五', '六'];
 
 @ComponentV2
 export struct BooksTabView {
   @Param navPathStack: NavPathStack = new NavPathStack();
   @Param underTitleBar: boolean = true;
+
+  /** 每日一字可能尚未就绪（数据加载中）；未就绪时返回空对象，由 hasDaily() 控制渲染。 */
+  private daily(): DailyChar {
+    const value: DailyChar | undefined = dailyCharService.current();
+    return value !== undefined ? value : new DailyChar();
+  }
+
+  private hasDaily(): boolean {
+    return dailyCharService.current() !== undefined;
+  }
 
   private totalChars(): number {
     let total: number = 0;
@@ -49,6 +67,18 @@ export struct BooksTabView {
     return rows * CARD_HEIGHT + (rows - 1) * CARD_GAP;
   }
 
+  private gradeGlyph(book: Book): string {
+    const index: number = book.grade - 1;
+    if (index >= 0 && index < GRADE_GLYPHS.length) {
+      return GRADE_GLYPHS[index];
+    }
+    return book.title.length > 0 ? book.title.substring(0, 1) : '';
+  }
+
+  private termLabel(book: Book): ResourceStr {
+    return book.term === 1 ? $r('app.string.books_term_up') : $r('app.string.books_term_down');
+  }
+
   private openFirstBook(): void {
     const books: Book[] = curriculumRepository.books();
     if (books.length === 0) {
@@ -66,142 +96,276 @@ export struct BooksTabView {
     this.navPathStack.pushPathByName(RouterConstants.PAGE_CATALOG, new CatalogRouteParam(''));
   }
 
-  private openFirstLesson(book: Book): void {
-    const units = curriculumRepository.unitsOfBook(book.id);
-    if (units.length === 0 || units[0].lessons.length === 0) {
-      return;
+  private openDailyChar(daily: DailyChar): void {
+    this.navPathStack.pushPathByName(RouterConstants.PAGE_CHAR,
+      new CharRouteParam(daily.char, daily.lessonId));
+  }
+
+  /** 每日一字的文字信息块：拼音、部首·笔画、组词、出处。 */
+  @Builder
+  dailyInfo(daily: DailyChar) {
+    Column({ space: $r('app.float.space_xs') }) {
+      Text(daily.pinyin)
+        .fontSize($r('app.float.font_size_title'))
+        .fontWeight(FontWeight.Medium)
+        .fontColor(themePalette.accent())
+      Row({ space: $r('app.float.space_xs') }) {
+        Text($r('app.string.books_daily_stroke', daily.strokeCount))
+          .fontSize($r('app.float.font_size_caption'))
+          .fontColor($r('app.color.hm_text_secondary'))
+        if (daily.radical.length > 0) {
+          Text(daily.radical)
+            .fontSize($r('app.float.font_size_caption'))
+            .fontColor($r('app.color.hm_text_secondary'))
+            .padding({
+              left: $r('app.float.space_xs'),
+              right: $r('app.float.space_xs'),
+              top: $r('app.float.space_xxs'),
+              bottom: $r('app.float.space_xxs')
+            })
+            .backgroundColor($r('app.color.hm_divider'))
+            .borderRadius($r('app.float.space_xs'))
+        }
+      }
+      if (daily.word.length > 0) {
+        Text(daily.word)
+          .fontSize($r('app.float.font_size_body'))
+          .fontColor($r('app.color.hm_text_primary'))
+      }
+      if (daily.bookTitle.length > 0) {
+        Text($r('app.string.books_daily_from', daily.bookTitle))
+          .fontSize($r('app.float.font_size_caption'))
+          .fontColor($r('app.color.hm_text_secondary'))
+      }
     }
-    this.navPathStack.pushPathByName(RouterConstants.PAGE_LESSON,
-      new LessonRouteParam(units[0].lessons[0].id));
+    .layoutWeight(1)
+    .alignItems(HorizontalAlign.Start)
   }
 
   @Builder
   todayCard() {
-    Column({ space: $r('app.float.space_s') }) {
-      Row() {
-        Text($r('app.string.books_today_title'))
-          .fontSize($r('app.float.font_size_title'))
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r('app.color.hm_text_primary'))
-          .layoutWeight(1)
-        Text(this.modeLabel())
-          .fontSize($r('app.float.font_size_caption'))
-          .fontColor($r('app.color.hm_text_secondary'))
-          .padding({
-            left: $r('app.float.space_s'),
-            right: $r('app.float.space_s'),
-            top: $r('app.float.space_xxs'),
-            bottom: $r('app.float.space_xxs')
-          })
-          .backgroundColor($r('app.color.hm_divider'))
-          .borderRadius($r('app.float.radius_chip'))
+    InkCard() {
+      Column({ space: $r('app.float.space_m') }) {
+        Row({ space: $r('app.float.space_s') }) {
+          Text($r('app.string.books_today_title'))
+            .fontSize($r('app.float.font_size_title'))
+            .fontWeight(FontWeight.Medium)
+            .fontColor($r('app.color.hm_text_primary'))
+            .layoutWeight(1)
+          Text(this.modeLabel())
+            .fontSize($r('app.float.font_size_caption'))
+            .fontColor($r('app.color.hm_text_secondary'))
+            .padding({
+              left: $r('app.float.space_s'),
+              right: $r('app.float.space_s'),
+              top: $r('app.float.space_xxs'),
+              bottom: $r('app.float.space_xxs')
+            })
+            .backgroundColor($r('app.color.hm_divider'))
+            .borderRadius($r('app.float.radius_chip'))
+        }
+        .width('100%')
+
+        if (this.hasDaily()) {
+          Row({ space: $r('app.float.space_m') }) {
+            HanziGridCell({ char: this.daily().char, cellSize: HERO_TILE })
+            this.dailyInfo(this.daily())
+          }
+          .width('100%')
+          .alignItems(VerticalAlign.Center)
+        }
+
+        Divider().color($r('app.color.ink_line'))
+
+        Column({ space: $r('app.float.space_xs') }) {
+          Text($r('app.string.books_progress', 0, this.totalChars()))
+            .fontSize($r('app.float.font_size_caption'))
+            .fontColor($r('app.color.hm_text_secondary'))
+            .width('100%')
+          Progress({ value: 0, total: Math.max(1, this.totalChars()), type: ProgressType.Linear })
+            .width('100%')
+            .color(themePalette.accent())
+        }
+        .width('100%')
+
+        Row({ space: $r('app.float.space_m') }) {
+          Button($r('app.string.books_continue'))
+            .buttonStyle(ButtonStyleMode.EMPHASIZED)
+            .fontColor($r('app.color.hm_on_brand'))
+            .backgroundColor(themePalette.fill())
+            .layoutWeight(1)
+            .onClick(() => {
+              this.openFirstBook();
+            })
+          if (this.hasDaily()) {
+            Button($r('app.string.books_daily_open'))
+              .buttonStyle(ButtonStyleMode.NORMAL)
+              .fontColor(themePalette.accent())
+              .layoutWeight(1)
+              .onClick(() => {
+                this.openDailyChar(this.daily());
+              })
+          }
+        }
+        .width('100%')
       }
       .width('100%')
+      .padding($r('app.float.space_l'))
+      .alignItems(HorizontalAlign.Start)
+    }
+  }
 
-      Text($r('app.string.books_progress', 0, this.totalChars()))
-        .fontSize($r('app.float.font_size_body'))
-        .fontColor($r('app.color.hm_text_secondary'))
-        .width('100%')
-
-      Progress({ value: 0, total: Math.max(1, this.totalChars()), type: ProgressType.Linear })
-        .width('100%')
-        .color(themePalette.accent())
-
-      Button($r('app.string.books_continue'))
-        .buttonStyle(ButtonStyleMode.EMPHASIZED)
-        .fontColor($r('app.color.hm_on_brand'))
-        .backgroundColor(themePalette.fill())
+  @Builder
+  sectionHeader() {
+    Row({ space: $r('app.float.space_s') }) {
+      Column()
+        .width($r('app.float.space_xs'))
+        .height($r('app.float.font_size_title'))
+        .borderRadius($r('app.float.space_xxs'))
+        .backgroundColor($r('app.color.ink_seal'))
+      Text($r('app.string.books_title'))
+        .fontSize($r('app.float.font_size_title'))
+        .fontWeight(FontWeight.Medium)
+        .fontColor($r('app.color.hm_text_primary'))
+      Divider()
+        .color($r('app.color.ink_line'))
+        .layoutWeight(1)
+      Button($r('app.string.books_search'))
+        .buttonStyle(ButtonStyleMode.TEXTUAL)
+        .fontSize($r('app.float.font_size_caption'))
+        .fontColor(themePalette.accent())
         .onClick(() => {
-          this.openFirstBook();
+          this.openCatalog();
         })
     }
     .width('100%')
-    .padding($r('app.float.space_l'))
-    .backgroundColor($r('app.color.hanzi_card'))
-    .borderRadius($r('app.float.book_card_radius'))
+    .alignItems(VerticalAlign.Center)
   }
 
   @Builder
   bookCard(book: Book) {
-    Column({ space: $r('app.float.space_xs') }) {
-      Text(book.title)
-        .fontSize($r('app.float.font_size_body'))
-        .fontWeight(FontWeight.Medium)
-        .fontColor($r('app.color.hm_text_primary'))
-        .maxLines(1)
-        .textOverflow({ overflow: TextOverflow.Ellipsis })
-      Text($r('app.string.books_lesson_count', book.lessonCount, book.charCount))
-        .fontSize($r('app.float.font_size_caption'))
-        .fontColor($r('app.color.hm_text_secondary'))
-        .maxLines(1)
-      Blank()
-      Progress({ value: 0, total: Math.max(1, book.charCount), type: ProgressType.Linear })
+    Column() {
+      InkCard() {
+        Column({ space: $r('app.float.space_s') }) {
+          Row({ space: $r('app.float.space_s') }) {
+            HanziGridCell({ char: this.gradeGlyph(book), cellSize: CARD_TILE })
+            Column({ space: $r('app.float.space_xxs') }) {
+              Text(book.title)
+                .fontSize($r('app.float.font_size_body'))
+                .fontWeight(FontWeight.Medium)
+                .fontColor($r('app.color.hm_text_primary'))
+                .maxLines(1)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+              Text($r('app.string.books_lesson_count', book.lessonCount, book.charCount))
+                .fontSize($r('app.float.font_size_caption'))
+                .fontColor($r('app.color.hm_text_secondary'))
+                .maxLines(1)
+              Text(this.termLabel(book))
+                .fontSize($r('app.float.font_size_caption'))
+                .fontColor($r('app.color.hm_text_secondary'))
+                .maxLines(1)
+            }
+            .layoutWeight(1)
+            .alignItems(HorizontalAlign.Start)
+          }
+          .width('100%')
+
+          Blank()
+
+          Progress({ value: 0, total: Math.max(1, book.charCount), type: ProgressType.Linear })
+            .width('100%')
+            .color(themePalette.accent())
+        }
         .width('100%')
-        .color(themePalette.accent())
+        .height('100%')
+        .padding($r('app.float.space_m'))
+        .alignItems(HorizontalAlign.Start)
+      }
     }
     .width('100%')
-    .height(CARD_HEIGHT)
-    .alignItems(HorizontalAlign.Start)
-    .padding($r('app.float.space_m'))
-    .backgroundColor($r('app.color.hanzi_card'))
-    .borderRadius($r('app.float.book_card_radius'))
+    .height($r('app.float.books_card_height'))
     .onClick(() => {
       this.openBook(book);
     })
   }
 
+  /** 纸色底 + 两团墨晕，营造宣纸质感（不使用位图素材）。 */
+  @Builder
+  paperLayer() {
+    Stack() {
+      Column()
+        .width('100%')
+        .height('100%')
+        .linearGradient({
+          angle: 180,
+          colors: [[$r('app.color.ink_paper'), 0.0], [$r('app.color.ink_paper_deep'), 1.0]]
+        })
+      Column()
+        .width(260)
+        .height(260)
+        .borderRadius(130)
+        .backgroundColor($r('app.color.ink_paper_deep'))
+        .opacity(0.9)
+        .blur(80)
+        .offset({ x: -90, y: -60 })
+      Column()
+        .width(220)
+        .height(220)
+        .borderRadius(110)
+        .backgroundColor($r('app.color.ink_paper_deep'))
+        .opacity(0.9)
+        .blur(80)
+        .offset({ x: 110, y: 320 })
+    }
+    .width('100%')
+    .height('100%')
+  }
+
   build() {
-    ResponsiveContent() {
-      List({ scroller: scrollers.home }) {
-        ListItem() {
-          Column({ space: $r('app.float.space_l') }) {
-            Row().width('100%')
-              .height(this.underTitleBar ? safeArea.contentTopInsetVp : $r('app.float.space_l'))
-            this.todayCard()
-            Row() {
-              Text($r('app.string.books_title'))
-                .fontSize($r('app.float.font_size_section'))
-                .fontColor($r('app.color.hm_text_secondary'))
-                .layoutWeight(1)
-              Button($r('app.string.books_search'))
-                .buttonStyle(ButtonStyleMode.TEXTUAL)
-                .fontSize($r('app.float.font_size_caption'))
-                .fontColor(themePalette.accent())
-                .onClick(() => {
-                  this.openCatalog();
-                })
+    Stack({ alignContent: Alignment.TopStart }) {
+      this.paperLayer()
+
+      ResponsiveContent() {
+        List({ scroller: scrollers.home }) {
+          ListItem() {
+            Column({ space: $r('app.float.space_l') }) {
+              Row().width('100%')
+                .height(this.underTitleBar ? safeArea.contentTopInsetVp : $r('app.float.space_l'))
+              this.todayCard()
+              this.sectionHeader()
             }
             .width('100%')
           }
-          .width('100%')
-        }
 
-        ListItem() {
-          Grid() {
-            ForEach(curriculumRepository.books(), (book: Book) => {
-              GridItem() {
-                this.bookCard(book)
-              }
-            }, (book: Book) => book.id)
-          }
-          .columnsTemplate(deviceService.wide ? '1fr 1fr 1fr 1fr' : '1fr 1fr')
-          .columnsGap(CARD_GAP)
-          .rowsGap(CARD_GAP)
-          .width('100%')
-          .height(this.gridHeight())
-          .margin({ top: $r('app.float.space_m') })
-        }
-
-        ListItem() {
-          Row()
+          ListItem() {
+            Grid() {
+              ForEach(curriculumRepository.books(), (book: Book) => {
+                GridItem() {
+                  this.bookCard(book)
+                }
+              }, (book: Book) => book.id)
+            }
+            .columnsTemplate(deviceService.wide ? '1fr 1fr 1fr 1fr' : '1fr 1fr')
+            .columnsGap(CARD_GAP)
+            .rowsGap(CARD_GAP)
             .width('100%')
-            .height(safeArea.contentBottomInsetVp)
+            .height(this.gridHeight())
+            .margin({ top: $r('app.float.space_m') })
+          }
+
+          ListItem() {
+            Row()
+              .width('100%')
+              .height(safeArea.contentBottomInsetVp)
+          }
         }
+        .width('100%')
+        .height('100%')
+        .padding({ left: $r('app.float.space_l'), right: $r('app.float.space_l') })
+        .scrollBar(BarState.Off)
       }
-      .width('100%')
-      .height('100%')
-      .padding({ left: $r('app.float.space_l'), right: $r('app.float.space_l') })
-      .scrollBar(BarState.Off)
     }
+    .width('100%')
+    .height('100%')
   }
 }

@@ -11,6 +11,7 @@
 import {
   DynamicHideParams,
   HideMode,
+  HdsNavigationMenuContentOptions,
   HdsNavigationTitleBarStyle,
   HdsNavigationTitle,
   HdsNavigationTitleBarOptions,
@@ -83,9 +84,13 @@ export function indexMaterialTitleStyle(): TitleBarStyleOptions {
   return style;
 }
 
-export function indexTitleOptions(mainTitle: ResourceStr): HdsNavigationTitleBarOptions {
+export function indexTitleOptions(mainTitle: ResourceStr,
+  menu?: HdsNavigationMenuContentOptions): HdsNavigationTitleBarOptions {
   const title: HdsNavigationTitle = { mainTitle: mainTitle };
   const content: TitleBarContentOptions = { title: title };
+  if (menu !== undefined) {
+    content.menu = menu;
+  }
   const options: HdsNavigationTitleBarOptions = {
     avoidLayoutSafeArea: true,
     enableComponentSafeArea: false,

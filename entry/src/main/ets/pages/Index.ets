@@ -15,6 +15,8 @@ import {
   HdsNavigation,
   HdsNavDestination,
   HdsNavigationTitleMode,
+  HdsNavigationMenuContentOptions,
+  HdsNavigationMenuItemOptions,
   HdsTabsFloatingStyle,
   HdsSideBar,
   HdsSideMenu,
@@ -44,10 +46,6 @@ import { CatalogView } from '../views/catalog/CatalogView';
 import { ReviewTabView } from '../views/review/ReviewTabView';
 import { DetailPageView } from '../views/DetailPageView';
 import { SettingsTabView } from '../views/SettingsTabView';
-import { SettingsLookView } from '../views/settings/SettingsLookView';
-import { SettingsMaterialView } from '../views/settings/SettingsMaterialView';
-import { SettingsSystemView } from '../views/settings/SettingsSystemView';
-import { SettingsStudyView } from '../views/settings/SettingsStudyView';
 import { ImageTabView } from '../views/ImageTabView';
 import { ImagePreviewView } from '../views/ImagePreviewView';
 import { PrivacyVeil } from '../views/PrivacyVeil';
@@ -93,6 +91,24 @@ struct Index {
       return $r('app.string.settings_title');
     }
     return $r('app.string.tab_images');
+  }
+
+  /** 首页标题栏右侧：查字（HM Symbol 搜索图标）。 */
+  private titleMenu(): HdsNavigationMenuContentOptions | undefined {
+    if (this.currentTab !== TabIndex.BOOKS) {
+      return undefined;
+    }
+    const searchItem: HdsNavigationMenuItemOptions = {
+      content: {
+        icon: $r('sys.symbol.magnifyingglass'),
+        label: $r('app.string.books_search'),
+        action: (): void => {
+          this.navPathStack.pushPathByName(RouterConstants.PAGE_CATALOG, new CatalogRouteParam(''));
+        }
+      }
+    };
+    const menu: HdsNavigationMenuContentOptions = { value: [searchItem] };
+    return menu;
   }
 
   private floatingStyle(): HdsTabsFloatingStyle {
@@ -176,8 +192,7 @@ struct Index {
   @Builder
   settingsContent() {
     SettingsTabView({
-      underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR,
-      navPathStack: this.navPathStack
+      underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR
     })
   }
 
@@ -196,23 +211,23 @@ struct Index {
       TabContent() {
         this.booksContent()
       }
-      .tabBar(this.barBuilder($r('sys.symbol.square_grid_2x2'), $r('app.string.tab_books'), this.currentTab === TabIndex.BOOKS))
+      .tabBar(this.barItem($r('sys.symbol.square_grid_2x2'), $r('app.string.tab_books'), TabIndex.BOOKS))
 
       TabContent() {
         this.reviewContent()
       }
-      .tabBar(this.barBuilder($r('sys.symbol.checkmark_circle'), $r('app.string.tab_review'), this.currentTab === TabIndex.REVIEW))
+      .tabBar(this.barItem($r('sys.symbol.checkmark_circle'), $r('app.string.tab_review'), TabIndex.REVIEW))
 
       TabContent() {
         this.settingsContent()
       }
-      .tabBar(this.barBuilder($r('sys.symbol.gearshape'), $r('app.string.tab_settings'), this.currentTab === TabIndex.SETTINGS))
+      .tabBar(this.barItem($r('sys.symbol.gearshape'), $r('app.string.tab_settings'), TabIndex.SETTINGS))
 
       if (IMAGE_DOMAIN) {
         TabContent() {
           this.imagesContent()
         }
-        .tabBar(this.barBuilder($r('sys.symbol.picture'), $r('app.string.tab_images'), this.currentTab === TabIndex.IMAGES))
+        .tabBar(this.barItem($r('sys.symbol.picture'), $r('app.string.tab_images'), TabIndex.IMAGES))
       }
     }
     .barPosition(BarPosition.End)
@@ -280,15 +295,22 @@ struct Index {
     .height('100%')
   }
 
+  /**
+   * 底部页签项。
+   *
+   * 关键：@Builder 传入 ≥2 个参数时参数本身不触发动态刷新（见 SettingsRows 注释），
+   * 所以这里只把「第几个页签」当参数，选中态在 builder 内部读 this.currentTab —— 只有这样，
+   * onChange 更新 currentTab 时图标与文字颜色才会跟着重建。
+   */
   @Builder
-  barBuilder(icon: Resource, label: ResourceStr, active: boolean) {
+  barItem(icon: Resource, label: ResourceStr, index: number) {
     Column({ space: $r('app.float.space_xxs') }) {
       SymbolGlyph(icon)
         .fontSize($r('app.float.tab_icon_size'))
-        .fontColor([active ? themePalette.accent() : $r('app.color.hm_text_secondary')])
+        .fontColor([this.currentTab === index ? themePalette.accent() : $r('app.color.hm_text_secondary')])
       Text(label)
         .fontSize($r('app.float.tab_font_size'))
-        .fontColor(active ? themePalette.accent() : $r('app.color.hm_text_secondary'))
+        .fontColor(this.currentTab === index ? themePalette.accent() : $r('app.color.hm_text_secondary'))
     }
     .width('100%')
     .height($r('app.float.tab_item_height'))
@@ -377,34 +399,6 @@ struct Index {
       .titleBar(indexTitleOptions($r('app.string.image_preview_title')))
       .dynamicHideTitleBar(indexDynamicHideParams())
       .backgroundColor($r('app.color.hm_page_background'))
-    } else if (name === RouterConstants.PAGE_SETTINGS_LOOK) {
-      HdsNavDestination() {
-        SettingsLookView({ underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR })
-      }
-      .titleBar(indexTitleOptions($r('app.string.settings_look_title')))
-      .dynamicHideTitleBar(indexDynamicHideParams())
-      .backgroundColor($r('app.color.hm_page_background'))
-    } else if (name === RouterConstants.PAGE_SETTINGS_MATERIAL) {
-      HdsNavDestination() {
-        SettingsMaterialView({ underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR })
-      }
-      .titleBar(indexTitleOptions($r('app.string.settings_material_title')))
-      .dynamicHideTitleBar(indexDynamicHideParams())
-      .backgroundColor($r('app.color.hm_page_background'))
-    } else if (name === RouterConstants.PAGE_SETTINGS_SYSTEM) {
-      HdsNavDestination() {
-        SettingsSystemView({ underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR })
-      }
-      .titleBar(indexTitleOptions($r('app.string.settings_system_title')))
-      .dynamicHideTitleBar(indexDynamicHideParams())
-      .backgroundColor($r('app.color.hm_page_background'))
-    } else if (name === RouterConstants.PAGE_SETTINGS_STUDY) {
-      HdsNavDestination() {
-        SettingsStudyView({ underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR })
-      }
-      .titleBar(indexTitleOptions($r('app.string.settings_study_title')))
-      .dynamicHideTitleBar(indexDynamicHideParams())
-      .backgroundColor($r('app.color.hm_page_background'))
     }
   }
 
@@ -466,7 +460,7 @@ struct Index {
             this.tabShell()
           }
         }
-        .titleBar(indexTitleOptions(this.currentTitle()))
+        .titleBar(indexTitleOptions(this.currentTitle(), this.titleMenu()))
         // 紧凑标题栏：FREE 大标题会与首屏占位重叠，模板统一使用 MINI。
         .titleMode(HdsNavigationTitleMode.MINI)
         .hideBackButton(true)

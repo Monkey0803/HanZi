@@ -18,12 +18,4 @@ export class RouterConstants {
   static readonly PAGE_CATALOG: string = 'catalog';
   /** 全屏图片预览（图片领域使用；基模板只保留桩件与路由分支）。 */
   static readonly PAGE_PREVIEW: string = 'imagePreview';
-  /** 设置二级页：外观与语言。 */
-  static readonly PAGE_SETTINGS_LOOK: string = 'settingsLook';
-  /** 设置二级页：材质与动效。 */
-  static readonly PAGE_SETTINGS_MATERIAL: string = 'settingsMaterial';
-  /** 设置二级页：系统与隐私。 */
-  static readonly PAGE_SETTINGS_SYSTEM: string = 'settingsSystem';
-  /** 设置二级页：笔顺与练习。 */
-  static readonly PAGE_SETTINGS_STUDY: string = 'settingsStudy';
 }

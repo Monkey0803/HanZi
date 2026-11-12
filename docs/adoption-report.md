@@ -110,13 +110,16 @@
 | 场景 | 操作 | 观察结果 |
 | --- | --- | --- |
 | 启动门控 | 冷启动 | 先出 `bootstrapLoadingOverlay`，数据就绪后挂载 `HdsNavigation`，无白屏 |
-| 首页 | 冷启动后 | 「今日学习 0/3044 字」「完整数据（本地）」12 册卡片正常 |
+| 首页（水墨卷轴） | 冷启动后 | 宣纸色底 + 卷轴卡；今日学习卡内含「每日一字」（字/拼音/笔画/部首/出处）+ 进度 + 继续学习/看这个字；12 册册签按年级显示一~六大字与上下册 |
 | 二级页 | 点第一册 → 课程 → 生字 | BookDetail / LessonDetail（天地人、隐藏拼音、会写的字）/ CharDetail（大·天、第 3/3 笔、播放笔顺、描红练习）均正常返回 |
-| 页签切换 | 底部悬浮页签 | 课本 / 复习 / 设置三页切换正常（页签可点区域 y≈2084–2123） |
-| 材质页 | 设置 → 材质与动效 | 「应用级材质 enable / 材质等级 EXQUISITE」、沉浸光感开关、材质类型/沉浸光感材质下拉、光感反馈开关均渲染 |
+| 页签切换 | 底部悬浮页签 | 课本 / 复习 / 设置三页切换正常（页签可点区域 y≈2084–2123）；选中项图标与文字实时变主题色，未选中为次级色 |
+| 全局纸感 | 冷启动 / 四个页签 / 二级页 | `hm_page_background` 改为宣纸色、`hm_card_background` / `hanzi_card` 改为纯白：设置页、复习页、课本页、书册页、课文页、生字页背景一致，卡片在纸底上有明确层次；启动窗口 `start_window_background` 与半模态遮罩 `hm_veil_background` 同步，冷启动无白闪 |
+| 深浅色 | 设置 → 主题 → 深色 | 全站切深色（`hm_page_background` / `start_window_background` → `#17181C`，与 `ink_paper` 同色）：墨色纸底 + 深灰卡片 + 白色字；切回「跟随系统」恢复浅色 |
+| 设置内联 | 设置页签 | 外观与语言 / 材质与动效 / 系统与隐私 / 笔顺与练习 四个分区同页可滚，无二级跳转；「应用级材质 enable / 材质等级 EXQUISITE」、自定义沉浸光感说明均渲染 |
 | 自定义沉浸光感分区 | 选「精美」 | 分区文案由「跟随系统自适应档位。」变为「使用设备支持的所选档位。」，说明 `CustomImmersiveViewModel.recompute()` 生效 |
-| 主题色 | 外观与语言 → 主题色 → 绿色 | 全局强调色、图标、胶囊底色同步变绿 |
-| 系统与隐私 | 设置 → 系统与隐私，开启防窥保护 | 智感握姿 →「未生效：设备不支持智感握姿」；防窥保护 →「未生效：设备不支持防窥保护」；日志仅 `isDlpAntiPeepSwitchOn failed: 801`，无崩溃（按预期降级） |
+| 主题色 | 设置页 → 主题色 → 绿色 / 蓝色 | 半模态从底部弹出（宿主在页签层，未被 Scroll 裁切），确认后设置页、课本页、生字页、底部页签、LoadingProgress 的强调色同步变更 |
+| 描红练习 | 生字页 → 描红练习 → 手写 | 进入即归零为「第 0/8 笔 / 错误 0 次」；写错一笔「错误 1 次」实时变红并闪红提示；写对一笔变「第 1/8 笔」且该笔填墨、序号标记移到下一笔 |
+| 系统与隐私 | 设置页内联分区，开启防窥保护 | 智感握姿 →「未生效：设备不支持智感握姿」；防窥保护 →「未生效：设备不支持防窥保护」；日志仅 `isDlpAntiPeepSwitchOn failed: 801`，无崩溃（按预期降级） |
 | 复习页 | 复习页签 | 占位卡片 + 禁用「开始复习」（Phase 5 未接入，符合当前阶段） |
 | 运行日志 | `devecocli log --bundle-name com.example.hanzi` | 无 ERROR / Exception / JSCrash；仅 `holdingHandChanged on failed: 801`（模拟器无握姿传感器，预期） |
 | 偏好持久化 | 改主题色 / 材质档位后重装并重启 | 选择项（绿色、精美）与自定义沉浸光感文案均保持，`SettingsStore` 读写正常 |
@@ -128,6 +131,9 @@
 | 移除 MiniBar 后「光感反馈」开关不再影响任何材质 | 该开关原先只被 `glassInteractiveMaterial()` 使用，MiniBar 删除后成为悬空配置 | `overlayMaterial()` 增加 `lightEnabled` 参数，并透传到 `menuOptionsFor()` / `sheetOptions()` / `dialogParams()` / `toastOptions()`；三处调用点传 `appSettings.lightEffectEnabled` |
 | 死代码与过期注释 | `glassInteractiveMaterial()`、`menuOptions()` 已无调用；`DetailPageView` 注释仍提 MiniBar | 删除两个方法，注释改为「底部页签栏」 |
 | 主题色只作用于设置页，首页/生字页仍是固定蓝 | 首页、生字页、底部页签、LoadingProgress 用静态 `$r('app.color.hanzi_active')` / `hm_brand` | 统一改用 `themePalette.fill()`（实心按钮）/ `accent()`（文字、图标、进度条）；`ButtonStyleMode.NORMAL` 按钮显式下发 `accent()`，避免沿用系统默认蓝 |
+| 点「描红练习」后「第 x/8 笔」仍显示上次播放的终值 | `char_quiz` 的 onClick 只重置 `mistakes`，未重置父级 `strokeIndex` | onClick 内补 `this.strokeIndex = 0`，进入描红即显示「第 0/n 笔」 |
+| 描红过程中「错误 N 次」永远为 0 | `StrokeCanvas` 只在整字写完时通过 `onQuizComplete` 回传错误数，中途不回调 | 新增 `@Event onStrokeError(total)`，在 `evaluateStroke()` 判定失败时回调；`CharDetailView` / `PracticeView` 订阅后实时更新计数 |
+| 页签选中态不随切换刷新 | `barBuilder(icon, label, active)` 用 ≥2 个参数推导 `@Builder`，参数变化不触发重绘 | 改为 `barItem(icon, label, index)`，在 builder 内部读 `this.currentTab` 判断选中态 |
 
 ## 8. 未验证项
 

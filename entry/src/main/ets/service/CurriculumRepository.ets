@@ -277,7 +277,9 @@ export class CurriculumRepository {
       const book: Book = new Book();
       book.id = TsvUtil.at(row, 0);
       book.grade = TsvUtil.numberAt(row, 1);
-      book.term = TsvUtil.numberAt(row, 2);
+      // books.tsv 的 term 是 'a'（上册）/ 'b'（下册），对外统一成 1 / 2。
+      const rawTerm: string = TsvUtil.at(row, 2);
+      book.term = rawTerm === 'a' ? 1 : (rawTerm === 'b' ? 2 : TsvUtil.numberAt(row, 2));
       book.title = TsvUtil.at(row, 3);
       book.lessonCount = TsvUtil.numberAt(row, 4);
       book.charCount = TsvUtil.numberAt(row, 5);

@@ -6,6 +6,9 @@ import strokeEngineTest from './StrokeEngine.test';
 import customImmersivePolicyTest from './CustomImmersivePolicy.test';
 import adoptionPolicyTest from './AdoptionPolicy.test';
 import strokeNumberLayoutTest from './StrokeNumberLayout.test';
+import pinyinUtilsTest from './PinyinUtils.test';
+import ideographDecompositionTest from './IdeographDecomposition.test';
+import dailyCharPickerTest from './DailyCharPicker.test';
 
 export default function testsuite() {
   settingsOptionsTest();
@@ -16,4 +19,7 @@ export default function testsuite() {
   customImmersivePolicyTest();
   adoptionPolicyTest();
   strokeNumberLayoutTest();
+  pinyinUtilsTest();
+  ideographDecompositionTest();
+  dailyCharPickerTest();
 }

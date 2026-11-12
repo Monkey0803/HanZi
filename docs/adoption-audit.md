@@ -83,7 +83,7 @@
 | `NAVIGATION` | 已接入：单栈 `HdsNavigation` + 悬浮 `HdsTabs` | `pages/Index.ets` |
 | `REACH` | 已接入：`holdingHandChanged` 订阅 + 左手镜像（详情页操作区） | `service/GripSensor.ets`、`views/DetailPageView.ets` |
 | `ANTI_PEEP` | 已接入但默认关闭：`canIUse` + 系统开关 + 订阅 + 遮罩（`PrivacyVeil`） | `service/AntiPeep.ets`、`views/PrivacyVeil.ets` |
-| `MATERIAL_CHOICE` | 已接入：材质类型 / 四档 / 光感反馈设置项 | `views/settings/SettingsMaterialView.ets`、`model/SettingsOptions.ets` |
+| `MATERIAL_CHOICE` | 已接入：材质类型 / 四档 / 光感反馈设置项 | `views/settings/SettingsMaterialSection.ets`、`model/SettingsOptions.ets` |
 | `CUSTOM_IMMERSIVE` | 部分：`getSystemMaterialTypes()` 能力探测 + 等级收敛；**无双入口共用状态/动态切换** | `service/MaterialController.ets` |
 | `CARD` | 未接入（无 FormExtensionAbility / form_config） | — |
 | `I18N` | 已接入：base(en) + zh_CN，key 集合一致 | `resources/base`、`resources/zh_CN` |

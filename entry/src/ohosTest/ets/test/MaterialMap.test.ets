@@ -90,11 +90,13 @@ export default function materialMapTest() {
       }
     });
 
-    it('glass_interactive_falls_back_to_glass_when_light_is_off', 0, () => {
-      // 光感反馈关掉（或设备没有 lightEffect 能力）时，应拿到与普通玻璃同一个材质实例。
-      const plain: uiMaterial.Material | undefined = MaterialController.glassMaterial(true);
-      const noLight: uiMaterial.Material | undefined = MaterialController.glassInteractiveMaterial(true, false);
-      expect(noLight === plain).assertTrue();
+    it('overlay_material_off_when_immersive_is_disabled', 0, () => {
+      // 总开关关闭时必须显式返回 empty（而不是 undefined），避免组件回落到默认材质。
+      if (!MaterialController.glassSupported() || !MaterialController.appMaterialOn()) {
+        expect(MaterialController.overlayMaterial(false) === undefined).assertTrue();
+      } else {
+        expect(MaterialController.overlayMaterial(false) === uiMaterial.Material.empty).assertTrue();
+      }
     });
 
     it('glass_material_follows_device_support', 0, () => {

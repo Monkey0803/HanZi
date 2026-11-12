@@ -691,6 +691,30 @@
     {
       "name": "practice_reset",
       "value": "Reset"
+    },
+    {
+      "name": "books_daily_title",
+      "value": "Character of the day"
+    },
+    {
+      "name": "books_daily_open",
+      "value": "Open this character"
+    },
+    {
+      "name": "books_daily_from",
+      "value": "From \"%s\""
+    },
+    {
+      "name": "books_daily_stroke",
+      "value": "%d strokes"
+    },
+    {
+      "name": "books_term_up",
+      "value": "First term"
+    },
+    {
+      "name": "books_term_down",
+      "value": "Second term"
     }
   ]
 }

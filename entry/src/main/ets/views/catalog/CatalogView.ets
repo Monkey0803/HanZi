@@ -19,6 +19,8 @@ import { AppMenu } from '../../common/components/AppMenu';
 import { choiceMenu } from '../../common/components/ChoiceMenu';
 import { ResponsiveContent } from '../ResponsiveContent';
 
+const LIST_SPACE: number = 8;
+
 @ComponentV2
 export struct CatalogView {
   @Param navPathStack: NavPathStack = new NavPathStack();
@@ -110,7 +112,7 @@ export struct CatalogView {
 
   build() {
     ResponsiveContent() {
-      List({ space: $r('app.float.space_s') }) {
+      List({ space: LIST_SPACE }) {
         ListItem() {
           Row().width('100%')
             .height(this.underTitleBar ? safeArea.contentTopInsetVp : $r('app.float.space_l'))

@@ -179,6 +179,14 @@
     {
       "name": "book_card_radius",
       "value": "16"
+    },
+    {
+      "name": "books_card_height",
+      "value": "108"
+    },
+    {
+      "name": "ink_radius_card",
+      "value": "20"
     }
   ]
 }

@@ -11,6 +11,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ensureDir, exists, readText, readTsv, tsvRow, writeText } from './lib.mjs';
+import { composeWordPractice } from './passages/compose.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MAX_TEXT_LENGTH = 120;
@@ -94,30 +95,6 @@ function uniqueChars(values) {
   return result;
 }
 
-/** 自动拼句：优先读本课词语，其次读本课生字；绝不引入超纲字。 */
-function composeText(focus, candidates) {
-  const sentences = [];
-  const readChars = focus.slice(0, 6);
-  if (candidates.length >= 2) {
-    sentences.push(`${candidates.slice(0, 4).join('、')}。`);
-    if (candidates.length >= 6) {
-      sentences.push(`${candidates.slice(4, 7).join('、')}。`);
-    }
-  }
-  if (readChars.length > 0 && sentences.length < 3) {
-    sentences.push(`${readChars.join('')}。`);
-  }
-  if (readChars.length >= 2 && sentences.length < 3) {
-    sentences.push(`${readChars.join('')}，${[...readChars].reverse().join('')}。`);
-  }
-  let text = sentences.join('');
-  while (text.length > MAX_TEXT_LENGTH && sentences.length > 1) {
-    sentences.pop();
-    text = sentences.join('');
-  }
-  return text.length > MAX_TEXT_LENGTH ? text.slice(0, MAX_TEXT_LENGTH) : text;
-}
-
 /** 人工覆盖的读音覆盖串：'地:dì;人:rén' → '地:dì;人:rén'（原样输出，去掉空白）。 */
 function normalizeOverrides(value) {
   return String(value ?? '')
@@ -185,7 +162,7 @@ async function main() {
         candidates.push(word);
         if (candidates.length >= MAX_CANDIDATE_WORDS) break;
       }
-      const text = composeText(focus, candidates);
+      const text = composeWordPractice(candidates);
       if (text.length === 0) {
         skipped += 1;
       } else {

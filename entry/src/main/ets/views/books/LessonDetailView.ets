@@ -40,7 +40,6 @@ export struct LessonDetailView {
   @Param navPathStack: NavPathStack = new NavPathStack();
   @Param underTitleBar: boolean = true;
 
-  @Local showReadingPinyin: boolean = true;
   @Local quizTarget: string = '';
   @Local quizResult: number = 0;
 
@@ -241,9 +240,9 @@ export struct LessonDetailView {
           Text($r('app.string.reading_pinyin'))
             .fontSize($r('app.float.font_size_caption'))
             .fontColor($r('app.color.hm_text_secondary'))
-          Toggle({ type: ToggleType.Switch, isOn: this.showReadingPinyin })
+          Toggle({ type: ToggleType.Switch, isOn: !appSettings.hidePinyin })
             .onChange((value: boolean) => {
-              this.showReadingPinyin = value;
+              settingsViewModel.setHidePinyin(!value);
             })
           Button($r('app.string.reading_quiz_start'))
             .buttonStyle(ButtonStyleMode.TEXTUAL)
@@ -278,7 +277,7 @@ export struct LessonDetailView {
           PassageCard({
             passage: passage,
             glyphs: this.reading.glyphsOf(passage.id),
-            showPinyin: this.showReadingPinyin && !appSettings.hidePinyin,
+            showPinyin: !appSettings.hidePinyin,
             playing: ttsService.speakingId === passage.id,
             canSpeak: appSettings.ttsEnabled && ttsService.available,
             onCharClick: (char: string): void => {

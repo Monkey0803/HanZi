@@ -9,6 +9,7 @@
     "data:curriculum": "node build-curriculum.mjs",
     "data:strokes": "node build-hanzi-data.mjs",
     "data:passages": "node build-passages.mjs",
+    "test:passages": "node --test passages/*.test.mjs",
     "data:build": "node build-curriculum.mjs && node build-hanzi-data.mjs && node build-passages.mjs",
     "data:validate": "node validate-data.mjs",
     "data:all": "node fetch-textbook.mjs && node build-curriculum.mjs && node build-hanzi-data.mjs && node build-passages.mjs && node validate-data.mjs",

@@ -23,6 +23,7 @@ import { PaperBackground } from '../PaperBackground';
 import { PageTopSpacer } from '../PageTopSpacer';
 import { HanziGridCell } from './HanziGridCell';
 import { InkCard } from './InkCard';
+import { progressStore } from '../../service/ProgressStore';
 
 const CARD_HEIGHT: number = 108;
 const CARD_GAP: number = 12;
@@ -168,11 +169,11 @@ export struct BooksTabView {
         Divider().color($r('app.color.ink_line'))
 
         Column({ space: $r('app.float.space_xs') }) {
-          Text($r('app.string.books_progress', 0, this.totalChars()))
+          Text($r('app.string.books_progress', progressStore.learnedCount, this.totalChars()))
             .fontSize($r('app.float.font_size_caption'))
             .fontColor($r('app.color.hm_text_secondary'))
             .width('100%')
-          Progress({ value: 0, total: Math.max(1, this.totalChars()), type: ProgressType.Linear })
+          Progress({ value: progressStore.learnedCount, total: Math.max(1, this.totalChars()), type: ProgressType.Linear })
             .width('100%')
             .color(themePalette.accent())
         }
@@ -255,7 +256,15 @@ export struct BooksTabView {
 
           Blank()
 
-          Progress({ value: 0, total: Math.max(1, book.charCount), type: ProgressType.Linear })
+          Text($r('app.string.progress_learned', progressStore.learnedOfBook(book.id), book.charCount))
+            .fontSize($r('app.float.font_size_caption'))
+            .fontColor($r('app.color.hm_text_secondary'))
+            .width('100%')
+          Progress({
+            value: progressStore.learnedOfBook(book.id),
+            total: Math.max(1, book.charCount),
+            type: ProgressType.Linear
+          })
             .width('100%')
             .color(themePalette.accent())
         }

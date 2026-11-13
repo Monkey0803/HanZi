@@ -29,7 +29,11 @@ export enum SettingField {
   SHOW_NUMBERS = 'showNumbers',
   SHOW_SKELETON = 'showSkeleton',
   SHOW_STEPS = 'showSteps',
-  GRID_STYLE = 'gridStyle'
+  GRID_STYLE = 'gridStyle',
+  HIDE_PINYIN = 'hidePinyin',
+  STROKE_SPEED = 'strokeSpeed',
+  DAILY_GOAL = 'dailyGoal',
+  TTS = 'tts'
 }
 
 /** 行首图标 + 标题。纯静态内容，不随状态变化。 */
@@ -89,6 +93,10 @@ export struct OptionSelectRow {
         return appSettings.languageMode;
       case SettingField.GRID_STYLE:
         return appSettings.gridStyle;
+      case SettingField.STROKE_SPEED:
+        return appSettings.strokeSpeed;
+      case SettingField.DAILY_GOAL:
+        return appSettings.dailyGoal.toString();
       default:
         return appSettings.themeMode;
     }
@@ -144,6 +152,10 @@ export struct SwitchSettingRow {
         return appSettings.showSkeleton;
       case SettingField.SHOW_STEPS:
         return appSettings.showStrokeSteps;
+      case SettingField.HIDE_PINYIN:
+        return appSettings.hidePinyin;
+      case SettingField.TTS:
+        return appSettings.ttsEnabled;
       default:
         return appSettings.immersiveOn;
     }

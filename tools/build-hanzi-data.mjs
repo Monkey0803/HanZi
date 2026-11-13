@@ -50,6 +50,7 @@ async function copyLicenses(outDir) {
   await ensureDir(target);
   const files = [
     ['ARPHICPL.txt', 'ARPHICPL.txt'],
+    ['CHINESE_TEXTBOOK_MIT.txt', 'CHINESE_TEXTBOOK_MIT.txt'],
     ['COPYING.txt', 'COPYING.txt'],
     ['LGPL.txt', 'LGPL.txt'],
     ['LICENSE-hanzi-writer.txt', 'LICENSE-hanzi-writer.txt']
@@ -155,6 +156,9 @@ async function main() {
   const metaFile = path.join(args.curriculum, 'meta.tsv');
   const metaRows = (await exists(metaFile)) ? await readTsv(metaFile) : [];
   const meta = new Map(metaRows.filter((row) => row.length >= 2).map((row) => [row[0], row[1]]));
+  if (!meta.has('dataVersion')) {
+    meta.set('dataVersion', '1.0.0');
+  }
   meta.set('strokeChars', String(graphics.size));
   meta.set('missingStrokes', String(missing.length));
   meta.set('catalogChars', String(dictionaryRows.length));

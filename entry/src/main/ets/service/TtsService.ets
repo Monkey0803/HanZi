@@ -7,6 +7,7 @@
 
 import { textToSpeech } from '@kit.CoreSpeechKit';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { appSettings } from '../model/AppSettings';
 
 class TtsListener implements textToSpeech.SpeakListener {
   private onDone: () => void;
@@ -48,11 +49,19 @@ export class TtsService {
 
   /** 预创建引擎（由阅读区 aboutToAppear 调用），失败只降级，不抛错。 */
   async init(): Promise<void> {
+    if (!appSettings.ttsEnabled) {
+      this.available = false;
+      return;
+    }
     await this.ensureEngine();
   }
 
   /** 点同一个短文 = 停止；点另一个 = 切换朗读。 */
   async speak(passageId: string, text: string): Promise<void> {
+    if (!appSettings.ttsEnabled) {
+      this.stop();
+      return;
+    }
     if (this.engine !== undefined && this.speakingId === passageId) {
       this.stop();
       return;

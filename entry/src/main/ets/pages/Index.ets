@@ -27,7 +27,6 @@ import { appSettings } from '../model/AppSettings';
 import { themePalette } from '../model/ThemePalette';
 import { settingsViewModel } from '../viewmodel/SettingsViewModel';
 import { customImmersiveViewModel } from '../viewmodel/CustomImmersiveViewModel';
-import { antiPeep } from '../service/AntiPeep';
 import { gripSensor } from '../service/GripSensor';
 import { deviceService } from '../service/DeviceService';
 import { scrollers } from '../service/ScrollerRegistry';
@@ -45,16 +44,20 @@ import { PracticeView } from '../views/practice/PracticeView';
 import { CatalogView } from '../views/catalog/CatalogView';
 import { ReviewTabView } from '../views/review/ReviewTabView';
 import { ReviewSessionView } from '../views/review/ReviewSessionView';
+import { MistakeBookView } from '../views/review/MistakeBookView';
 import { DetailPageView } from '../views/DetailPageView';
 import { SettingsTabView } from '../views/SettingsTabView';
+import { AboutDataView } from '../views/settings/AboutDataView';
+import { PrivacyPolicyView } from '../views/settings/PrivacyPolicyView';
+import { LicenseTextView } from '../views/settings/LicenseTextView';
 import { ImageTabView } from '../views/ImageTabView';
 import { ImagePreviewView } from '../views/ImagePreviewView';
-import { PrivacyVeil } from '../views/PrivacyVeil';
 import { appBootstrap, BootstrapState } from '../service/AppBootstrap';
 import { progressStore } from '../service/ProgressStore';
 import { curriculumRepository } from '../service/CurriculumRepository';
 import { Book, Lesson } from '../model/CurriculumModels';
-import { BookRouteParam, LessonRouteParam, CharRouteParam, PracticeRouteParam, CatalogRouteParam, ReviewRouteParam } from '../model/RouteParams';
+import { BookRouteParam, LessonRouteParam, CharRouteParam, PracticeRouteParam, CatalogRouteParam, ReviewRouteParam,
+  LicenseRouteParam } from '../model/RouteParams';
 
 @Entry
 @ComponentV2
@@ -78,7 +81,6 @@ struct Index {
   }
 
   aboutToDisappear(): void {
-    antiPeep.stop();
     gripSensor.stop();
     deviceService.stop();
   }
@@ -218,6 +220,7 @@ struct Index {
   @Builder
   settingsContent() {
     SettingsTabView({
+      navPathStack: this.navPathStack,
       underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR
     })
   }
@@ -411,7 +414,47 @@ struct Index {
           navPathStack: this.navPathStack
         })
       }
-      .titleBar(indexTitleOptions($r('app.string.review_title')))
+      .titleBar(indexTitleOptions((pageInfos as ReviewRouteParam).mode === 'unit'
+        ? $r('app.string.review_unit_title')
+        : ((pageInfos as ReviewRouteParam).mode === 'mistake'
+          ? $r('app.string.review_mistake_title') : $r('app.string.review_all_title'))))
+      .dynamicHideTitleBar(indexDynamicHideParams())
+      .backgroundColor($r('app.color.hm_page_background'))
+    } else if (name === RouterConstants.PAGE_MISTAKES) {
+      HdsNavDestination() {
+        MistakeBookView({
+          navPathStack: this.navPathStack,
+          underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR
+        })
+      }
+      .titleBar(indexTitleOptions($r('app.string.mistake_book_title')))
+      .dynamicHideTitleBar(indexDynamicHideParams())
+      .backgroundColor($r('app.color.hm_page_background'))
+    } else if (name === RouterConstants.PAGE_ABOUT_DATA) {
+      HdsNavDestination() {
+        AboutDataView({
+          navPathStack: this.navPathStack,
+          underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR
+        })
+      }
+      .titleBar(indexTitleOptions($r('app.string.settings_about_data')))
+      .dynamicHideTitleBar(indexDynamicHideParams())
+      .backgroundColor($r('app.color.hm_page_background'))
+    } else if (name === RouterConstants.PAGE_PRIVACY) {
+      HdsNavDestination() {
+        PrivacyPolicyView({ underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR })
+      }
+      .titleBar(indexTitleOptions($r('app.string.settings_privacy')))
+      .dynamicHideTitleBar(indexDynamicHideParams())
+      .backgroundColor($r('app.color.hm_page_background'))
+    } else if (name === RouterConstants.PAGE_LICENSE) {
+      HdsNavDestination() {
+        LicenseTextView({
+          fileName: (pageInfos as LicenseRouteParam).fileName,
+          underTitleBar: CommonConstants.CONTENT_UNDER_TITLE_BAR
+        })
+      }
+      .titleBar(indexTitleOptions($r('app.string.license_title')))
       .dynamicHideTitleBar(indexDynamicHideParams())
       .backgroundColor($r('app.color.hm_page_background'))
     } else if (name === RouterConstants.PAGE_CATALOG) {
@@ -520,9 +563,6 @@ struct Index {
         this.bootstrapLoadingOverlay()
       }
 
-      if (antiPeep.peeking) {
-        PrivacyVeil()
-      }
     }
     .width('100%')
     .height('100%')

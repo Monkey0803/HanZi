@@ -21,6 +21,7 @@ import { InkCard } from '../books/InkCard';
 import { HanziGridCell } from '../books/HanziGridCell';
 import { StrokeToggleChip } from '../practice/StrokeToggleChip';
 import { ReviewStatCard } from './ReviewStatCard';
+import { appSettings } from '../../model/AppSettings';
 
 const EMPTY_CELL_SIZE: number = 72;
 const MISTAKE_CELL_SIZE: number = 44;
@@ -70,6 +71,10 @@ export struct ReviewTabView {
   private openChar(char: string): void {
     this.navPathStack.pushPathByName(RouterConstants.PAGE_CHAR,
       new CharRouteParam(char, progressStore.lessonOf(char)));
+  }
+
+  private openMistakes(): void {
+    this.navPathStack.pushPathByName(RouterConstants.PAGE_MISTAKES, '');
   }
 
   private retryProgress(): void {
@@ -142,8 +147,8 @@ export struct ReviewTabView {
       .alignItems(VerticalAlign.Bottom)
 
       Progress({
-        value: Math.min(progressStore.todayCount, ReviewConstants.DAILY_GOAL),
-        total: ReviewConstants.DAILY_GOAL,
+        value: Math.min(progressStore.todayCount, appSettings.dailyGoal),
+        total: appSettings.dailyGoal,
         type: ProgressType.Linear
       })
         .width('100%')
@@ -199,7 +204,7 @@ export struct ReviewTabView {
             .fontWeight(FontWeight.Medium)
             .fontColor($r('app.color.hm_text_primary'))
             .layoutWeight(1)
-          Text($r('app.string.review_today_progress', progressStore.todayCount, ReviewConstants.DAILY_GOAL))
+          Text($r('app.string.review_today_progress', progressStore.todayCount, appSettings.dailyGoal))
             .fontSize($r('app.float.font_size_caption'))
             .fontColor($r('app.color.hm_text_secondary'))
             .padding({
@@ -309,6 +314,15 @@ export struct ReviewTabView {
         Text(`${progressStore.mistakeCount}`)
           .fontSize($r('app.float.font_size_caption'))
           .fontColor($r('app.color.hm_text_secondary'))
+        if (progressStore.mistakeChars.length > 0) {
+          Button($r('app.string.review_mistakes_all'))
+            .buttonStyle(ButtonStyleMode.TEXTUAL)
+            .fontSize($r('app.float.font_size_caption'))
+            .fontColor(themePalette.accent())
+            .onClick(() => {
+              this.openMistakes();
+            })
+        }
       }
       .width('100%')
       .alignItems(VerticalAlign.Center)

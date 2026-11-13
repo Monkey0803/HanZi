@@ -7,7 +7,7 @@
 
 import { THEME_OPTIONS, LANGUAGE_OPTIONS, MATERIAL_TYPE_OPTIONS, MATERIAL_LEVEL_OPTIONS } from './SettingsOptions';
 import { DEFAULT_THEME_COLOR } from '../common/constants/SettingsConstants';
-import { GridStyleId } from '../common/constants/StrokeConstants';
+import { GridStyleId, StrokeSpeedId } from '../common/constants/StrokeConstants';
 
 @ObservedV2
 export class AppSettings {
@@ -37,6 +37,14 @@ export class AppSettings {
   @Trace showSkeleton: boolean = false;
   /** 字详情是否显示笔顺步骤条。 */
   @Trace showStrokeSteps: boolean = true;
+  /** 每日学习目标。 */
+  @Trace dailyGoal: number = 10;
+  /** 笔顺播放速度。 */
+  @Trace strokeSpeed: string = StrokeSpeedId.STANDARD;
+  /** 全局隐藏拼音。 */
+  @Trace hidePinyin: boolean = false;
+  /** 系统语音朗读开关。 */
+  @Trace ttsEnabled: boolean = true;
   /** 教材版本：'pep' | 'shanghai'。 */
 }
 

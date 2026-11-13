@@ -1,6 +1,6 @@
 {
   "modelVersion": "6.1.0",
-  "description": "HarmonyOS HDS app template",
+  "description": "HanZi 是一款离线的小学语文生字学习与书写练习应用",
   "dependencies": {},
   "devDependencies": {
     "@ohos/hypium": "1.0.25",

@@ -6,7 +6,7 @@
  */
 
 import { ThemeMode, AppLanguage, MaterialKind, MaterialGrade } from '../common/constants/SettingsConstants';
-import { CatalogScope, GridStyleId, StrokeBand } from '../common/constants/StrokeConstants';
+import { CatalogScope, GridStyleId, StrokeBand, StrokeSpeedId } from '../common/constants/StrokeConstants';
 
 /** 一个可选项：语义 id + 展示文案。 */
 export class ChoiceOption {
@@ -113,3 +113,16 @@ export const CATALOG_BAND_OPTIONS: ChoiceSet = new ChoiceSet([
   new ChoiceOption(StrokeBand.B3, $r('app.string.catalog_band_9_12')),
   new ChoiceOption(StrokeBand.B4, $r('app.string.catalog_band_13_plus'))
 ], StrokeBand.ALL);
+
+export const DAILY_GOAL_OPTIONS: ChoiceSet = new ChoiceSet([
+  new ChoiceOption('5', $r('app.string.opt_daily_goal_5')),
+  new ChoiceOption('10', $r('app.string.opt_daily_goal_10')),
+  new ChoiceOption('15', $r('app.string.opt_daily_goal_15')),
+  new ChoiceOption('20', $r('app.string.opt_daily_goal_20'))
+], '10');
+
+export const STROKE_SPEED_OPTIONS: ChoiceSet = new ChoiceSet([
+  new ChoiceOption(StrokeSpeedId.SLOW, $r('app.string.opt_stroke_speed_slow')),
+  new ChoiceOption(StrokeSpeedId.STANDARD, $r('app.string.opt_stroke_speed_standard')),
+  new ChoiceOption(StrokeSpeedId.FAST, $r('app.string.opt_stroke_speed_fast'))
+], StrokeSpeedId.STANDARD);

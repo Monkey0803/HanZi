@@ -1,0 +1,42 @@
+/*
+ * 可提交的无签名构建模板。
+ * 首次 clone 后复制为 build-profile.json5，再由 DevEco Studio 配置本地签名。
+ */
+{
+  app: {
+    signingConfigs: [],
+    products: [
+      {
+        name: 'default',
+        signingConfig: 'default',
+        targetSdkVersion: '26.0.0',
+        compatibleSdkVersion: '6.1.0(23)',
+        runtimeOS: 'HarmonyOS',
+        buildOption: {
+          strictMode: {
+            caseSensitiveCheck: true,
+            useNormalizedOHMUrl: true,
+          },
+        },
+      },
+    ],
+    buildModeSet: [
+      { name: 'debug' },
+      { name: 'release' },
+    ],
+  },
+  modules: [
+    {
+      name: 'entry',
+      srcPath: './entry',
+      targets: [
+        {
+          name: 'default',
+          applyToProducts: ['default'],
+        },
+      ],
+    },
+    { name: 'toast_kit', srcPath: './toast-kit' },
+    { name: 'keyboard_kit', srcPath: './keyboard-kit' },
+  ],
+}

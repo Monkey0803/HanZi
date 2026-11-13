@@ -3,7 +3,9 @@ import {
   THEME_OPTIONS,
   LANGUAGE_OPTIONS,
   MATERIAL_TYPE_OPTIONS,
-  MATERIAL_LEVEL_OPTIONS
+  MATERIAL_LEVEL_OPTIONS,
+  DAILY_GOAL_OPTIONS,
+  STROKE_SPEED_OPTIONS
 } from '../../../main/ets/model/SettingsOptions';
 
 // ChoiceSet 的纯函数单测：不依赖 Context，也不访问文件系统。
@@ -38,6 +40,14 @@ export default function settingsOptionsTest() {
 
     it('labelOf_never_throws_for_unknown_id', 0, () => {
       expect(MATERIAL_TYPE_OPTIONS.labelOf('unknown') !== undefined).assertTrue();
+    });
+
+    it('study_options_have_expected_values', 0, () => {
+      expect(DAILY_GOAL_OPTIONS.options.length).assertEqual(4);
+      expect(DAILY_GOAL_OPTIONS.normalize('15')).assertEqual('15');
+      expect(DAILY_GOAL_OPTIONS.normalize('99')).assertEqual('10');
+      expect(STROKE_SPEED_OPTIONS.options.length).assertEqual(3);
+      expect(STROKE_SPEED_OPTIONS.normalize('fast')).assertEqual('fast');
     });
   });
 }

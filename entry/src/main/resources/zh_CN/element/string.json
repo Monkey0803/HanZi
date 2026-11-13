@@ -210,7 +210,7 @@
     },
     {
       "name": "reason_detect_gesture",
-      "value": "用于识别握持手，实现智感握姿"
+      "value": "用于识别握持手，优化单手操作布局；不采集、不上传"
     },
     {
       "name": "reason_dlp_hide",
@@ -931,6 +931,142 @@
     {
       "name": "logo_mark_a11y",
       "value": "HanZi 应用标志"
+    },
+    {
+      "name": "progress_learned",
+      "value": "已学会 %d / %d"
+    },
+    {
+      "name": "unit_review",
+      "value": "生字复习"
+    },
+    {
+      "name": "settings_daily_goal",
+      "value": "每日目标"
+    },
+    {
+      "name": "settings_stroke_speed",
+      "value": "笔顺速度"
+    },
+    {
+      "name": "settings_hide_pinyin",
+      "value": "隐藏拼音"
+    },
+    {
+      "name": "settings_tts",
+      "value": "语音朗读"
+    },
+    {
+      "name": "opt_daily_goal_5",
+      "value": "5 个字"
+    },
+    {
+      "name": "opt_daily_goal_10",
+      "value": "10 个字"
+    },
+    {
+      "name": "opt_daily_goal_15",
+      "value": "15 个字"
+    },
+    {
+      "name": "opt_daily_goal_20",
+      "value": "20 个字"
+    },
+    {
+      "name": "opt_stroke_speed_slow",
+      "value": "慢"
+    },
+    {
+      "name": "opt_stroke_speed_standard",
+      "value": "标准"
+    },
+    {
+      "name": "opt_stroke_speed_fast",
+      "value": "快"
+    },
+    {
+      "name": "review_mistakes_all",
+      "value": "查看全部"
+    },
+    {
+      "name": "mistake_book_title",
+      "value": "错题本"
+    },
+    {
+      "name": "mistake_count",
+      "value": "错误 %d 次"
+    },
+    {
+      "name": "mistake_review_start",
+      "value": "开始错题复习"
+    },
+    {
+      "name": "review_all_title",
+      "value": "综合复习"
+    },
+    {
+      "name": "review_unit_title",
+      "value": "单元复习"
+    },
+    {
+      "name": "review_mistake_title",
+      "value": "错题复习"
+    },
+    {
+      "name": "settings_about_data",
+      "value": "数据与许可"
+    },
+    {
+      "name": "settings_privacy",
+      "value": "隐私政策"
+    },
+    {
+      "name": "about_data_mode",
+      "value": "数据模式"
+    },
+    {
+      "name": "about_data_version",
+      "value": "数据版本"
+    },
+    {
+      "name": "about_data_books",
+      "value": "课本"
+    },
+    {
+      "name": "about_data_lessons",
+      "value": "课文"
+    },
+    {
+      "name": "about_data_chars",
+      "value": "汉字"
+    },
+    {
+      "name": "about_data_strokes",
+      "value": "含笔顺字数"
+    },
+    {
+      "name": "about_data_missing_strokes",
+      "value": "缺失笔顺"
+    },
+    {
+      "name": "about_data_catalog_chars",
+      "value": "字表字数"
+    },
+    {
+      "name": "about_data_generated",
+      "value": "生成时间"
+    },
+    {
+      "name": "about_data_source_summary",
+      "value": "课程与笔顺数据均随包离线提供。点按下列条目可查看完整许可文本。"
+    },
+    {
+      "name": "license_title",
+      "value": "许可全文"
+    },
+    {
+      "name": "document_load_failed",
+      "value": "文档加载失败。"
     }
   ]
 }

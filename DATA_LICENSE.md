@@ -6,8 +6,10 @@ Only `entry/src/main/resources/rawfile/data/seed/` is committed. It is a
 minimal demonstration dataset (a handful of characters) used for building,
 CI, and UI development.
 
-`entry/src/main/resources/rawfile/data/full/` is intentionally ignored by git.
-It is generated locally from third-party sources and must not be redistributed.
+`entry/src/main/resources/rawfile/data/full/` is intentionally ignored by git and
+generated locally from third-party sources. The AppGallery release HAP is built
+with `scripts/build-release.sh` and includes this generated full dataset together
+with every applicable license file. Any redistribution must keep those notices.
 
 ## Third-party data
 

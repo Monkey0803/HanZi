@@ -18,6 +18,14 @@ export class RouterConstants {
   static readonly PAGE_CATALOG: string = 'catalog';
   /** 复习会话。 */
   static readonly PAGE_REVIEW_SESSION: string = 'reviewSession';
+  /** 完整错题本。 */
+  static readonly PAGE_MISTAKES: string = 'mistakes';
+  /** 数据来源与许可。 */
+  static readonly PAGE_ABOUT_DATA: string = 'aboutData';
+  /** 隐私政策。 */
+  static readonly PAGE_PRIVACY: string = 'privacy';
+  /** 许可全文。 */
+  static readonly PAGE_LICENSE: string = 'license';
   /** 全屏图片预览（图片领域使用；基模板只保留桩件与路由分支）。 */
   static readonly PAGE_PREVIEW: string = 'imagePreview';
 }

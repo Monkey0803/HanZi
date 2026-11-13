@@ -20,19 +20,30 @@
 ## 快速开始
 
 ```bash
-# 1. 安装依赖（工程根目录）
+# 1. 首次 clone：创建本机配置（不要提交 build-profile.json5）
+cp build-profile.template.json5 build-profile.json5
+
+# 2. 在 DevEco Studio 的 Project Structure > Signing Configs 配置自动签名，
+#    或先执行 devecocli auth login，再执行 devecocli signature generate。
+
+# 3. 安装依赖（工程根目录）
 ohpm install --all
 
-# 2. 构建
+# 4. 构建
 devecocli build
 
-# 3. 运行（需要已连接设备或模拟器，并配置签名）
+# 5. 运行（需要已连接设备或模拟器，并配置签名）
 devecocli run
 ```
 
+本地一键校验可运行 `scripts/verify.sh`。发布包使用 `scripts/build-release.sh`：脚本会先生成并校验
+完整课程数据，再构建 release HAP，并确认包内包含完整数据与许可文件。
+
 ## 数据
 
-仓库只提交 **seed 演示数据**：`entry/src/main/resources/rawfile/data/seed/`，保证 clone 后可离线构建和演示。
+源码仓库只提交 **seed 演示数据**：`entry/src/main/resources/rawfile/data/seed/`，保证 clone 后可离线构建和演示。
+应用市场 release HAP 必须通过 `scripts/build-release.sh` 生成，其中包含本地生成的完整课程数据和许可文件；
+禁止把只有 2 课的 seed 包作为正式版本上传。
 
 完整课程数据由公开教材生字表在本地生成（默认不提交）：
 

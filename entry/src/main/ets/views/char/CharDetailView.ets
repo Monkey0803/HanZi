@@ -29,7 +29,7 @@ import { ResponsiveContent } from '../ResponsiveContent';
 import { PageTopSpacer } from '../PageTopSpacer';
 import { ttsService } from '../../service/TtsService';
 import { deviceService } from '../../service/DeviceService';
-import { STEPS_CELL_WIDTH } from '../../common/constants/StrokeConstants';
+import { STEPS_CELL_WIDTH, StrokeSpeed } from '../../common/constants/StrokeConstants';
 
 const WORD_PREVIEW: number = 10;
 const CANVAS_MIN: number = 220;
@@ -296,7 +296,7 @@ export struct CharDetailView {
   }
 
   private showSpeak(): boolean {
-    return ttsService.available;
+    return appSettings.ttsEnabled && ttsService.available;
   }
 
   private canvasA11y(): Resource {
@@ -592,6 +592,7 @@ export struct CharDetailView {
             canvasSize: this.canvasSize,
             canvasPadding: this.canvasPadding,
             showOutline: true,
+            strokeDuration: StrokeSpeed.durationOf(appSettings.strokeSpeed),
             playTrigger: this.playTrigger,
             quizTrigger: this.quizTrigger,
             resetTrigger: this.resetTrigger,

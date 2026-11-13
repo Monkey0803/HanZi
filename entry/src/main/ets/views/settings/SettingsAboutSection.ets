@@ -6,10 +6,13 @@
  */
 
 import { LogoMark } from '../../common/components/LogoMark';
-import { SettingsSectionTitle } from './SettingsRows';
+import { NavSettingRow, SettingsSectionTitle } from './SettingsRows';
 
 @ComponentV2
 export struct SettingsAboutSection {
+  @Event onOpenData: () => void = () => {};
+  @Event onOpenPrivacy: () => void = () => {};
+
   build() {
     Column() {
       SettingsSectionTitle({ title: $r('app.string.settings_about_title') })
@@ -38,6 +41,22 @@ export struct SettingsAboutSection {
           right: $r('app.float.space_m'),
           top: $r('app.float.space_m'),
           bottom: $r('app.float.space_m')
+        })
+        Divider().color($r('app.color.hm_divider'))
+        NavSettingRow({
+          icon: $r('sys.symbol.doc_text'),
+          title: $r('app.string.settings_about_data'),
+          onOpen: () => {
+            this.onOpenData();
+          }
+        })
+        Divider().color($r('app.color.hm_divider'))
+        NavSettingRow({
+          icon: $r('sys.symbol.lock_shield'),
+          title: $r('app.string.settings_privacy'),
+          onOpen: () => {
+            this.onOpenPrivacy();
+          }
         })
         Divider().color($r('app.color.hm_divider'))
         Row() {

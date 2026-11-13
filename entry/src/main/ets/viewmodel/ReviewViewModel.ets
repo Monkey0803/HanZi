@@ -124,10 +124,11 @@ export class ReviewViewModel {
   }
 
   private unitCandidates(bookId: string, unit: number): string[] {
-    const result: string[] = [];
+    const learned: string[] = [];
+    const unlearned: string[] = [];
     const seen: Set<string> = new Set();
     if (bookId.length === 0) {
-      return result;
+      return learned;
     }
     const lessons: Lesson[] = curriculumRepository.lessonsOfBook(bookId);
     for (let i = 0; i < lessons.length; i += 1) {
@@ -137,14 +138,18 @@ export class ReviewViewModel {
       const chars: LessonChar[] = curriculumRepository.charsOfLesson(lessons[i].id);
       for (let j = 0; j < chars.length; j += 1) {
         const char: string = chars[j].char;
-        if (seen.has(char) || !progressStore.isLearned(char)) {
+        if (seen.has(char)) {
           continue;
         }
         seen.add(char);
-        result.push(char);
+        if (progressStore.isLearned(char)) {
+          learned.push(char);
+        } else {
+          unlearned.push(char);
+        }
       }
     }
-    return result;
+    return learned.concat(unlearned);
   }
 
   private buildCard(char: string): ReviewCard {

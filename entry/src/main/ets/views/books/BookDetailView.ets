@@ -13,7 +13,9 @@ import { safeArea } from '../../service/SafeAreaController';
 import { themePalette } from '../../model/ThemePalette';
 import { RouterConstants } from '../../common/constants/RouterConstants';
 import { gradeGlyphOf } from '../../common/constants/CurriculumConstants';
-import { LessonRouteParam } from '../../model/RouteParams';
+import { LessonRouteParam, ReviewMode, ReviewRouteParam } from '../../model/RouteParams';
+import { ReviewCardMode, ReviewConstants } from '../../common/constants/ReviewConstants';
+import { progressStore } from '../../service/ProgressStore';
 import { ResponsiveContent } from '../ResponsiveContent';
 import { PageTopSpacer } from '../PageTopSpacer';
 import { HanziGridCell } from './HanziGridCell';
@@ -116,6 +118,35 @@ export struct BookDetailView {
     this.navPathStack.pushPathByName(RouterConstants.PAGE_LESSON, new LessonRouteParam(lessonId, 'book'));
   }
 
+  private unitTotal(unit: Unit): number {
+    const seen: Set<string> = new Set<string>();
+    for (let i = 0; i < unit.lessons.length; i += 1) {
+      for (let j = 0; j < unit.lessons[i].chars.length; j += 1) {
+        seen.add(unit.lessons[i].chars[j].char);
+      }
+    }
+    return seen.size;
+  }
+
+  private unitLearned(unit: Unit): number {
+    const learned: Set<string> = new Set<string>();
+    for (let i = 0; i < unit.lessons.length; i += 1) {
+      for (let j = 0; j < unit.lessons[i].chars.length; j += 1) {
+        const char: string = unit.lessons[i].chars[j].char;
+        if (progressStore.isLearned(char)) {
+          learned.add(char);
+        }
+      }
+    }
+    return learned.size;
+  }
+
+  private startUnitReview(unit: Unit): void {
+    this.navPathStack.pushPathByName(RouterConstants.PAGE_REVIEW_SESSION,
+      new ReviewRouteParam(ReviewMode.UNIT, this.bookId, unit.index,
+        ReviewConstants.DEFAULT_LIMIT, ReviewCardMode.CHAR));
+  }
+
   /** 水墨册头：年级田字格 + 册名 + 学期 / 统计。 */
   @Builder
   bookHeaderCard() {
@@ -176,20 +207,43 @@ export struct BookDetailView {
   /** 单元头本体：印章红竖条 + 「第 N 单元 · M 课」+ 细线。 */
   @Builder
   unitHeader(unit: Unit) {
-    Row({ space: $r('app.float.space_s') }) {
-      Column()
-        .width($r('app.float.unit_bar_width'))
-        .height($r('app.float.unit_bar_height'))
-        .borderRadius($r('app.float.unit_bar_radius'))
-        .backgroundColor($r('app.color.ink_seal'))
-      Text($r('app.string.unit_header', unit.index, unit.lessons.length))
-        .fontSize($r('app.float.font_size_section'))
-        .fontWeight(FontWeight.Medium)
-        .fontColor($r('app.color.hm_text_secondary'))
-        .maxLines(1)
-      Divider()
-        .color($r('app.color.ink_line'))
-        .layoutWeight(1)
+    Column({ space: $r('app.float.space_xs') }) {
+      Row({ space: $r('app.float.space_s') }) {
+        Column()
+          .width($r('app.float.unit_bar_width'))
+          .height($r('app.float.unit_bar_height'))
+          .borderRadius($r('app.float.unit_bar_radius'))
+          .backgroundColor($r('app.color.ink_seal'))
+        Text($r('app.string.unit_header', unit.index, unit.lessons.length))
+          .fontSize($r('app.float.font_size_section'))
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r('app.color.hm_text_secondary'))
+          .maxLines(1)
+        Divider()
+          .color($r('app.color.ink_line'))
+          .layoutWeight(1)
+        Button($r('app.string.unit_review'))
+          .buttonStyle(ButtonStyleMode.TEXTUAL)
+          .fontSize($r('app.float.font_size_caption'))
+          .fontColor(themePalette.accent())
+          .onClick(() => {
+            this.startUnitReview(unit);
+          })
+      }
+      .width('100%')
+      Row({ space: $r('app.float.space_s') }) {
+        Text($r('app.string.progress_learned', this.unitLearned(unit), this.unitTotal(unit)))
+          .fontSize($r('app.float.font_size_caption'))
+          .fontColor($r('app.color.hm_text_secondary'))
+        Progress({
+          value: this.unitLearned(unit),
+          total: Math.max(1, this.unitTotal(unit)),
+          type: ProgressType.Linear
+        })
+          .layoutWeight(1)
+          .color(themePalette.accent())
+      }
+      .width('100%')
     }
     .width('100%')
     .padding({ top: $r('app.float.space_xl'), bottom: $r('app.float.space_s') })
@@ -237,6 +291,17 @@ export struct BookDetailView {
                 .maxLines(1)
             }
             .width('100%')
+            Text($r('app.string.progress_learned', progressStore.learnedOfLesson(meta.id), meta.charCount))
+              .fontSize($r('app.float.font_size_caption'))
+              .fontColor($r('app.color.hm_text_secondary'))
+              .width('100%')
+            Progress({
+              value: progressStore.learnedOfLesson(meta.id),
+              total: Math.max(1, meta.charCount),
+              type: ProgressType.Linear
+            })
+              .width('100%')
+              .color(themePalette.accent())
           }
         }
         .layoutWeight(1)

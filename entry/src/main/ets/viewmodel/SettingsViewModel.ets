@@ -10,7 +10,6 @@ import { settingsStore } from '../service/SettingsStore';
 import { ThemeController } from '../service/ThemeController';
 import { LocaleController } from '../service/LocaleController';
 import { MaterialController } from '../service/MaterialController';
-import { antiPeep } from '../service/AntiPeep';
 import { gripSensor } from '../service/GripSensor';
 import { ThemeColorMath } from '../common/utils/ThemeColorMath';
 import { customImmersiveViewModel } from './CustomImmersiveViewModel';
@@ -33,9 +32,6 @@ export class SettingsViewModel {
     // 设置恢复后重算一次：自定义沉浸光感的档位 / 降级原因依赖开关与设备能力。
     customImmersiveViewModel.recompute();
     gripSensor.setEnabled(appSettings.gripEnabled);
-    if (appSettings.antiPeepEnabled) {
-      await antiPeep.setEnabled(true);
-    }
   }
 
   setTheme(context: common.Context, id: string): void {
@@ -111,15 +107,27 @@ export class SettingsViewModel {
     settingsStore.save();
   }
 
-  setAntiPeepEnabled(value: boolean, context: common.UIAbilityContext): void {
-    appSettings.antiPeepEnabled = value;
-    this.applyAntiPeep(value, context);
+  setDailyGoal(id: string): void {
+    const value: number = Number(id);
+    appSettings.dailyGoal = value === 5 || value === 10 || value === 15 || value === 20 ? value : 10;
     settingsStore.save();
   }
 
-  private async applyAntiPeep(value: boolean, context: common.UIAbilityContext): Promise<void> {
-    await antiPeep.setEnabled(value, context);
+  setStrokeSpeed(id: string): void {
+    appSettings.strokeSpeed = id;
+    settingsStore.save();
   }
+
+  setHidePinyin(value: boolean): void {
+    appSettings.hidePinyin = value;
+    settingsStore.save();
+  }
+
+  setTtsEnabled(value: boolean): void {
+    appSettings.ttsEnabled = value;
+    settingsStore.save();
+  }
+
 }
 
 /** 全局唯一 ViewModel。 */

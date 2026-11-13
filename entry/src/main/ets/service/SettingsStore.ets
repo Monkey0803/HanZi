@@ -8,7 +8,8 @@ import { preferences } from '@kit.ArkData';
 import { common } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { appSettings } from '../model/AppSettings';
-import { THEME_OPTIONS, LANGUAGE_OPTIONS, MATERIAL_TYPE_OPTIONS, MATERIAL_LEVEL_OPTIONS, GRID_OPTIONS } from '../model/SettingsOptions';
+import { THEME_OPTIONS, LANGUAGE_OPTIONS, MATERIAL_TYPE_OPTIONS, MATERIAL_LEVEL_OPTIONS, GRID_OPTIONS,
+  DAILY_GOAL_OPTIONS, STROKE_SPEED_OPTIONS } from '../model/SettingsOptions';
 import { PreferencesConstants } from '../common/constants/PreferencesConstants';
 import { DEFAULT_THEME_COLOR } from '../common/constants/SettingsConstants';
 import { ThemeColorMath } from '../common/utils/ThemeColorMath';
@@ -32,12 +33,22 @@ export class SettingsStore {
       appSettings.immersiveOn = store.getSync(PreferencesConstants.KEY_IMMERSIVE_ON, appSettings.immersiveOn) as boolean;
       appSettings.lightEffectEnabled = store.getSync(PreferencesConstants.KEY_LIGHT_EFFECT, appSettings.lightEffectEnabled) as boolean;
       appSettings.gripEnabled = store.getSync(PreferencesConstants.KEY_GRIP_ENABLED, appSettings.gripEnabled) as boolean;
-      appSettings.antiPeepEnabled = store.getSync(PreferencesConstants.KEY_ANTI_PEEP_ENABLED, appSettings.antiPeepEnabled) as boolean;
+      // 首版未申请 DLP ACL，防窥入口隐藏且启动时强制关闭，避免旧偏好误触发受限能力。
+      appSettings.antiPeepEnabled = false;
       appSettings.showStrokeNumbers = store.getSync(PreferencesConstants.KEY_STROKE_NUMBERS, appSettings.showStrokeNumbers) as boolean;
       appSettings.showSkeleton = store.getSync(PreferencesConstants.KEY_STROKE_SKELETON, appSettings.showSkeleton) as boolean;
       appSettings.showStrokeSteps = store.getSync(PreferencesConstants.KEY_STROKE_STEPS, appSettings.showStrokeSteps) as boolean;
       const gridStyle: string = store.getSync(PreferencesConstants.KEY_GRID_STYLE, appSettings.gridStyle) as string;
       appSettings.gridStyle = GRID_OPTIONS.normalize(gridStyle);
+      const dailyGoal: number = store.getSync(PreferencesConstants.KEY_DAILY_GOAL, appSettings.dailyGoal) as number;
+      appSettings.dailyGoal = Number(DAILY_GOAL_OPTIONS.normalize(dailyGoal.toString()));
+      const strokeSpeed: string = store.getSync(PreferencesConstants.KEY_STROKE_SPEED,
+        appSettings.strokeSpeed) as string;
+      appSettings.strokeSpeed = STROKE_SPEED_OPTIONS.normalize(strokeSpeed);
+      appSettings.hidePinyin = store.getSync(PreferencesConstants.KEY_HIDE_PINYIN,
+        appSettings.hidePinyin) as boolean;
+      appSettings.ttsEnabled = store.getSync(PreferencesConstants.KEY_TTS_ENABLED,
+        appSettings.ttsEnabled) as boolean;
       const themeColor: string =
         store.getSync(PreferencesConstants.KEY_THEME_COLOR, appSettings.themeColor) as string;
       appSettings.themeColor = ThemeColorMath.normalize(themeColor, DEFAULT_THEME_COLOR);
@@ -67,6 +78,10 @@ export class SettingsStore {
       store.putSync(PreferencesConstants.KEY_STROKE_STEPS, appSettings.showStrokeSteps);
       store.putSync(PreferencesConstants.KEY_GRID_STYLE, appSettings.gridStyle);
       store.putSync(PreferencesConstants.KEY_THEME_COLOR, appSettings.themeColor);
+      store.putSync(PreferencesConstants.KEY_DAILY_GOAL, appSettings.dailyGoal);
+      store.putSync(PreferencesConstants.KEY_STROKE_SPEED, appSettings.strokeSpeed);
+      store.putSync(PreferencesConstants.KEY_HIDE_PINYIN, appSettings.hidePinyin);
+      store.putSync(PreferencesConstants.KEY_TTS_ENABLED, appSettings.ttsEnabled);
       store.flush().catch((err: BusinessError) => {
         console.error('SettingsStore.flush failed: ' + err.code.toString());
       });

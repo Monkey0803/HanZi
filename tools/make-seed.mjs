@@ -131,7 +131,7 @@ async function main() {
     path.join(curriculum, 'passages.tsv'),
     [
       tsvRow(['passageId', 'lessonId', 'order', 'title', 'text', 'pinyinOverrides']),
-      ...passageRows.map(tsvRow)
+      ...passageRows.map((row) => tsvRow(row[row.length - 1] === '' ? row.slice(0, -1) : row))
     ].join('\n') + '\n'
   );
   await writeText(
@@ -141,10 +141,13 @@ async function main() {
       tsvRow(['dataSource', 'PEP primary school Chinese word lists (MIT dataset)']),
       tsvRow(['dataSourceUrl', 'https://github.com/athenayan123-web/dictation-robot']),
       tsvRow(['dataLicense', 'MIT']),
+      tsvRow(['dataVersion', '1.0.0']),
       tsvRow(['books', '1']),
       tsvRow(['lessons', String(seedLessons.length)]),
       tsvRow(['uniqueChars', String(keep.size)]),
       tsvRow(['strokeChars', String(graphics.size)]),
+      tsvRow(['missingStrokes', String(missing.length)]),
+      tsvRow(['catalogChars', String(characters.length)]),
       tsvRow(['passages', String(passageRows.length)]),
       tsvRow(['generatedAt', nowIso()])
     ].join('\n') + '\n'

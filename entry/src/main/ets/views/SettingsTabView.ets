@@ -21,9 +21,11 @@ import { SettingsAboutSection } from './settings/SettingsAboutSection';
 import { ThemeColorSheet } from './settings/ThemeColorSheet';
 import { ResponsiveContent } from './ResponsiveContent';
 import { PageTopSpacer } from './PageTopSpacer';
+import { RouterConstants } from '../common/constants/RouterConstants';
 
 @ComponentV2
 export struct SettingsTabView {
+  @Param navPathStack: NavPathStack = new NavPathStack();
   /** 内容是否穿透标题栏：true 时顶部预留标题栏高度，首屏内容不被标题栏遮住。 */
   @Param underTitleBar: boolean = false;
   /** 主题色取色面板显隐。 */
@@ -51,7 +53,14 @@ export struct SettingsTabView {
             SettingsMaterialSection()
             SettingsSystemSection()
             SettingsStudySection()
-            SettingsAboutSection()
+            SettingsAboutSection({
+              onOpenData: () => {
+                this.navPathStack.pushPathByName(RouterConstants.PAGE_ABOUT_DATA, '');
+              },
+              onOpenPrivacy: () => {
+                this.navPathStack.pushPathByName(RouterConstants.PAGE_PRIVACY, '');
+              }
+            })
 
             // barOverlap(true) 时页签栏悬浮叠在内容上：底部预留避让，末行不被遮挡。
             Blank().height(safeArea.contentBottomInsetVp)

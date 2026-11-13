@@ -87,3 +87,12 @@ export class ReviewRouteParam {
     this.cardMode = cardMode;
   }
 }
+
+/** 打开随数据包分发的许可全文。 */
+export class LicenseRouteParam {
+  fileName: string = '';
+
+  constructor(fileName: string = '') {
+    this.fileName = fileName;
+  }
+}

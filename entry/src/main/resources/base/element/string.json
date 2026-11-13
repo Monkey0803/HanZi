@@ -210,7 +210,7 @@
     },
     {
       "name": "reason_detect_gesture",
-      "value": "Used to detect the holding hand for smart grip"
+      "value": "Used to detect the holding hand and optimize one-handed layout; no data is collected or uploaded"
     },
     {
       "name": "reason_dlp_hide",
@@ -931,6 +931,142 @@
     {
       "name": "logo_mark_a11y",
       "value": "HanZi app logo"
+    },
+    {
+      "name": "progress_learned",
+      "value": "Learned %d / %d"
+    },
+    {
+      "name": "unit_review",
+      "value": "Review characters"
+    },
+    {
+      "name": "settings_daily_goal",
+      "value": "Daily goal"
+    },
+    {
+      "name": "settings_stroke_speed",
+      "value": "Stroke speed"
+    },
+    {
+      "name": "settings_hide_pinyin",
+      "value": "Hide pinyin"
+    },
+    {
+      "name": "settings_tts",
+      "value": "Voice reading"
+    },
+    {
+      "name": "opt_daily_goal_5",
+      "value": "5 characters"
+    },
+    {
+      "name": "opt_daily_goal_10",
+      "value": "10 characters"
+    },
+    {
+      "name": "opt_daily_goal_15",
+      "value": "15 characters"
+    },
+    {
+      "name": "opt_daily_goal_20",
+      "value": "20 characters"
+    },
+    {
+      "name": "opt_stroke_speed_slow",
+      "value": "Slow"
+    },
+    {
+      "name": "opt_stroke_speed_standard",
+      "value": "Standard"
+    },
+    {
+      "name": "opt_stroke_speed_fast",
+      "value": "Fast"
+    },
+    {
+      "name": "review_mistakes_all",
+      "value": "View all"
+    },
+    {
+      "name": "mistake_book_title",
+      "value": "Mistake book"
+    },
+    {
+      "name": "mistake_count",
+      "value": "%d mistakes"
+    },
+    {
+      "name": "mistake_review_start",
+      "value": "Review mistakes"
+    },
+    {
+      "name": "review_all_title",
+      "value": "Review"
+    },
+    {
+      "name": "review_unit_title",
+      "value": "Unit review"
+    },
+    {
+      "name": "review_mistake_title",
+      "value": "Mistake review"
+    },
+    {
+      "name": "settings_about_data",
+      "value": "Data and licenses"
+    },
+    {
+      "name": "settings_privacy",
+      "value": "Privacy policy"
+    },
+    {
+      "name": "about_data_mode",
+      "value": "Data mode"
+    },
+    {
+      "name": "about_data_version",
+      "value": "Data version"
+    },
+    {
+      "name": "about_data_books",
+      "value": "Books"
+    },
+    {
+      "name": "about_data_lessons",
+      "value": "Lessons"
+    },
+    {
+      "name": "about_data_chars",
+      "value": "Characters"
+    },
+    {
+      "name": "about_data_strokes",
+      "value": "Stroke characters"
+    },
+    {
+      "name": "about_data_missing_strokes",
+      "value": "Missing stroke data"
+    },
+    {
+      "name": "about_data_catalog_chars",
+      "value": "Catalog characters"
+    },
+    {
+      "name": "about_data_generated",
+      "value": "Generated at"
+    },
+    {
+      "name": "about_data_source_summary",
+      "value": "Curriculum and stroke data are bundled locally. Open an item below for its complete license text."
+    },
+    {
+      "name": "license_title",
+      "value": "License"
+    },
+    {
+      "name": "document_load_failed",
+      "value": "Unable to load this document."
     }
   ]
 }

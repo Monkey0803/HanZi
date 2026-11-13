@@ -18,4 +18,8 @@ export class PreferencesConstants {
   static readonly KEY_GRID_STYLE: string = 'gridStyle';
   static readonly KEY_STROKE_SKELETON: string = 'strokeSkeleton';
   static readonly KEY_STROKE_STEPS: string = 'strokeSteps';
+  static readonly KEY_DAILY_GOAL: string = 'dailyGoal';
+  static readonly KEY_STROKE_SPEED: string = 'strokeSpeed';
+  static readonly KEY_HIDE_PINYIN: string = 'hidePinyin';
+  static readonly KEY_TTS_ENABLED: string = 'ttsEnabled';
 }

@@ -25,6 +25,7 @@ import { StrokeCanvas } from './StrokeCanvas';
 import { StrokeToggleChip } from './StrokeToggleChip';
 import { ResponsiveContent } from '../ResponsiveContent';
 import { PageTopSpacer } from '../PageTopSpacer';
+import { StrokeSpeed } from '../../common/constants/StrokeConstants';
 
 const AREA_MARGIN: number = 32;
 const CONTROL_RESERVE: number = 190;
@@ -131,6 +132,7 @@ export struct PracticeView {
           canvasSize: this.canvasSize,
           canvasPadding: this.canvasPadding,
           showOutline: true,
+          strokeDuration: StrokeSpeed.durationOf(appSettings.strokeSpeed),
           playTrigger: this.playTrigger,
           quizTrigger: this.quizTrigger,
           gridStyle: appSettings.gridStyle,

@@ -4,7 +4,7 @@
  * 内容：笔顺序号、运笔骨架、笔顺步骤条与字格样式；字详情页的内联开关与这里共用 appSettings。
  */
 
-import { GRID_OPTIONS } from '../../model/SettingsOptions';
+import { GRID_OPTIONS, DAILY_GOAL_OPTIONS, STROKE_SPEED_OPTIONS } from '../../model/SettingsOptions';
 import { settingsViewModel } from '../../viewmodel/SettingsViewModel';
 import { OptionSelectRow, SettingField, SettingsSectionTitle, SwitchSettingRow } from './SettingsRows';
 
@@ -14,6 +14,44 @@ export struct SettingsStudySection {
     Column() {
       SettingsSectionTitle({ title: $r('app.string.settings_study_title') })
       Column() {
+        OptionSelectRow({
+          icon: $r('sys.symbol.checkmark_circle'),
+          title: $r('app.string.settings_daily_goal'),
+          choice: DAILY_GOAL_OPTIONS,
+          field: SettingField.DAILY_GOAL,
+          onPick: (id: string) => {
+            settingsViewModel.setDailyGoal(id);
+          }
+        })
+        Divider().color($r('app.color.hm_divider'))
+        OptionSelectRow({
+          icon: $r('sys.symbol.slider_horizontal_2'),
+          title: $r('app.string.settings_stroke_speed'),
+          choice: STROKE_SPEED_OPTIONS,
+          field: SettingField.STROKE_SPEED,
+          onPick: (id: string) => {
+            settingsViewModel.setStrokeSpeed(id);
+          }
+        })
+        Divider().color($r('app.color.hm_divider'))
+        SwitchSettingRow({
+          icon: $r('sys.symbol.textformat'),
+          title: $r('app.string.settings_hide_pinyin'),
+          field: SettingField.HIDE_PINYIN,
+          onToggle: (value: boolean) => {
+            settingsViewModel.setHidePinyin(value);
+          }
+        })
+        Divider().color($r('app.color.hm_divider'))
+        SwitchSettingRow({
+          icon: $r('sys.symbol.speaker_wave_2'),
+          title: $r('app.string.settings_tts'),
+          field: SettingField.TTS,
+          onToggle: (value: boolean) => {
+            settingsViewModel.setTtsEnabled(value);
+          }
+        })
+        Divider().color($r('app.color.hm_divider'))
         SwitchSettingRow({
           icon: $r('sys.symbol.checkmark_circle'),
           title: $r('app.string.settings_show_numbers'),

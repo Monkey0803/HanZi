@@ -20,12 +20,6 @@
     ],
     "requestPermissions": [
       {
-        "name": "ohos.permission.INTERNET"
-      },
-      {
-        "name": "ohos.permission.GET_NETWORK_INFO"
-      },
-      {
         "name": "ohos.permission.DETECT_GESTURE",
         "reason": "$string:reason_detect_gesture",
         "usedScene": {

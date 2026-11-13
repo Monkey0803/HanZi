@@ -29,8 +29,9 @@ This project uses the following third-party code, data and references.
 - Source: athenayan123-web/dictation-robot, `server/data/chinese_textbook.json`
   (人教版 / 部编版小学语文 12 册，按册 → 单元 → 课 → 生字/词语组织).
 - License: MIT. License text: `data/licenses/CHINESE_TEXTBOOK_MIT.txt`.
-- The public repository ships only the minimal `data/seed/` dataset; the full
-  dataset is generated locally by the scripts in `tools/`. See `DATA_LICENSE.md`.
+- The public source repository ships only the minimal `data/seed/` dataset. The
+  AppGallery release HAP includes the locally generated full dataset and its
+  license texts; see `DATA_LICENSE.md` and `scripts/build-release.sh`.
 
 ## Common character catalog
 

@@ -12,6 +12,7 @@ import dailyCharPickerTest from './DailyCharPicker.test';
 import readingTextBuilderTest from './ReadingTextBuilder.test';
 import readingQuizTest from './ReadingQuiz.test';
 import reviewSchedulerTest from './ReviewScheduler.test';
+import progressAggregatorTest from './ProgressAggregator.test';
 
 export default function testsuite() {
   settingsOptionsTest();
@@ -28,4 +29,5 @@ export default function testsuite() {
   reviewSchedulerTest();
   readingTextBuilderTest();
   readingQuizTest();
+  progressAggregatorTest();
 }

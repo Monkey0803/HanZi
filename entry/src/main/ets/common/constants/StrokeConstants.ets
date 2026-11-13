@@ -28,6 +28,24 @@ export enum StrokeBand {
   B4 = '13+'
 }
 
+export enum StrokeSpeedId {
+  SLOW = 'slow',
+  STANDARD = 'standard',
+  FAST = 'fast'
+}
+
+export class StrokeSpeed {
+  static durationOf(id: string): number {
+    if (id === StrokeSpeedId.SLOW) {
+      return 600;
+    }
+    if (id === StrokeSpeedId.FAST) {
+      return 260;
+    }
+    return 400;
+  }
+}
+
 /** 序号徽标最小半径（vp）。 */
 export const NUMBER_MIN_RADIUS: number = 7;
 /** 序号徽标最大半径（vp）。 */

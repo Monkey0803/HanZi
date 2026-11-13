@@ -15,6 +15,9 @@ import { ReadingQuiz } from '../../common/utils/ReadingQuiz';
 import { ResponsiveContent } from '../ResponsiveContent';
 import { PageTopSpacer } from '../PageTopSpacer';
 import { PassageCard } from './PassageCard';
+import { appSettings } from '../../model/AppSettings';
+import { settingsViewModel } from '../../viewmodel/SettingsViewModel';
+import { progressStore } from '../../service/ProgressStore';
 
 const CELL_SIZE: number = 64;
 const CELL_GAP: number = 8;
@@ -37,7 +40,6 @@ export struct LessonDetailView {
   @Param navPathStack: NavPathStack = new NavPathStack();
   @Param underTitleBar: boolean = true;
 
-  @Local hidePinyin: boolean = false;
   @Local showReadingPinyin: boolean = true;
   @Local quizTarget: string = '';
   @Local quizResult: number = 0;
@@ -47,7 +49,7 @@ export struct LessonDetailView {
 
   aboutToAppear(): void {
     this.reading.load(this.lessonId);
-    if (this.reading.hasReading()) {
+    if (this.reading.hasReading() && appSettings.ttsEnabled) {
       ttsService.init();
     }
   }
@@ -167,7 +169,7 @@ export struct LessonDetailView {
   @Builder
   charCell(item: LessonChar) {
     Column({ space: $r('app.float.space_xxs') }) {
-      Text(this.hidePinyin ? '' : item.pinyin)
+      Text(appSettings.hidePinyin ? '' : item.pinyin)
         .fontSize($r('app.float.font_size_caption'))
         .fontColor($r('app.color.hm_text_secondary'))
         .height($r('app.float.font_size_caption'))
@@ -175,6 +177,13 @@ export struct LessonDetailView {
         Text(item.char)
           .fontSize($r('app.float.font_size_title'))
           .fontColor($r('app.color.hanzi_ink'))
+        if (progressStore.isLearned(item.char)) {
+          SymbolGlyph($r('sys.symbol.checkmark_circle_fill'))
+            .fontSize($r('app.float.icon_size_tiny'))
+            .fontColor([themePalette.accent()])
+            .align(Alignment.TopEnd)
+            .accessibilityLevel('no')
+        }
       }
       .width(CELL_SIZE - 16)
       .height(CELL_SIZE - 16)
@@ -269,9 +278,9 @@ export struct LessonDetailView {
           PassageCard({
             passage: passage,
             glyphs: this.reading.glyphsOf(passage.id),
-            showPinyin: this.showReadingPinyin,
+            showPinyin: this.showReadingPinyin && !appSettings.hidePinyin,
             playing: ttsService.speakingId === passage.id,
-            canSpeak: ttsService.available,
+            canSpeak: appSettings.ttsEnabled && ttsService.available,
             onCharClick: (char: string): void => {
               this.handleReadingChar(char);
             },
@@ -302,14 +311,26 @@ export struct LessonDetailView {
                 .fontWeight(FontWeight.Medium)
                 .fontColor($r('app.color.hm_text_primary'))
                 .width('100%')
+              Text($r('app.string.progress_learned', progressStore.learnedOfLesson(this.lessonId),
+                this.lesson()?.chars.length ?? 0))
+                .fontSize($r('app.float.font_size_caption'))
+                .fontColor($r('app.color.hm_text_secondary'))
+                .width('100%')
+              Progress({
+                value: progressStore.learnedOfLesson(this.lessonId),
+                total: Math.max(1, this.lesson()?.chars.length ?? 0),
+                type: ProgressType.Linear
+              })
+                .width('100%')
+                .color(themePalette.accent())
               Row() {
                 Text($r('app.string.lesson_hide_pinyin'))
                   .fontSize($r('app.float.font_size_caption'))
                   .fontColor($r('app.color.hm_text_secondary'))
                   .layoutWeight(1)
-                Toggle({ type: ToggleType.Switch, isOn: this.hidePinyin })
+                Toggle({ type: ToggleType.Switch, isOn: appSettings.hidePinyin })
                   .onChange((value: boolean) => {
-                    this.hidePinyin = value;
+                    settingsViewModel.setHidePinyin(value);
                   })
               }
               .width('100%')

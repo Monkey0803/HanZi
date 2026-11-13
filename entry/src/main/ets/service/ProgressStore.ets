@@ -12,6 +12,9 @@ import { ReviewConstants } from '../common/constants/ReviewConstants';
 import { ProgressRepository, progressRepository } from './ProgressRepository';
 import { appDatabase } from './AppDatabase';
 import { ReviewScheduler } from './ReviewScheduler';
+import { Book, Lesson } from '../model/CurriculumModels';
+import { curriculumRepository } from './CurriculumRepository';
+import { ProgressAggregator } from './ProgressAggregator';
 
 @ObservedV2
 export class ProgressStore {
@@ -28,6 +31,9 @@ export class ProgressStore {
   @Trace streakDays: number = 0;
   @Trace accuracy: number = 0;
   @Trace attemptCount: number = 0;
+  @Trace learnedByLesson: Map<string, number> = new Map<string, number>();
+  @Trace learnedByBook: Map<string, number> = new Map<string, number>();
+  @Trace mistakeCounts: Map<string, number> = new Map<string, number>();
 
   private progressMap: Map<string, CharProgress> = new Map();
   private repository: ProgressRepository = progressRepository;
@@ -82,6 +88,18 @@ export class ProgressStore {
       this.dueChars = due;
       this.learnedChars = learned;
       this.mistakeChars = mistakes;
+      const items: CharProgress[] = Array.from(this.progressMap.values());
+      const lessons: Lesson[] = [];
+      const books: Book[] = curriculumRepository.books();
+      for (let i = 0; i < books.length; i += 1) {
+        const bookLessons: Lesson[] = curriculumRepository.lessonsOfBook(books[i].id);
+        for (let j = 0; j < bookLessons.length; j += 1) {
+          lessons.push(bookLessons[j]);
+        }
+      }
+      this.learnedByLesson = ProgressAggregator.byLesson(items, lessons);
+      this.learnedByBook = ProgressAggregator.byBook(items, lessons);
+      this.mistakeCounts = ProgressAggregator.mistakeCounts(items);
     } catch (err) {
       const error: BusinessError = err as BusinessError;
       console.error(`ProgressStore.refresh failed: ${error.code}`);
@@ -100,6 +118,18 @@ export class ProgressStore {
 
   isLearned(char: string): boolean {
     return this.learnedChars.indexOf(char) >= 0;
+  }
+
+  learnedOfLesson(lessonId: string): number {
+    return this.learnedByLesson.get(lessonId) ?? 0;
+  }
+
+  learnedOfBook(bookId: string): number {
+    return this.learnedByBook.get(bookId) ?? 0;
+  }
+
+  mistakeOf(char: string): number {
+    return this.mistakeCounts.get(char) ?? 0;
   }
 
   lessonOf(char: string): string {

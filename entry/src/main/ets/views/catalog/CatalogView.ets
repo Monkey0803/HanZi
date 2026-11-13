@@ -18,6 +18,7 @@ import { CharRouteParam } from '../../model/RouteParams';
 import { AppMenu } from '../../common/components/AppMenu';
 import { choiceMenu } from '../../common/components/ChoiceMenu';
 import { ResponsiveContent } from '../ResponsiveContent';
+import { PageTopSpacer } from '../PageTopSpacer';
 
 const LIST_SPACE: number = 8;
 
@@ -114,8 +115,7 @@ export struct CatalogView {
     ResponsiveContent() {
       List({ space: LIST_SPACE }) {
         ListItem() {
-          Row().width('100%')
-            .height(this.underTitleBar ? safeArea.contentTopInsetVp : $r('app.float.space_l'))
+          PageTopSpacer({ underTitleBar: this.underTitleBar })
         }
 
         ListItem() {

@@ -13,6 +13,7 @@ import { themePalette } from '../../model/ThemePalette';
 import { CharRouteParam, LessonRouteParam } from '../../model/RouteParams';
 import { ReadingQuiz } from '../../common/utils/ReadingQuiz';
 import { ResponsiveContent } from '../ResponsiveContent';
+import { PageTopSpacer } from '../PageTopSpacer';
 import { PassageCard } from './PassageCard';
 
 const CELL_SIZE: number = 64;
@@ -292,8 +293,7 @@ export struct LessonDetailView {
     ResponsiveContent() {
       Scroll() {
         Column({ space: $r('app.float.space_l') }) {
-          Row().width('100%')
-            .height(this.underTitleBar ? safeArea.contentTopInsetVp : $r('app.float.space_l'))
+          PageTopSpacer({ underTitleBar: this.underTitleBar })
 
           if (this.lesson() !== undefined) {
             Column({ space: $r('app.float.space_xs') }) {

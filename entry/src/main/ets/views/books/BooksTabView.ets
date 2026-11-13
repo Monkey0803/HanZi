@@ -20,6 +20,7 @@ import { gradeGlyphOf } from '../../common/constants/CurriculumConstants';
 import { BookRouteParam, CharRouteParam, LessonRouteParam } from '../../model/RouteParams';
 import { ResponsiveContent } from '../ResponsiveContent';
 import { PaperBackground } from '../PaperBackground';
+import { PageTopSpacer } from '../PageTopSpacer';
 import { HanziGridCell } from './HanziGridCell';
 import { InkCard } from './InkCard';
 
@@ -280,8 +281,7 @@ export struct BooksTabView {
         List({ scroller: scrollers.home }) {
           ListItem() {
             Column({ space: $r('app.float.space_l') }) {
-              Row().width('100%')
-                .height(this.underTitleBar ? safeArea.contentTopInsetVp : $r('app.float.space_l'))
+              PageTopSpacer({ underTitleBar: this.underTitleBar })
               this.todayCard()
               this.sectionHeader()
             }

@@ -105,6 +105,14 @@
       "value": "32"
     },
     {
+      "name": "action_button_height",
+      "value": "40"
+    },
+    {
+      "name": "char_progress_height",
+      "value": "4"
+    },
+    {
       "name": "icon_size_tiny",
       "value": "12"
     },
@@ -162,11 +170,11 @@
     },
     {
       "name": "stroke_steps_height",
-      "value": "96"
+      "value": "64"
     },
     {
       "name": "stroke_steps_cell_width",
-      "value": "56"
+      "value": "48"
     },
     {
       "name": "practice_canvas_cap",
@@ -243,6 +251,10 @@
     {
       "name": "reading_glyph_height",
       "value": "34"
+    },
+    {
+      "name": "title_bar_content_gap",
+      "value": "16"
     }
   ]
 }

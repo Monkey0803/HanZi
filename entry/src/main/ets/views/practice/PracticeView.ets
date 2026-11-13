@@ -24,6 +24,7 @@ import { choiceMenu } from '../../common/components/ChoiceMenu';
 import { StrokeCanvas } from './StrokeCanvas';
 import { StrokeToggleChip } from './StrokeToggleChip';
 import { ResponsiveContent } from '../ResponsiveContent';
+import { PageTopSpacer } from '../PageTopSpacer';
 
 const AREA_MARGIN: number = 32;
 const CONTROL_RESERVE: number = 190;
@@ -301,8 +302,7 @@ export struct PracticeView {
   build() {
     ResponsiveContent() {
       Column({ space: $r('app.float.space_s') }) {
-        Row().width('100%')
-          .height(this.underTitleBar ? safeArea.contentTopInsetVp : $r('app.float.space_l'))
+        PageTopSpacer({ underTitleBar: this.underTitleBar })
 
         if (deviceService.wide) {
           Row({ space: $r('app.float.space_l') }) {

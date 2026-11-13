@@ -23,6 +23,7 @@ import { gripSensor } from '../service/GripSensor';
 import { deviceService } from '../service/DeviceService';
 import { safeArea } from '../service/SafeAreaController';
 import { ResponsiveContent } from './ResponsiveContent';
+import { PageTopSpacer } from './PageTopSpacer';
 
 const SECTION_LIST: number = 0;
 const SECTION_EFFECTS: number = 1;
@@ -226,7 +227,7 @@ export struct DetailPageView {
     ResponsiveContent() {
       Column({ space: $r('app.float.space_l') }) {
         // 透明标题栏占位：内容从标题栏下方开始，滚动/布局不压住标题。
-        Row().width('100%').height(safeArea.contentTopInsetVp)
+        PageTopSpacer()
         Text($r('app.string.detail_hint'))
           .fontSize($r('app.float.font_size_caption'))
           .fontColor($r('app.color.hm_text_secondary'))

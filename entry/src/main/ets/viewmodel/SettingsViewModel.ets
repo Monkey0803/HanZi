@@ -5,7 +5,6 @@
  */
 
 import { common } from '@kit.AbilityKit';
-import { uiMaterial } from '@kit.ArkUI';
 import { appSettings } from '../model/AppSettings';
 import { settingsStore } from '../service/SettingsStore';
 import { ThemeController } from '../service/ThemeController';
@@ -20,10 +19,6 @@ import { customImmersiveViewModel } from './CustomImmersiveViewModel';
 export class SettingsViewModel {
   /** 本机是否支持沉浸式材质（设置页可据此提示降级）。 */
   @Trace immersiveSupported: boolean = true;
-  /** 应用级（全局）沉浸光感状态说明（default / enable / disable，来自 module.json5 metadata）。 */
-  @Trace stateCaption: ResourceStr = '';
-  /** 设备材质等级说明（高 / 中 / 低算力，由设备决定、只能查不能设）。 */
-  @Trace levelCaption: ResourceStr = '';
 
   /** 启动时装配：恢复落盘设置 → 应用主题与语言 → 恢复防窥订阅（不弹窗）。 */
   init(context: common.Context): void {
@@ -35,43 +30,12 @@ export class SettingsViewModel {
     ThemeController.apply(context, appSettings.themeMode);
     LocaleController.apply(appSettings.languageMode);
     this.immersiveSupported = MaterialController.immersiveSupported();
-    this.stateCaption = SettingsViewModel.stateCaptionOf(MaterialController.materialState());
-    this.levelCaption = SettingsViewModel.levelCaptionOf(MaterialController.globalLevel());
     // 设置恢复后重算一次：自定义沉浸光感的档位 / 降级原因依赖开关与设备能力。
     customImmersiveViewModel.recompute();
     gripSensor.setEnabled(appSettings.gripEnabled);
     if (appSettings.antiPeepEnabled) {
       await antiPeep.setEnabled(true);
     }
-  }
-
-  /**
-   * 应用级状态文案：三态各有含义，不能简单写成"开 / 关"。
-   * DEFAULT 下只有弹窗与文本菜单默认开材质；ENABLE 下系统清单内的组件默认开启
-   * （Popup / Tips / Button 不在清单内，仍需组件级显式设置）。
-   */
-  private static stateCaptionOf(state: uiMaterial.MaterialState): ResourceStr {
-    if (state === uiMaterial.MaterialState.ENABLE) {
-      return $r('app.string.aux_material_state_enable');
-    }
-    if (state === uiMaterial.MaterialState.DISABLE) {
-      return $r('app.string.aux_material_state_disable');
-    }
-    return $r('app.string.aux_material_state_default');
-  }
-
-  /**
-   * 材质等级文案：uiMaterial 的 MaterialLevel 只有三档，由设备算力决定、应用无法设置，
-   * 所以这里只做展示（排查"为什么这台机器效果不一样"时先看它）。
-   */
-  private static levelCaptionOf(level: uiMaterial.MaterialLevel): ResourceStr {
-    if (level === uiMaterial.MaterialLevel.EXQUISITE) {
-      return $r('app.string.aux_material_level_high');
-    }
-    if (level === uiMaterial.MaterialLevel.GENTLE) {
-      return $r('app.string.aux_material_level_mid');
-    }
-    return $r('app.string.aux_material_level_low');
   }
 
   setTheme(context: common.Context, id: string): void {

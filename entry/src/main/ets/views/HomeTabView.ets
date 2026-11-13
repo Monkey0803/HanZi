@@ -9,6 +9,7 @@ import { deviceService } from '../service/DeviceService';
 import { scrollers } from '../service/ScrollerRegistry';
 import { safeArea } from '../service/SafeAreaController';
 import { ResponsiveContent } from './ResponsiveContent';
+import { PageTopSpacer } from './PageTopSpacer';
 
 const SAMPLE_ROWS: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
   13, 14, 15, 16, 17, 18, 19, 20];
@@ -23,8 +24,7 @@ export struct HomeTabView {
       List({ scroller: scrollers.home }) {
         ListItem() {
           Column({ space: $r('app.float.space_l') }) {
-            Row().width('100%')
-              .height(this.underTitleBar ? safeArea.contentTopInsetVp : $r('app.float.space_l'))
+            PageTopSpacer({ underTitleBar: this.underTitleBar })
             Text($r('app.string.home_placeholder'))
               .fontSize($r('app.float.font_size_body'))
               .fontColor($r('app.color.hm_text_secondary'))

@@ -96,7 +96,7 @@ export struct StrokeStepsView {
       ctx.strokeRect(x0 + 1, 1, STEPS_CELL_WIDTH - 2, STEPS_HEIGHT - 2);
 
       const tx: number = x0 + (STEPS_CELL_WIDTH - inner) / 2;
-      const ty: number = STEPS_CELL_PADDING + 10 + 900 * scale;
+      const ty: number = (STEPS_HEIGHT + inner) / 2;
       ctx.save();
       ctx.setTransform(scale, 0, 0, -scale, tx, ty);
       StrokeRenderer.fillStrokes(ctx, data, data.commands.length, this.theme.outline);
@@ -105,7 +105,8 @@ export struct StrokeStepsView {
 
       if (this.showNumbers) {
         ctx.fillStyle = active ? this.theme.active : this.theme.numberText;
-        ctx.font = `${STEPS_NUMBER_FONT_SIZE}px sans-serif`;
+        const fontPx: number = this.getUIContext().vp2px(STEPS_NUMBER_FONT_SIZE);
+        ctx.font = `${fontPx}px sans-serif`;
         ctx.textAlign = 'left';
         ctx.textBaseline = 'top';
         ctx.fillText(`${i + 1}`, x0 + 4, 3);

@@ -41,4 +41,10 @@ export class CommonConstants {
 
   /** 标题栏背景模糊半径（仅 GRADIENT_BLUR 模式生效，取值范围 [0, 128]）。 */
   static readonly TITLE_BAR_BLUR_RADIUS: number = 24;
+
+  /**
+   * 静止态标题栏的模糊半径：必须为 0。
+   * 否则内容即使没有滚动，也会被标题栏背后的模糊带“吃掉”一截，看起来像已经沉浸。
+   */
+  static readonly TITLE_BAR_REST_BLUR_RADIUS: number = 0;
 }

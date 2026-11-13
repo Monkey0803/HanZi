@@ -389,6 +389,10 @@
       "value": "Trace practice"
     },
     {
+      "name": "char_quiz_stop",
+      "value": "Stop tracing"
+    },
+    {
       "name": "char_strokes",
       "value": "Stroke %d / %d"
     },
@@ -439,6 +443,10 @@
     {
       "name": "char_speak",
       "value": "Speak"
+    },
+    {
+      "name": "char_canvas_a11y",
+      "value": "Stroke practice area, %d strokes"
     },
     {
       "name": "review_title",

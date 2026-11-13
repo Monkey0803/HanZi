@@ -135,8 +135,16 @@ entry/src/main/ets/
 
 ```bash
 devecocli build        # 必须 BUILD SUCCESSFUL
-devecocli run          # 装到真机/模拟器并启动
+devecocli run --device <模拟器名或序列号>   # 默认模拟器；真机需用户明确要求
 ```
+
+### 验证设备（强制）
+
+- **默认使用模拟器验证**：`devecocli device list` / `devecocli emulator list` 确认模拟器在线；
+  多设备时显式 `devecocli run --device <模拟器名或序列号>`，不要依赖 `devecocli run` 的自动选择。
+- 只有用户**明确要求**「用真机 / 真机验证 / 我的手机」时才使用真机；不要因为模拟器缺能力就自行切真机。
+- 模拟器验不了的能力（沉浸光感、智感握姿、防窥、TTS 等）按降级分支验收；确需真机时**先问用户**，
+  得到明确同意后再切换。
 
 **真机安装需要签名**：模板的 `build-profile.json5` 刻意不带 `signingConfigs`。先在 DevEco Studio
 里配置自动签名，或 `devecocli auth login` 后 `devecocli signature generate`。
@@ -150,3 +158,4 @@ devecocli run          # 装到真机/模拟器并启动
   `hdsMaterial` 可以设四档，但必须用 `ADAPTIVE`（低算力设备上强设高等级会卡顿发热），本工程 `params()` 已在 `SMOOTH` 设备上强制收敛。
 - **通透玻璃**的性能与视觉边界：`systemMaterial` 只装饰当前组件（不继承），功耗上只保留少量小面积玻璃、不要在系统材质上再叠加一层；玻璃后面不要长期放视频/动图等持续变化的内容。设备算力等级不同、系统"光感强度"不同，效果本来就不同，不要试图强行统一。
 - **模拟器**验不了沉浸视效、智感握姿、防窥保护，只会走降级分支（801）；这些要真机验。
+  **但默认仍用模拟器**：确需真机时先问用户，不要自行切换（见「验证设备」）。

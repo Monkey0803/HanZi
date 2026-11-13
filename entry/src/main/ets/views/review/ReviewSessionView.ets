@@ -13,6 +13,7 @@ import { progressStore } from '../../service/ProgressStore';
 import { themePalette } from '../../model/ThemePalette';
 import { safeArea } from '../../service/SafeAreaController';
 import { ResponsiveContent } from '../ResponsiveContent';
+import { PageTopSpacer } from '../PageTopSpacer';
 import { InkCard } from '../books/InkCard';
 
 @ComponentV2
@@ -240,9 +241,7 @@ export struct ReviewSessionView {
   build() {
     ResponsiveContent() {
       Column({ space: $r('app.float.space_l') }) {
-        Row()
-          .width('100%')
-          .height(safeArea.contentTopInsetVp)
+        PageTopSpacer()
 
         if (this.viewModel.unavailable) {
           this.unavailableBody()

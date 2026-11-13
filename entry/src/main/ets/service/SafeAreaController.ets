@@ -4,7 +4,7 @@
  * 应用在 EntryAbility 里调用了 setWindowLayoutFullScreen(true)，布局不做系统栏避让。
  * 顶部由 HDS 标题栏的 enableComponentSafeArea / avoidLayoutSafeArea 处理；
  * 这里提供「内容要为浮层让出多少」：
- *   - contentTopInsetVp：可滚动内容顶部预留量（= 系统状态栏 + HDS 标题栏高度）；
+ *   - contentTopInsetVp：可滚动内容顶部预留量（= 系统状态栏 + HDS 标题栏高度 + 标题栏内容间距）；
  *   - contentBottomInsetVp：可滚动内容底部预留量（= 悬浮页签栏避让高度 + 系统导航条高度）；
  *   - bottomInsetVp：系统导航条高度，用于悬浮页签栏上抬 / 页面底部内缩。
  * 旋转 / 分屏 / 折叠时由 avoidAreaChange 刷新，不要在页面里缓存避让值。
@@ -39,6 +39,8 @@ export class SafeAreaController {
 
   private mainWindow: window.Window | undefined = undefined;
   private tabClearanceVp: number = 0;
+  /** 标题栏与首屏内容之间的额外间距（vp）：避免内容紧贴标题栏，静止态就被标题栏模糊。 */
+  private titleBarGapVp: number = 0;
   private decorHidden: boolean = false;
 
   /** 纯计算：可滚动内容顶部预留量。 */
@@ -61,6 +63,7 @@ export class SafeAreaController {
     // 窗口重建 / 接续恢复时可能再次 attach：先释放旧监听，避免重复订阅。
     this.detach();
     this.tabClearanceVp = this.readFloat(context, $r('app.float.tab_clearance'));
+    this.titleBarGapVp = this.readFloat(context, $r('app.float.title_bar_content_gap'));
     this.mainWindow = mainWindow;
     this.refresh();
     try {
@@ -193,7 +196,7 @@ export class SafeAreaController {
       systemBottom = 0;
     }
     this.bottomInsetVp = SafeAreaController.navBottom(indicatorBottom, systemBottom);
-    this.contentTopInsetVp = SafeAreaController.contentTop(this.topInsetVp);
+    this.contentTopInsetVp = SafeAreaController.contentTop(this.topInsetVp) + this.titleBarGapVp;
     this.contentBottomInsetVp = SafeAreaController.contentBottom(this.tabClearanceVp, this.bottomInsetVp);
   }
 }

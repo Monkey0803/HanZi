@@ -15,6 +15,7 @@ import { RouterConstants } from '../../common/constants/RouterConstants';
 import { ReviewCardMode, ReviewConstants } from '../../common/constants/ReviewConstants';
 import { CharRouteParam, ReviewMode, ReviewRouteParam } from '../../model/RouteParams';
 import { ResponsiveContent } from '../ResponsiveContent';
+import { PageTopSpacer } from '../PageTopSpacer';
 import { PaperBackground } from '../PaperBackground';
 import { InkCard } from '../books/InkCard';
 import { HanziGridCell } from '../books/HanziGridCell';
@@ -348,9 +349,7 @@ export struct ReviewTabView {
       ResponsiveContent() {
         Scroll(scrollers.review) {
           Column({ space: $r('app.float.space_l') }) {
-            Row()
-              .width('100%')
-              .height(this.underTitleBar ? safeArea.contentTopInsetVp : $r('app.float.space_l'))
+            PageTopSpacer({ underTitleBar: this.underTitleBar })
 
             this.heroCard()
             this.statsGrid()

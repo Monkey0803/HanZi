@@ -19,6 +19,7 @@ import { SettingsSystemSection } from './settings/SettingsSystemSection';
 import { SettingsStudySection } from './settings/SettingsStudySection';
 import { ThemeColorSheet } from './settings/ThemeColorSheet';
 import { ResponsiveContent } from './ResponsiveContent';
+import { PageTopSpacer } from './PageTopSpacer';
 
 @ComponentV2
 export struct SettingsTabView {
@@ -39,8 +40,7 @@ export struct SettingsTabView {
         Scroll(scrollers.settings) {
           Column() {
             // 透明标题栏占位：首屏顶部预留「状态栏 + 标题栏」高度，滚动时随内容上移。
-            Row().width('100%')
-              .height(this.underTitleBar ? safeArea.contentTopInsetVp : $r('app.float.space_l'))
+            PageTopSpacer({ underTitleBar: this.underTitleBar })
 
             SettingsLookSection({
               onOpenThemeColor: () => {

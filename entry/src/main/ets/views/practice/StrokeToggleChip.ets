@@ -17,11 +17,11 @@ export struct StrokeToggleChip {
     Text(this.label)
       .fontSize($r('app.float.font_size_caption'))
       .fontColor(this.active ? $r('app.color.hm_on_brand') : $r('app.color.hm_text_secondary'))
+      .textAlign(TextAlign.Center)
+      .height($r('app.float.value_chip_height'))
       .padding({
         left: $r('app.float.space_m'),
-        right: $r('app.float.space_m'),
-        top: $r('app.float.space_xs'),
-        bottom: $r('app.float.space_xs')
+        right: $r('app.float.space_m')
       })
       .backgroundColor(this.active ? themePalette.fill() : $r('app.color.hm_divider'))
       .borderRadius($r('app.float.radius_chip'))

@@ -15,10 +15,10 @@ import { RouterConstants } from '../../common/constants/RouterConstants';
 import { gradeGlyphOf } from '../../common/constants/CurriculumConstants';
 import { LessonRouteParam } from '../../model/RouteParams';
 import { ResponsiveContent } from '../ResponsiveContent';
+import { PageTopSpacer } from '../PageTopSpacer';
 import { HanziGridCell } from './HanziGridCell';
 import { InkCard } from './InkCard';
 
-const PREVIEW_CHARS: number = 8;
 const GRADE_TILE: number = 64;
 
 /** 课文行的展示数据（构建期一次性算好）。 */
@@ -26,7 +26,6 @@ class LessonRowMeta {
   id: string = '';
   title: string = '';
   preview: string = '';
-  truncated: boolean = false;
   charCount: number = 0;
   writeCount: number = 0;
 
@@ -40,13 +39,10 @@ class LessonRowMeta {
       if (lesson.chars[i].isWrite === 1) {
         write += 1;
       }
-      if (i < PREVIEW_CHARS) {
-        preview += lesson.chars[i].char;
-      }
+      preview += lesson.chars[i].char;
     }
     this.writeCount = write;
     this.preview = preview;
-    this.truncated = lesson.chars.length > PREVIEW_CHARS;
   }
 }
 
@@ -86,10 +82,6 @@ export struct BookDetailView {
 
   private metaOf(lesson: Lesson): LessonRowMeta {
     return this.metas.get(lesson.id) ?? new LessonRowMeta(lesson);
-  }
-
-  private previewText(meta: LessonRowMeta): string {
-    return meta.truncated ? `${meta.preview}…` : meta.preview;
   }
 
   /** 会写字数与总字数相同时只显示字数，避免「6 字 · 6 会写」这类冗余。 */
@@ -233,7 +225,7 @@ export struct BookDetailView {
             .width('100%')
           if (meta.charCount > 0) {
             Row({ space: $r('app.float.space_s') }) {
-              Text(this.previewText(meta))
+              Text(meta.preview)
                 .fontSize($r('app.float.font_size_caption'))
                 .fontColor($r('app.color.hm_text_secondary'))
                 .maxLines(1)
@@ -377,9 +369,7 @@ export struct BookDetailView {
   wideContent() {
     Scroll() {
       Column({ space: $r('app.float.space_l') }) {
-        Row()
-          .width('100%')
-          .height(this.underTitleBar ? safeArea.contentTopInsetVp : $r('app.float.space_l'))
+        PageTopSpacer({ underTitleBar: this.underTitleBar })
 
         this.bookHeaderCard()
 

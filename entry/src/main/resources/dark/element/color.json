@@ -58,11 +58,11 @@
     },
     {
       "name": "hanzi_grid",
-      "value": "#40FFFFFF"
+      "value": "#FF3F4550"
     },
     {
       "name": "hanzi_outline",
-      "value": "#33FFFFFF"
+      "value": "#FF5A5F6B"
     },
     {
       "name": "hanzi_active",
@@ -82,11 +82,11 @@
     },
     {
       "name": "hanzi_number_bg",
-      "value": "#FF262A33"
+      "value": "#FF3A404D"
     },
     {
       "name": "hanzi_number_border",
-      "value": "#FF5A5F6B"
+      "value": "#FF9AA0A6"
     },
     {
       "name": "hanzi_number_text",

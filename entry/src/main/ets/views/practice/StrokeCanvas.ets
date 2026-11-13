@@ -10,7 +10,8 @@ import { StrokeData, StrokeMatcherOptions, StrokeMatchResult, StrokeTheme, Point
 import { StrokeRenderer } from '../../service/StrokeRenderer';
 import { StrokeGeometry } from '../../service/StrokeGeometry';
 import { StrokeMatcher } from '../../service/StrokeMatcher';
-import { GridStyleId, SKELETON_OUTLINE_ALPHA } from '../../common/constants/StrokeConstants';
+import { StrokeNumberLayout } from '../../service/StrokeNumberLayout';
+import { GridStyleId, NUMBER_FONT_RATIO, SKELETON_OUTLINE_ALPHA } from '../../common/constants/StrokeConstants';
 
 const MASK_HALF_WIDTH: number = 140;
 const STROKE_PAUSE_MS: number = 180;
@@ -51,7 +52,8 @@ export struct StrokeCanvas {
   private current: number = 0;
   private mistakes: number = 0;
   private playing: boolean = false;
-  private quizMode: boolean = false;
+  /** 描红模式：决定触摸是否拦截外层 Scroll。 */
+  @Local quizMode: boolean = false;
   private playIndex: number = 0;
   private strokeStartMs: number = 0;
   private progress: number = 0;
@@ -59,10 +61,17 @@ export struct StrokeCanvas {
   private timerId: number = -1;
   private pauseTimerId: number = -1;
   private flashTimerId: number = -1;
+  private redrawTimer: number = -1;
   private matcherOptions: StrokeMatcherOptions = new StrokeMatcherOptions();
 
   aboutToDisappear(): void {
     this.stop();
+    this.cancelRedraw();
+  }
+
+  @Monitor('canvasSize')
+  onCanvasSizeChanged(): void {
+    this.scheduleRedraw();
   }
 
   @Monitor('playTrigger')
@@ -78,6 +87,7 @@ export struct StrokeCanvas {
   @Monitor('resetTrigger')
   onResetTriggerChanged(): void {
     this.stop();
+    this.quizMode = false;
     this.resetState();
     this.drawBase();
     this.clearOverlay();
@@ -86,6 +96,7 @@ export struct StrokeCanvas {
   @Monitor('data')
   onDataChanged(): void {
     this.stop();
+    this.quizMode = false;
     this.resetState();
     this.drawBase();
     this.clearOverlay();
@@ -155,6 +166,23 @@ export struct StrokeCanvas {
     if (this.flashTimerId >= 0) {
       clearTimeout(this.flashTimerId);
       this.flashTimerId = -1;
+    }
+  }
+
+  /** 画布尺寸变化后，等布局生效再重绘，避免画在旧 surface 上。 */
+  private scheduleRedraw(): void {
+    this.cancelRedraw();
+    this.redrawTimer = setTimeout(() => {
+      this.redrawTimer = -1;
+      this.drawBase();
+      this.clearOverlay();
+    }, 16);
+  }
+
+  private cancelRedraw(): void {
+    if (this.redrawTimer >= 0) {
+      clearTimeout(this.redrawTimer);
+      this.redrawTimer = -1;
     }
   }
 
@@ -232,8 +260,10 @@ export struct StrokeCanvas {
         this.currentStrokeIndex(data));
     }
     if (this.showNumbers) {
+      const radius: number = StrokeNumberLayout.radiusFor(this.canvasSize);
+      const fontPx: number = this.getUIContext().vp2px(Math.round(radius * NUMBER_FONT_RATIO));
       StrokeRenderer.drawNumbers(ctx, data, this.canvasSize, this.canvasPadding, this.theme,
-        this.currentStrokeIndex(data));
+        this.currentStrokeIndex(data), fontPx);
     }
   }
 
@@ -380,6 +410,7 @@ export struct StrokeCanvas {
       Canvas(this.baseCtx)
         .width(this.canvasSize)
         .height(this.canvasSize)
+        .hitTestBehavior(HitTestMode.None)
         .onReady(() => {
           this.baseReady = true;
           this.drawBase();
@@ -394,6 +425,7 @@ export struct StrokeCanvas {
         .onTouch((event: TouchEvent) => {
           this.handleTouch(event);
         })
+        .hitTestBehavior(this.quizMode ? HitTestMode.Default : HitTestMode.None)
     }
     .width(this.canvasSize)
     .height(this.canvasSize)

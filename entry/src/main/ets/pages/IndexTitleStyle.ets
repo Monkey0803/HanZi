@@ -56,7 +56,8 @@ export function indexMaterialTitleStyle(): TitleBarStyleOptions {
   const original: HdsNavigationTitleBarStyle = {
     backgroundStyle: {
       backgroundColor: Color.Transparent,
-      blurRadius: CommonConstants.TITLE_BAR_BLUR_RADIUS
+      // 静止态不模糊：内容未滚动时标题栏必须完全通透，否则首屏内容会被糊掉一条。
+      blurRadius: CommonConstants.TITLE_BAR_REST_BLUR_RADIUS
     }
   };
   const scrolled: HdsNavigationTitleBarStyle = {

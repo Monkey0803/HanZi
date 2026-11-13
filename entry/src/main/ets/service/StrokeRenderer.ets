@@ -156,7 +156,7 @@ export class StrokeRenderer {
 
   /** 笔顺序号：每笔起笔处画圆圈 + 数字（屏幕坐标）。 */
   static drawNumbers(ctx: CanvasRenderingContext2D, data: StrokeData, size: number, padding: number,
-    theme: StrokeTheme, currentIndex: number): void {
+    theme: StrokeTheme, currentIndex: number, fontPx: number): void {
     if (size < NUMBER_MIN_CANVAS_VP) {
       return;
     }
@@ -165,11 +165,12 @@ export class StrokeRenderer {
     ctx.save();
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = `${Math.round(radius * 1.25)}px sans-serif`;
     for (let i = 0; i < data.medians.length; i += 1) {
       const median: Point[] = data.medians[i];
       const anchor: NumberAnchor = StrokeNumberLayout.anchor(median, size, padding, radius);
       const active: boolean = i === currentIndex;
+      const numberFontPx: number = i >= 9 ? Math.round(fontPx * 0.88) : fontPx;
+      ctx.font = `${numberFontPx}px sans-serif`;
       ctx.beginPath();
       ctx.arc(anchor.x, anchor.y, radius, 0, Math.PI * 2);
       ctx.fillStyle = active ? theme.numberActiveBg : theme.numberBg;

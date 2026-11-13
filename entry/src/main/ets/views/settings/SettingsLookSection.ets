@@ -1,7 +1,7 @@
 /*
- * SettingsLookSection.ets — 「外观与语言」分区（纯展示 + 事件上报）。
+ * SettingsLookSection.ets — 「外观」分区（纯展示 + 事件上报）。
  *
- * 内容：主题、主题色（预设 + 系统取色器）、语言。
+ * 内容：主题、主题色（预设 + 系统取色器）。应用仅支持简体中文，语言开关已移除。
  * 行为全部在 SettingsViewModel；本分区只读 appSettings 的 @Trace 字段。
  * 主题色半模态的宿主在 SettingsTabView（半模态不能挂在 Scroll 里，否则会被裁切），
  * 这里只通过 @Event 上报「要打开取色面板」。
@@ -9,7 +9,7 @@
 
 import { common } from '@kit.AbilityKit';
 import { appSettings } from '../../model/AppSettings';
-import { LANGUAGE_OPTIONS, THEME_OPTIONS } from '../../model/SettingsOptions';
+import { THEME_OPTIONS } from '../../model/SettingsOptions';
 import { settingsViewModel } from '../../viewmodel/SettingsViewModel';
 import { themePalette } from '../../model/ThemePalette';
 import { themeColorLabelOf } from '../../model/ThemeColorOptions';
@@ -48,16 +48,6 @@ export struct SettingsLookSection {
           dotColor: themePalette.accent(),
           onOpen: () => {
             this.onOpenThemeColor();
-          }
-        })
-        Divider().color($r('app.color.hm_divider'))
-        OptionSelectRow({
-          icon: $r('sys.symbol.translate'),
-          title: $r('app.string.row_language'),
-          choice: LANGUAGE_OPTIONS,
-          field: SettingField.LANGUAGE,
-          onPick: (id: string) => {
-            settingsViewModel.setLanguage(id);
           }
         })
       }

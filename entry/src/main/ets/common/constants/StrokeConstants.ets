@@ -29,11 +29,13 @@ export enum StrokeBand {
 }
 
 /** 序号徽标最小半径（vp）。 */
-export const NUMBER_MIN_RADIUS: number = 9;
+export const NUMBER_MIN_RADIUS: number = 7;
 /** 序号徽标最大半径（vp）。 */
-export const NUMBER_MAX_RADIUS: number = 16;
+export const NUMBER_MAX_RADIUS: number = 12;
 /** 半径随画布尺寸的比例。 */
-export const NUMBER_RADIUS_RATIO: number = 0.045;
+export const NUMBER_RADIUS_RATIO: number = 0.032;
+/** 序号字号相对徽标半径的比例（字号 = 半径 × 该值）。 */
+export const NUMBER_FONT_RATIO: number = 1.45;
 /** 序号沿书写方向内移的半径倍数，避免压住起笔。 */
 export const NUMBER_OFFSET_RATIO: number = 1.15;
 /** 画布过小时不画序号（vp）。 */
@@ -49,10 +51,10 @@ export const ARROW_POSITION_RATIO: number = 0.8;
 /** 骨架模式下轮廓透明度。 */
 export const SKELETON_OUTLINE_ALPHA: number = 0.2;
 /** 步骤条单元格宽度（vp，Canvas 几何）。 */
-export const STEPS_CELL_WIDTH: number = 56;
+export const STEPS_CELL_WIDTH: number = 48;
 /** 步骤条高度（vp，Canvas 几何）。 */
-export const STEPS_HEIGHT: number = 96;
+export const STEPS_HEIGHT: number = 64;
 /** 步骤条单元格内边距（vp）。 */
 export const STEPS_CELL_PADDING: number = 4;
-/** 步骤条序号字号（px）。 */
-export const STEPS_NUMBER_FONT_SIZE: number = 10;
+/** 步骤条序号字号（vp）。 */
+export const STEPS_NUMBER_FONT_SIZE: number = 11;

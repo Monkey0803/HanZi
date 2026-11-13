@@ -1,7 +1,8 @@
 /*
  * CatalogDataSource.ets — 字表页状态（状态管理 V2）。
  *
- * 负责分页窗口与过滤条件的组合；数据本身仍来自 CurriculumRepository 的内存索引。
+ * 统一维护浏览模式、过滤条件、分组、索引选中项与搜索结果；
+ * 数据本身仍来自 CurriculumRepository 的内存索引。
  */
 
 import { CharacterEntry } from '../model/CurriculumModels';
@@ -9,9 +10,32 @@ import { ChoiceSet } from '../model/SettingsOptions';
 import { CatalogQuery, CharacterCatalogService } from '../service/CharacterCatalogService';
 import { curriculumRepository } from '../service/CurriculumRepository';
 import { CatalogScope, StrokeBand } from '../common/constants/StrokeConstants';
+import { CatalogBrowseMode, CatalogGridRow, CatalogGroup } from '../model/CatalogModels';
 
-/** 首次加载与每次「更多」追加的条数。 */
-const PAGE_SIZE: number = 120;
+export interface CatalogDataProvider {
+  isLoaded(): boolean;
+  results(condition: CatalogQuery): CharacterEntry[];
+  limitedData(): boolean;
+  radicalChoice(current: string): ChoiceSet;
+}
+
+class AppCatalogDataProvider implements CatalogDataProvider {
+  isLoaded(): boolean {
+    return curriculumRepository.isLoaded();
+  }
+
+  results(condition: CatalogQuery): CharacterEntry[] {
+    return CharacterCatalogService.results(condition, 0);
+  }
+
+  limitedData(): boolean {
+    return CharacterCatalogService.isLimitedData();
+  }
+
+  radicalChoice(current: string): ChoiceSet {
+    return CharacterCatalogService.radicalOptions(current);
+  }
+}
 
 @ObservedV2
 export class CatalogDataSource {
@@ -19,22 +43,57 @@ export class CatalogDataSource {
   @Trace scope: string = CatalogScope.ALL;
   @Trace band: string = StrokeBand.ALL;
   @Trace radical: string = '';
+  @Trace browseMode: CatalogBrowseMode = CatalogBrowseMode.RADICAL;
+  @Trace showPinyin: boolean = true;
   @Trace items: CharacterEntry[] = [];
+  @Trace groups: CatalogGroup[] = [];
+  @Trace selectedGroupIndex: number = 0;
   @Trace total: number = 0;
   @Trace limitedData: boolean = false;
-  private window: number = PAGE_SIZE;
+  private provider: CatalogDataProvider = new AppCatalogDataProvider();
+
+  constructor(provider?: CatalogDataProvider) {
+    if (provider !== undefined) {
+      this.provider = provider;
+    }
+  }
 
   reload(): void {
-    if (!curriculumRepository.isLoaded()) {
+    if (!this.provider.isLoaded()) {
       this.items = [];
       this.total = 0;
+      this.groups = [];
       this.limitedData = true;
       return;
     }
-    this.window = PAGE_SIZE;
-    this.total = CharacterCatalogService.count(this.condition());
-    this.items = CharacterCatalogService.results(this.condition(), this.window);
-    this.limitedData = CharacterCatalogService.isLimitedData();
+    this.items = this.provider.results(this.condition());
+    this.total = this.items.length;
+    this.groups = this.searching()
+      ? []
+      : CharacterCatalogService.groupEntries(this.items, this.browseMode);
+    if (!this.searching()) {
+      this.selectedGroupIndex = this.groups.length > 0
+        ? Math.min(this.selectedGroupIndex, this.groups.length - 1)
+        : 0;
+    }
+    this.limitedData = this.provider.limitedData();
+  }
+
+  searching(): boolean {
+    return this.keyword.trim().length > 0;
+  }
+
+  setBrowseMode(value: CatalogBrowseMode): void {
+    if (this.browseMode === value) {
+      return;
+    }
+    this.browseMode = value;
+    this.selectedGroupIndex = 0;
+    this.reload();
+  }
+
+  setShowPinyin(value: boolean): void {
+    this.showPinyin = value;
   }
 
   setKeyword(value: string): void {
@@ -50,6 +109,7 @@ export class CatalogDataSource {
       return;
     }
     this.scope = value;
+    this.selectedGroupIndex = 0;
     this.reload();
   }
 
@@ -58,6 +118,7 @@ export class CatalogDataSource {
       return;
     }
     this.band = value;
+    this.selectedGroupIndex = 0;
     this.reload();
   }
 
@@ -66,23 +127,46 @@ export class CatalogDataSource {
       return;
     }
     this.radical = value;
+    this.selectedGroupIndex = 0;
     this.reload();
   }
 
-  hasMore(): boolean {
-    return this.items.length < this.total;
+  resetFilters(): void {
+    this.scope = CatalogScope.ALL;
+    this.band = StrokeBand.ALL;
+    this.radical = '';
+    this.selectedGroupIndex = 0;
+    this.reload();
   }
 
-  loadMore(): void {
-    if (!this.hasMore()) {
-      return;
+  activeFilterCount(): number {
+    let count: number = 0;
+    if (this.scope !== CatalogScope.ALL) {
+      count += 1;
     }
-    this.window += PAGE_SIZE;
-    this.items = CharacterCatalogService.results(this.condition(), this.window);
+    if (this.band !== StrokeBand.ALL) {
+      count += 1;
+    }
+    if (this.radical.length > 0) {
+      count += 1;
+    }
+    return count;
+  }
+
+  indexLabels(): string[] {
+    const labels: string[] = [];
+    for (let i = 0; i < this.groups.length; i += 1) {
+      labels.push(this.groups[i].indexLabel);
+    }
+    return labels;
+  }
+
+  searchRows(wide: boolean): CatalogGridRow[] {
+    return CatalogGroup.partition('search', this.items, wide ? 8 : 5);
   }
 
   radicalChoice(): ChoiceSet {
-    return CharacterCatalogService.radicalOptions(this.radical);
+    return this.provider.radicalChoice(this.radical);
   }
 
   private condition(): CatalogQuery {

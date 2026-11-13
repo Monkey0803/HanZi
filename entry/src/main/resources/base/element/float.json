@@ -267,6 +267,22 @@
     {
       "name": "title_bar_content_gap",
       "value": "16"
+    },
+    {
+      "name": "catalog_index_width",
+      "value": "28"
+    },
+    {
+      "name": "catalog_group_header_height",
+      "value": "36"
+    },
+    {
+      "name": "catalog_filter_badge_size",
+      "value": "18"
+    },
+    {
+      "name": "catalog_cell_radius",
+      "value": "12"
     }
   ]
 }

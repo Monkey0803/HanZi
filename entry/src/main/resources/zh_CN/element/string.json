@@ -753,6 +753,54 @@
       "value": "输入汉字或拼音"
     },
     {
+      "name": "catalog_mode_radical",
+      "value": "部首"
+    },
+    {
+      "name": "catalog_mode_pinyin",
+      "value": "拼音"
+    },
+    {
+      "name": "catalog_mode_stroke",
+      "value": "笔画"
+    },
+    {
+      "name": "catalog_filter",
+      "value": "筛选"
+    },
+    {
+      "name": "catalog_filter_title",
+      "value": "字表筛选"
+    },
+    {
+      "name": "catalog_filter_reset",
+      "value": "重置"
+    },
+    {
+      "name": "catalog_show_pinyin",
+      "value": "显示拼音"
+    },
+    {
+      "name": "catalog_group_radical",
+      "value": "%s部 · %d字"
+    },
+    {
+      "name": "catalog_group_pinyin",
+      "value": "%s · %d字"
+    },
+    {
+      "name": "catalog_group_stroke",
+      "value": "%s画 · %d字"
+    },
+    {
+      "name": "catalog_group_other",
+      "value": "其他 · %d字"
+    },
+    {
+      "name": "catalog_char_a11y",
+      "value": "%s，拼音%s，部首%s，%d画"
+    },
+    {
       "name": "catalog_scope",
       "value": "范围"
     },

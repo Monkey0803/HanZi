@@ -201,12 +201,18 @@ export class CurriculumRepository {
    * 结果按「教材字优先 → 笔画数 → 字符码」排序。
    */
   searchCatalog(query: string, scope: string, band: string, radical: string, limit: number): CharacterEntry[] {
+    return CurriculumRepository.filterCatalogEntries(this.charList, query, scope, band, radical, limit);
+  }
+
+  /** 纯筛选入口：与实例查询共用，便于覆盖组合筛选和搜索排序。 */
+  static filterCatalogEntries(entries: CharacterEntry[], query: string, scope: string, band: string,
+    radical: string, limit: number): CharacterEntry[] {
     const trimmed: string = query.trim();
     const normalizedQuery: string = PinyinUtils.normalize(trimmed);
     const matched: CharacterEntry[] = [];
-    for (let i = 0; i < this.charList.length; i += 1) {
-      const entry: CharacterEntry = this.charList[i];
-      if (!this.inScope(entry, scope) || !this.inBand(entry, band)) {
+    for (let i = 0; i < entries.length; i += 1) {
+      const entry: CharacterEntry = entries[i];
+      if (!CurriculumRepository.entryInScope(entry, scope) || !CurriculumRepository.entryInBand(entry, band)) {
         continue;
       }
       if (radical.length > 0 && entry.radical !== radical) {
@@ -233,6 +239,10 @@ export class CurriculumRepository {
   }
 
   private inScope(entry: CharacterEntry, scope: string): boolean {
+    return CurriculumRepository.entryInScope(entry, scope);
+  }
+
+  private static entryInScope(entry: CharacterEntry, scope: string): boolean {
     if (scope === 'curriculum') {
       return entry.inCurriculum;
     }
@@ -243,6 +253,10 @@ export class CurriculumRepository {
   }
 
   private inBand(entry: CharacterEntry, band: string): boolean {
+    return CurriculumRepository.entryInBand(entry, band);
+  }
+
+  private static entryInBand(entry: CharacterEntry, band: string): boolean {
     const count: number = entry.strokeCount;
     if (band === '1-4') {
       return count >= 1 && count <= 4;

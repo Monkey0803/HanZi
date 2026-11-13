@@ -753,6 +753,54 @@
       "value": "Character or pinyin"
     },
     {
+      "name": "catalog_mode_radical",
+      "value": "Radical"
+    },
+    {
+      "name": "catalog_mode_pinyin",
+      "value": "Pinyin"
+    },
+    {
+      "name": "catalog_mode_stroke",
+      "value": "Strokes"
+    },
+    {
+      "name": "catalog_filter",
+      "value": "Filter"
+    },
+    {
+      "name": "catalog_filter_title",
+      "value": "Catalog filters"
+    },
+    {
+      "name": "catalog_filter_reset",
+      "value": "Reset"
+    },
+    {
+      "name": "catalog_show_pinyin",
+      "value": "Show pinyin"
+    },
+    {
+      "name": "catalog_group_radical",
+      "value": "Radical %s · %d"
+    },
+    {
+      "name": "catalog_group_pinyin",
+      "value": "%s · %d"
+    },
+    {
+      "name": "catalog_group_stroke",
+      "value": "%s strokes · %d"
+    },
+    {
+      "name": "catalog_group_other",
+      "value": "Other · %d"
+    },
+    {
+      "name": "catalog_char_a11y",
+      "value": "%s, %s, radical %s, %d strokes"
+    },
+    {
       "name": "catalog_scope",
       "value": "Scope"
     },

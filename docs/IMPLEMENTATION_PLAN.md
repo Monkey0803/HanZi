@@ -374,7 +374,7 @@ CREATE INDEX IF NOT EXISTS idx_practice_ts ON practice_log(ts);
 - Canvas 颜色：`active` 用 `themePalette.accent()`；`ink`/`grid`/`outline` 根据 `themePalette.isDark` 取预定义色，通过 `@Param` 传给 `StrokeCanvas`，主题变化时父组件重建并触发重绘。
 - 权限：不新增权限；删除 `module.json5` 的 `ohos.permission.DLP_GET_HIDE_STATUS`（避免 system_basic ACL 导致安装失败），防窥功能保持关闭；INTERNET/GET_NETWORK_INFO 保留但不用于核心功能。
 - 语音：`TtsService` 使用离线中文引擎；引擎不可用时隐藏喇叭，不影响学习闭环。
-- 图标：沿用脚手架图标；后续可换成「田字格 + 字」的简单图标，非首版阻塞项。
+- 图标：已替换为「墨迹『字』+ 朱红『汉』印章」的纯墨迹图标；应用内品牌标记见设置页「关于」卡片。
 
 ### 8. 性能与无障碍
 

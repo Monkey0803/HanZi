@@ -911,6 +911,26 @@
     {
       "name": "reading_a11y",
       "value": "阅读短文《%s》，点字查看详情。"
+    },
+    {
+      "name": "settings_about_title",
+      "value": "关于"
+    },
+    {
+      "name": "about_app_name",
+      "value": "HanZi · 汉字书写"
+    },
+    {
+      "name": "about_app_description",
+      "value": "离线汉字书写学习"
+    },
+    {
+      "name": "about_app_version",
+      "value": "v1.0.0"
+    },
+    {
+      "name": "logo_mark_a11y",
+      "value": "HanZi 应用标志"
     }
   ]
 }

@@ -911,6 +911,26 @@
     {
       "name": "reading_a11y",
       "value": "Reading passage %s. Tap a character for details."
+    },
+    {
+      "name": "settings_about_title",
+      "value": "About"
+    },
+    {
+      "name": "about_app_name",
+      "value": "HanZi · 汉字书写"
+    },
+    {
+      "name": "about_app_description",
+      "value": "Offline Chinese character writing practice"
+    },
+    {
+      "name": "about_app_version",
+      "value": "v1.0.0"
+    },
+    {
+      "name": "logo_mark_a11y",
+      "value": "HanZi app logo"
     }
   ]
 }

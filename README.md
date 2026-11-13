@@ -1,3 +1,5 @@
+<img src="docs/logo.svg" width="96" alt="HanZi logo" />
+
 # HanZi · 汉字书写
 
 一个基于 HarmonyOS（ArkTS / ArkUI / HDS）的小学语文生字学习 App。

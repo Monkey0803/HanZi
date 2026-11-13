@@ -17,6 +17,7 @@ import { SettingsLookSection } from './settings/SettingsLookSection';
 import { SettingsMaterialSection } from './settings/SettingsMaterialSection';
 import { SettingsSystemSection } from './settings/SettingsSystemSection';
 import { SettingsStudySection } from './settings/SettingsStudySection';
+import { SettingsAboutSection } from './settings/SettingsAboutSection';
 import { ThemeColorSheet } from './settings/ThemeColorSheet';
 import { ResponsiveContent } from './ResponsiveContent';
 import { PageTopSpacer } from './PageTopSpacer';
@@ -50,6 +51,7 @@ export struct SettingsTabView {
             SettingsMaterialSection()
             SettingsSystemSection()
             SettingsStudySection()
+            SettingsAboutSection()
 
             // barOverlap(true) 时页签栏悬浮叠在内容上：底部预留避让，末行不被遮挡。
             Blank().height(safeArea.contentBottomInsetVp)

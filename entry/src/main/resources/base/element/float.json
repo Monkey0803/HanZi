@@ -185,6 +185,18 @@
       "value": "220"
     },
     {
+      "name": "practice_canvas_compact_min",
+      "value": "144"
+    },
+    {
+      "name": "practice_canvas_area_margin",
+      "value": "32"
+    },
+    {
+      "name": "practice_control_min_height",
+      "value": "44"
+    },
+    {
       "name": "book_card_radius",
       "value": "16"
     },

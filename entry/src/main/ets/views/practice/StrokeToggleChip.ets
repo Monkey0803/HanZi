@@ -12,19 +12,26 @@ export struct StrokeToggleChip {
   @Param label: ResourceStr = '';
   @Param active: boolean = false;
   @Event onTap: () => void = () => {};
+  @Local hovering: boolean = false;
 
   build() {
-    Text(this.label)
+    Button(this.label)
+      .buttonStyle(ButtonStyleMode.NORMAL)
       .fontSize($r('app.float.font_size_caption'))
       .fontColor(this.active ? $r('app.color.hm_on_brand') : $r('app.color.hm_text_secondary'))
-      .textAlign(TextAlign.Center)
-      .height($r('app.float.value_chip_height'))
+      .height($r('app.float.practice_control_min_height'))
       .padding({
         left: $r('app.float.space_m'),
         right: $r('app.float.space_m')
       })
       .backgroundColor(this.active ? themePalette.fill() : $r('app.color.hm_divider'))
+      .opacity(this.hovering ? 0.82 : 1)
       .borderRadius($r('app.float.radius_chip'))
+      .focusable(true)
+      .accessibilityDescription(this.active ? $r('app.string.common_on') : $r('app.string.common_off'))
+      .onHover((isHovering: boolean) => {
+        this.hovering = isHovering;
+      })
       .onClick(() => {
         this.onTap();
       })

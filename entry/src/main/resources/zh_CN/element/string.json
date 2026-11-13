@@ -589,6 +589,14 @@
       "value": "加载中…"
     },
     {
+      "name": "common_on",
+      "value": "已开启"
+    },
+    {
+      "name": "common_off",
+      "value": "已关闭"
+    },
+    {
       "name": "char_more",
       "value": "更多"
     },

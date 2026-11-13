@@ -13,6 +13,7 @@ import readingTextBuilderTest from './ReadingTextBuilder.test';
 import readingQuizTest from './ReadingQuiz.test';
 import reviewSchedulerTest from './ReviewScheduler.test';
 import progressAggregatorTest from './ProgressAggregator.test';
+import practiceLayoutPolicyTest from './PracticeLayoutPolicy.test';
 
 export default function testsuite() {
   settingsOptionsTest();
@@ -30,4 +31,5 @@ export default function testsuite() {
   readingTextBuilderTest();
   readingQuizTest();
   progressAggregatorTest();
+  practiceLayoutPolicyTest();
 }

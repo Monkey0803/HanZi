@@ -589,6 +589,14 @@
       "value": "Loading…"
     },
     {
+      "name": "common_on",
+      "value": "On"
+    },
+    {
+      "name": "common_off",
+      "value": "Off"
+    },
+    {
       "name": "char_more",
       "value": "More"
     },

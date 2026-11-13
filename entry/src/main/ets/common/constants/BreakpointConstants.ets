@@ -10,6 +10,8 @@ export class BreakpointConstants {
   static readonly GRID_COLUMNS: number = 12;
   /** 窗口宽度断点（vp）：sm -> md -> lg。 */
   static readonly WINDOW_BREAKPOINTS: string[] = ['600vp', '840vp'];
+  /** 「中等窗口」媒体查询条件（md 起点），供页面代码读取。 */
+  static readonly MEDIUM_MEDIA_QUERY: string = '(width>=600vp)';
   /** 「宽屏」媒体查询条件（lg 起点），供 mediaquery 在代码里取断点用。 */
   static readonly WIDE_MEDIA_QUERY: string = '(width>=840vp)';
 }
